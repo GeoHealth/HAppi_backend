@@ -4,3 +4,5 @@ rvm:
     - 2.1.2
 script:
   - bundle exec rake test
+notifications:
+  slack: geohealthcrew:UnjUhKFWfj66txuItOlLIE5Q
