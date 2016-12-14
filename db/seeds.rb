@@ -5,3 +5,4 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+Symptom.create(name:"Abdominal distension", short_description:"short", long_description:"long_description", gender_filter:"both")
