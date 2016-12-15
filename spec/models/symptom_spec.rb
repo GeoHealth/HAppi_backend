@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe Symptom, type: :model do
 
   describe 'attributes' do
-    it 'has a name' do
+    it {
       should validate_presence_of(:name)
-    end
+    }
 
-    it 'has a gender filter that is either "male", "female" or "both"' do
+    it {
       should validate_inclusion_of(:gender_filter).
-          in_array(%w(male female both))
-    end
+          in_array(%w( male female both ))
+    }
   end
 
 
