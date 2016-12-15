@@ -1,6 +1,10 @@
 language: ruby
+cache: bundler
 rvm:
 - 2.2.0
+before_script:
+- cp config/database.yml.travis config/database.yml
+- bundle exec rake db:test:prepare
 script:
 - bundle exec rake spec
 notifications:
