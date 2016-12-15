@@ -49,6 +49,9 @@ group :development, :test do
   # Rspec test
   gem 'rspec-rails', '~> 3.5'
 
+  # A replacement for Fixture
+  # https://github.com/thoughtbot/factory_girl
+  gem 'factory_girl_rails', '~> 4.0'
 end
 
 group :test do
