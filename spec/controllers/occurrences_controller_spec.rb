@@ -27,8 +27,8 @@ RSpec.describe OccurrencesController, type: :controller do
         post :create
       end
 
-      it 'responds with 406' do
-        should respond_with 406
+      it 'responds with 422' do
+        should respond_with 422
       end
 
       it 'does not add any occurrence' do

@@ -1,4 +1,6 @@
 class OccurrencesController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def create
     received_coordinate = params[:gps_coordinate]
     gps_coordinate = GpsCoordinate.new
@@ -26,7 +28,7 @@ class OccurrencesController < ApplicationController
                :status => 200
       elsif not occurrence.valid?
         render :nothing => true,
-               :status => 406
+               :status => 422
       else
         render :nothing => true,
                :status => 501
