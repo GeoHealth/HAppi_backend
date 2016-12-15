@@ -11,10 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214113404) do
+ActiveRecord::Schema.define(version: 20161215120633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "factor_instances", force: :cascade do |t|
+    t.integer  "factor_id"
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "factor_instances", ["factor_id"], name: "index_factor_instances_on_factor_id", using: :btree
+
+  create_table "factors", force: :cascade do |t|
+    t.string   "name"
+    t.string   "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "gps_coordinates", force: :cascade do |t|
     t.float    "accuracy"
@@ -48,6 +64,7 @@ ActiveRecord::Schema.define(version: 20161214113404) do
     t.datetime "updated_at",        null: false
   end
 
+  add_foreign_key "factor_instances", "factors"
   add_foreign_key "occurrences", "gps_coordinates"
   add_foreign_key "occurrences", "symptoms"
 end
