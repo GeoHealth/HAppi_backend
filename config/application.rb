@@ -24,5 +24,12 @@ module HappiBackend
     config.active_record.raise_in_transactional_callbacks = true
 
     config.web_console.development_only = false
+
+    # from http://stackoverflow.com/a/17815546/2179668
+    # Set those headers to allow cross-origin requests
+    config.action_dispatch.default_headers.merge!({
+                                                      'Access-Control-Allow-Origin' => '*',
+                                                      'Access-Control-Request-Method' => '*'
+                                                  })
   end
 end
