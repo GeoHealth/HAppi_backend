@@ -6,4 +6,7 @@ class Occurrence < ActiveRecord::Base
   validates_presence_of :symptom_id
   validates_presence_of :date
 
+  def as_json(options={})
+    super(:include =>[:gps_coordinate])
+  end
 end

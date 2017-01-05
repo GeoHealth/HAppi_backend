@@ -10,15 +10,27 @@ RSpec.describe OccurrencesController, type: :controller do
         @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
         @valid_symptom.save
         @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new)
-        post :create, @valid_occurrence.to_json
+        @created_occurrence = post :create, occurrence: @valid_occurrence.to_json
       end
 
-      it 'responds with 200' do
-        should respond_with 200
+      it 'responds with 201' do
+        is_expected.to respond_with 201
       end
 
       it 'adds the occurrence in the database' do
         expect(Occurrence.count).to eq 1
+      end
+
+      it 'returns a JSON containing the occurrence that has been saved' do
+        expect(response.body).to be_instance_of(String)
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response['symptom_id']).to eq  @valid_occurrence.symptom_id
+        expect(parsed_response['date']).to eq @valid_occurrence.date
+      end
+
+      it 'returns a JSON containing the generated ID' do
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response['id']).not_to be_nil
       end
     end
 
@@ -28,7 +40,7 @@ RSpec.describe OccurrencesController, type: :controller do
       end
 
       it 'responds with 422' do
-        should respond_with 422
+        is_expected.to respond_with 422
       end
 
       it 'does not add any occurrence' do
@@ -40,11 +52,11 @@ RSpec.describe OccurrencesController, type: :controller do
       before(:each) do
         @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
         @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new)
-        post :create, @valid_occurrence.to_json
+        post :create, occurrence: @valid_occurrence.to_json
       end
 
-      it 'responds with 404' do
-        should respond_with 404
+      it 'responds with 422' do
+        is_expected.to respond_with 422
       end
 
       it 'does not add any occurrence' do
@@ -60,11 +72,11 @@ RSpec.describe OccurrencesController, type: :controller do
         @gps_location = GpsCoordinate.new(latitude: 50.663856999985, longitude: 4.6251496, altitude: 25.3)
 
         @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new, gps_coordinate: @gps_location)
-        post :create, @valid_occurrence.to_json( include: :gps_coordinate)
+        post :create, occurrence: @valid_occurrence.to_json( include: :gps_coordinate)
       end
 
-      it 'responds with 200' do
-        should respond_with 200
+      it 'responds with 201' do
+        is_expected.to respond_with 201
       end
 
       it 'adds the occurrence in the database' do
@@ -73,6 +85,25 @@ RSpec.describe OccurrencesController, type: :controller do
 
       it 'adds the gps_coordinate in the database' do
         expect(GpsCoordinate.count).to eq 1
+      end
+
+      it 'returns a JSON containing the occurrence that has been saved including the gps_coordinate' do
+        expect(response.body).to be_instance_of(String)
+        parsed_response = JSON.parse(response.body)
+
+        expect(parsed_response['symptom_id']).to eq  @valid_occurrence.symptom_id
+        expect(parsed_response['date']).to eq @valid_occurrence.date
+
+        expect(parsed_response['gps_coordinate']).not_to be_nil
+        expect(parsed_response['gps_coordinate']['latitude']).to eq @valid_occurrence.gps_coordinate.latitude
+        expect(parsed_response['gps_coordinate']['longitude']).to eq @valid_occurrence.gps_coordinate.longitude
+        expect(parsed_response['gps_coordinate']['altitude']).to eq @valid_occurrence.gps_coordinate.altitude
+      end
+
+      it 'returns a JSON containing the generated ID of occurrence and gps_coordinate' do
+        parsed_response = JSON.parse(response.body)
+        expect(parsed_response['id']).not_to be_nil
+        expect(parsed_response['gps_coordinate']['id']).not_to be_nil
       end
     end
   end
