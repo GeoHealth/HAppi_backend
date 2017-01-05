@@ -54,10 +54,6 @@ group :test do
   # https://github.com/thoughtbot/shoulda-matchers
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
 
-  # A replacement for Fixture
-  # https://github.com/thoughtbot/factory_girl
-  gem 'factory_girl_rails', '~> 4.0'
-
   # Need to add the Rake gem in the Gemfile for Travis-CI
   # https://docs.travis-ci.com/user/languages/ruby#Default-Test-Script
   gem 'rake', '~> 12.0'
