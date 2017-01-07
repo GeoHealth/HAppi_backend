@@ -23,6 +23,10 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+# Rack::Cors provides support for Cross-Origin Resource Sharing (CORS)
+# http://stackoverflow.com/questions/29751115/how-to-enable-cors-in-rails-4-app
+gem 'rack-cors', '0.4'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

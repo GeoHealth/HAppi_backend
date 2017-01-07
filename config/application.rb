@@ -25,11 +25,11 @@ module HappiBackend
 
     config.web_console.development_only = false
 
-    # from http://stackoverflow.com/a/17815546/2179668
-    # Set those headers to allow cross-origin requests
-    config.action_dispatch.default_headers.merge!({
-                                                      'Access-Control-Allow-Origin' => '*',
-                                                      'Access-Control-Request-Method' => '*'
-                                                  })
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => :any
+      end
+    end
   end
 end
