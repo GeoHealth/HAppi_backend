@@ -61,5 +61,10 @@ group :test do
   # Need to add the Rake gem in the Gemfile for Travis-CI
   # https://docs.travis-ci.com/user/languages/ruby#Default-Test-Script
   gem 'rake', '~> 12.0'
+
+  # Test-coverage
+  # https://docs.codeclimate.com/docs/ruby
+  gem "simplecov"
+  gem "codeclimate-test-reporter", "~> 1.0.0"
 end
 

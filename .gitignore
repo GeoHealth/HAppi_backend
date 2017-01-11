@@ -20,3 +20,5 @@
 /.idea
 
 *.log
+
+/coverage
