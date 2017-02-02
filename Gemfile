@@ -66,7 +66,11 @@ group :test do
 
   # Test-coverage
   # https://docs.codeclimate.com/docs/ruby
-  gem "simplecov"
-  gem "codeclimate-test-reporter", "~> 1.0.0"
+  gem 'simplecov'
+  gem 'codeclimate-test-reporter', '~> 1.0.0'
+
+  # Use Factories instead of Fixtures: https://semaphoreci.com/blog/2014/01/14/rails-testing-antipatterns-fixtures-and-factories.html
+  # https://github.com/thoughtbot/factory_girl_rails
+  gem 'factory_girl_rails', '~> 4.8'
 end
 
