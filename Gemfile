@@ -36,6 +36,10 @@ gem 'rack-cors', '0.4'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Use for authentication
+# https://github.com/lynndylanhurley/devise_token_auth
+gem 'devise_token_auth'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
