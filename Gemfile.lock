@@ -211,7 +211,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   devise_token_auth
   factory_girl_rails (~> 4.8)
-  jbuilder (~> 2.0)
+  jbuilder (>= 2.0)
   jquery-rails
   pg (~> 0.19.0)
   puma
