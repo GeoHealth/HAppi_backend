@@ -1,5 +1,6 @@
 class OccurrencesController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_action :authenticate_user!
 
   def create
     @occurrence = OccurrenceFactory.build_from_params(params[:occurrence])

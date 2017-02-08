@@ -1,11 +1,11 @@
 require 'rails_helper'
+require 'authentication_test_helper'
 
 RSpec.describe OccurrencesController, type: :controller do
   describe '#create' do
     it { should route(:post, '/occurrences').to(action: :create) }
 
-    context 'when a valid, basic (no gps_location, no factors) occurrence is given' do
-
+    context 'without valid authentication headers' do
       before(:each) do
         @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
         @valid_symptom.save
@@ -13,97 +13,118 @@ RSpec.describe OccurrencesController, type: :controller do
         @created_occurrence = post :create, occurrence: @valid_occurrence.to_json
       end
 
-      it 'responds with 201' do
-        is_expected.to respond_with 201
-      end
-
-      it 'adds the occurrence in the database' do
-        expect(Occurrence.count).to eq 1
-      end
-
-      it 'returns a JSON containing the occurrence that has been saved' do
-        expect(response.body).to be_instance_of(String)
-        parsed_response = JSON.parse(response.body)
-        expect(parsed_response['symptom_id']).to eq  @valid_occurrence.symptom_id
-        expect(parsed_response['date']).to eq @valid_occurrence.date
-      end
-
-      it 'returns a JSON containing the generated ID' do
-        parsed_response = JSON.parse(response.body)
-        expect(parsed_response['id']).not_to be_nil
+      it 'responds with 302' do
+        is_expected.to respond_with 302
       end
     end
 
-    context 'when no occurrence is given' do
+    context 'with valid authentication headers' do
       before(:each) do
-        post :create
+        @user = AuthenticationTestHelper.set_valid_authentication_headers(@request)
+        sign_in @user
       end
 
-      it 'responds with 422' do
-        is_expected.to respond_with 422
+      context 'when a valid, basic (no gps_location, no factors) occurrence is given' do
+
+        before(:each) do
+          @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
+          @valid_symptom.save
+          @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new)
+          @created_occurrence = post :create, occurrence: @valid_occurrence.to_json
+        end
+
+        it 'responds with 201' do
+          is_expected.to respond_with 201
+        end
+
+        it 'adds the occurrence in the database' do
+          expect(Occurrence.count).to eq 1
+        end
+
+        it 'returns a JSON containing the occurrence that has been saved' do
+          expect(response.body).to be_instance_of(String)
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['symptom_id']).to eq @valid_occurrence.symptom_id
+          expect(parsed_response['date']).to eq @valid_occurrence.date
+        end
+
+        it 'returns a JSON containing the generated ID' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['id']).not_to be_nil
+        end
       end
 
-      it 'does not add any occurrence' do
-        expect(Occurrence.count).to eq 0
-      end
-    end
+      context 'when no occurrence is given' do
+        before(:each) do
+          post :create
+        end
 
-    context 'when the given occurrence reference a non existing symptom' do
-      before(:each) do
-        @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
-        @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new)
-        post :create, occurrence: @valid_occurrence.to_json
-      end
+        it 'responds with 422' do
+          is_expected.to respond_with 422
+        end
 
-      it 'responds with 422' do
-        is_expected.to respond_with 422
+        it 'does not add any occurrence' do
+          expect(Occurrence.count).to eq 0
+        end
       end
 
-      it 'does not add any occurrence' do
-        expect(Occurrence.count).to eq 0
-      end
-    end
+      context 'when the given occurrence reference a non existing symptom' do
+        before(:each) do
+          @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
+          @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new)
+          post :create, occurrence: @valid_occurrence.to_json
+        end
 
-    context 'when a valid occurrence with gps_location is given' do
-      before(:each) do
-        @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
-        @valid_symptom.save
+        it 'responds with 422' do
+          is_expected.to respond_with 422
+        end
 
-        @gps_location = GpsCoordinate.new(latitude: 50.663856999985, longitude: 4.6251496, altitude: 25.3)
-
-        @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new, gps_coordinate: @gps_location)
-        post :create, occurrence: @valid_occurrence.to_json( include: :gps_coordinate)
-      end
-
-      it 'responds with 201' do
-        is_expected.to respond_with 201
+        it 'does not add any occurrence' do
+          expect(Occurrence.count).to eq 0
+        end
       end
 
-      it 'adds the occurrence in the database' do
-        expect(Occurrence.count).to eq 1
-      end
+      context 'when a valid occurrence with gps_location is given' do
+        before(:each) do
+          @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
+          @valid_symptom.save
 
-      it 'adds the gps_coordinate in the database' do
-        expect(GpsCoordinate.count).to eq 1
-      end
+          @gps_location = GpsCoordinate.new(latitude: 50.663856999985, longitude: 4.6251496, altitude: 25.3)
 
-      it 'returns a JSON containing the occurrence that has been saved including the gps_coordinate' do
-        expect(response.body).to be_instance_of(String)
-        parsed_response = JSON.parse(response.body)
+          @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new, gps_coordinate: @gps_location)
+          post :create, occurrence: @valid_occurrence.to_json(include: :gps_coordinate)
+        end
 
-        expect(parsed_response['symptom_id']).to eq  @valid_occurrence.symptom_id
-        expect(parsed_response['date']).to eq @valid_occurrence.date
+        it 'responds with 201' do
+          is_expected.to respond_with 201
+        end
 
-        expect(parsed_response['gps_coordinate']).not_to be_nil
-        expect(parsed_response['gps_coordinate']['latitude']).to eq @valid_occurrence.gps_coordinate.latitude
-        expect(parsed_response['gps_coordinate']['longitude']).to eq @valid_occurrence.gps_coordinate.longitude
-        expect(parsed_response['gps_coordinate']['altitude']).to eq @valid_occurrence.gps_coordinate.altitude
-      end
+        it 'adds the occurrence in the database' do
+          expect(Occurrence.count).to eq 1
+        end
 
-      it 'returns a JSON containing the generated ID of occurrence and gps_coordinate' do
-        parsed_response = JSON.parse(response.body)
-        expect(parsed_response['id']).not_to be_nil
-        expect(parsed_response['gps_coordinate']['id']).not_to be_nil
+        it 'adds the gps_coordinate in the database' do
+          expect(GpsCoordinate.count).to eq 1
+        end
+
+        it 'returns a JSON containing the occurrence that has been saved including the gps_coordinate' do
+          expect(response.body).to be_instance_of(String)
+          parsed_response = JSON.parse(response.body)
+
+          expect(parsed_response['symptom_id']).to eq @valid_occurrence.symptom_id
+          expect(parsed_response['date']).to eq @valid_occurrence.date
+
+          expect(parsed_response['gps_coordinate']).not_to be_nil
+          expect(parsed_response['gps_coordinate']['latitude']).to eq @valid_occurrence.gps_coordinate.latitude
+          expect(parsed_response['gps_coordinate']['longitude']).to eq @valid_occurrence.gps_coordinate.longitude
+          expect(parsed_response['gps_coordinate']['altitude']).to eq @valid_occurrence.gps_coordinate.altitude
+        end
+
+        it 'returns a JSON containing the generated ID of occurrence and gps_coordinate' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['id']).not_to be_nil
+          expect(parsed_response['gps_coordinate']['id']).not_to be_nil
+        end
       end
     end
   end

@@ -171,6 +171,8 @@ paths:
             Expiry:
               description: The date at which the current session will expire. This can be used by clients to invalidate expired tokens without the need for an API request.
               type: string
+        '401':
+          description: Invalid login credentials.
         '422':
           description: An error occurred and the error is detailled in the *errors* key of the response
   /auth/sign_out:
