@@ -7,9 +7,7 @@ RSpec.describe OccurrencesController, type: :controller do
 
     context 'without valid authentication headers' do
       before(:each) do
-        @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
-        @valid_symptom.save
-        @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new)
+        @valid_occurrence = build(:occurrence)
         @created_occurrence = post :create, occurrence: @valid_occurrence.to_json
       end
 
@@ -27,9 +25,7 @@ RSpec.describe OccurrencesController, type: :controller do
       context 'when a valid, basic (no gps_location, no factors) occurrence is given' do
 
         before(:each) do
-          @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
-          @valid_symptom.save
-          @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new)
+          @valid_occurrence = build(:occurrence)
           @created_occurrence = post :create, occurrence: @valid_occurrence.to_json
         end
 
@@ -70,8 +66,7 @@ RSpec.describe OccurrencesController, type: :controller do
 
       context 'when the given occurrence reference a non existing symptom' do
         before(:each) do
-          @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
-          @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new)
+          @valid_occurrence = build(:occurrence_with_non_existing_symptom)
           post :create, occurrence: @valid_occurrence.to_json
         end
 
@@ -86,12 +81,7 @@ RSpec.describe OccurrencesController, type: :controller do
 
       context 'when a valid occurrence with gps_location is given' do
         before(:each) do
-          @valid_symptom = Symptom.new(id: 1, name: 'the_symptom', gender_filter: 'both')
-          @valid_symptom.save
-
-          @gps_location = GpsCoordinate.new(latitude: 50.663856999985, longitude: 4.6251496, altitude: 25.3)
-
-          @valid_occurrence = Occurrence.new(symptom_id: @valid_symptom.id, date: Date.new, gps_coordinate: @gps_location)
+          @valid_occurrence = build(:occurrence_with_gps_coordinates)
           post :create, occurrence: @valid_occurrence.to_json(include: :gps_coordinate)
         end
 

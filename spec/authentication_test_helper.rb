@@ -15,18 +15,15 @@ class AuthenticationTestHelper
                     last_sign_in_at: Time.now
     )
 
-    if user.save
+    user.save
 
-      @auth_headers = user.create_new_auth_token
+    @auth_headers = user.create_new_auth_token
 
-      request.env['access-token'] = @auth_headers['access-token']
-      request.env['token-type'] = @auth_headers['token-type']
-      request.env['client'] = @auth_headers['client']
-      request.env['expiry'] = @auth_headers['expiry']
-      request.env['uid'] = @auth_headers['uid']
-      return user
-    else
-      raise Exception, "can not create the user #{user} because of #{user.errors}"
-    end
+    request.env['access-token'] = @auth_headers['access-token']
+    request.env['token-type'] = @auth_headers['token-type']
+    request.env['client'] = @auth_headers['client']
+    request.env['expiry'] = @auth_headers['expiry']
+    request.env['uid'] = @auth_headers['uid']
+    return user
   end
 end
