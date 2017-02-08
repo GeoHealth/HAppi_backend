@@ -11,8 +11,8 @@ RSpec.describe OccurrencesController, type: :controller do
         @created_occurrence = post :create, occurrence: @valid_occurrence.to_json
       end
 
-      it 'responds with 302' do
-        is_expected.to respond_with 302
+      it 'responds with 401' do
+        is_expected.to respond_with 401
       end
     end
 

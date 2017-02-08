@@ -12,8 +12,8 @@ RSpec.describe SymptomsController, type: :controller do
         get :index
       end
 
-      it 'responds with 302' do
-        is_expected.to respond_with 302
+      it 'responds with 401' do
+        is_expected.to respond_with 401
       end
     end
 
