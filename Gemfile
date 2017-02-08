@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+# Explicitly set the Ruby version to 2.2.x
+ruby '~> 2.2.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
@@ -39,6 +41,12 @@ gem 'rack-cors', '0.4'
 # Use for authentication
 # https://github.com/lynndylanhurley/devise_token_auth
 gem 'devise_token_auth'
+
+# Puma gem for multi threaded server
+gem 'puma'
+
+# This gem enables serving assets in production and setting your logger to standard out
+gem 'rails_12factor', group: :production
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
