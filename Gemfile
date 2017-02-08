@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Explicitly set the Ruby version to 2.2.x
-ruby '>= 2.2.0'
+ruby '~> 2.2.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
