@@ -1,0 +1,385 @@
+swagger: '2.0'
+info:
+  title: HAppi API
+  description: Track symptoms with the HAppi API
+  version: 1.0.0
+host: 51.254.135.79:3000
+schemes:
+  - https
+basePath: /v1
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /symptoms:
+    get:
+      summary: Retrieve symptoms
+      description:
+        The Symptom endpoint returns information about the *symptom* . The response includes the symptoms filtered by name and category
+      parameters:
+        - name: name
+          in: query
+          description: Name of researched symptoms.
+          required: false
+          type: string
+        - name: category
+          in: query
+          description: Category of researched symptoms.
+          required: false
+          type: string
+          
+        - name: uid
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+        - name: client
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+        - name: access-token
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+      tags:
+        - Symptoms
+      responses:
+        '200':
+          description: An array of symptoms with their associated factors.
+          schema: 
+            type: array
+            items:
+              $ref: '#/definitions/SymptomWithFactors'
+  /occurrence:
+    post:
+      summary: Add a symptom occurrence
+      description:
+        Add the received symptom occurrence to the database.
+      consumes:
+        - application/json
+      parameters:
+        - name: occurrence
+          in: body
+          description: The occurrence to add.
+          required: true
+          schema:
+            $ref: '#/definitions/Occurrence'
+        
+        - name: uid
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+        - name: client
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+        - name: access-token
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+      tags:
+        - Occurrence
+        - Symptom
+      responses:
+        '201':
+          description: Occurrence correctly added.
+          schema:
+            $ref: '#/definitions/Occurrence'
+        '422':
+          description: The given object is not a valid occurrence.
+  /auth:
+    post:
+      summary: Create account
+      description: Create a new account for the given email with the given password.
+      tags:
+        - Authentication
+      consumes:
+        - application/json
+      parameters:
+        - name: ' '
+          in: body
+          description: The new account information
+          required: true
+          schema:
+            $ref: '#/definitions/NewAccount'
+      responses:
+        '200':
+          description: Account created. The headers that are returned must be included in every following request in order to valid the authentication.
+          schema:
+            $ref: '#/definitions/Account'
+          headers:
+            Access-Token:
+              description: This serves as the user's password for each request. A hashed version of this value is stored in the database for later comparison.
+              type: string
+            Client:
+              description: This enables the use of multiple simultaneous sessions on different clients. (For example, a user may want to be authenticated on both their phone and their laptop at the same time.)
+              type: string
+            Uid:
+              description: A unique value that is used to identify the user. This is necessary because searching the DB for users by their access token will make the API susceptible to timing attacks.
+              type: string
+            Token-Type:
+              description: Always 'Bearer'
+              type: string
+              enum:
+                - Bearer
+            Expiry:
+              description: The date at which the current session will expire. This can be used by clients to invalidate expired tokens without the need for an API request.
+              type: string
+        '422':
+          description: An error occurred and the error is detailled in the *errors* key of the response
+  /auth/sign_in:
+    post:
+      summary: Login
+      description: Login an account by checking the {email, password} pair. The headers that are returned must be included in every following request in order to valid the authentication.
+      tags:
+        - Authentication
+      consumes:
+        - application/json
+      parameters:
+        - name: ' '
+          in: body
+          description: The new account information
+          required: true
+          schema:
+            $ref: '#/definitions/NewAccount'
+      responses:
+        '200':
+          description: Account created.
+          schema:
+            $ref: '#/definitions/Account'
+          headers:
+            Access-Token:
+              description: This serves as the user's password for each request. A hashed version of this value is stored in the database for later comparison.
+              type: string
+            Client:
+              description: This enables the use of multiple simultaneous sessions on different clients. (For example, a user may want to be authenticated on both their phone and their laptop at the same time.)
+              type: string
+            Uid:
+              description: A unique value that is used to identify the user. This is necessary because searching the DB for users by their access token will make the API susceptible to timing attacks.
+              type: string
+            Token-Type:
+              description: Always 'Bearer'
+              type: string
+              enum:
+                - Bearer
+            Expiry:
+              description: The date at which the current session will expire. This can be used by clients to invalidate expired tokens without the need for an API request.
+              type: string
+        '422':
+          description: An error occurred and the error is detailled in the *errors* key of the response
+  /auth/sign_out:
+    delete:
+      summary: Log out
+      description: Log out the current account. The request must contains the authentication headers (uid, client, access-token).
+      tags:
+        - Authentication
+      parameters:
+        - name: uid
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+        - name: client
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+        - name: access-token
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully logged out.
+        '404':
+          description: The user was not logged in.
+definitions:
+  Symptom:
+    type: object
+    description: A symptom.
+    properties:
+      id:
+        type: number
+        description: Unique ID of the symptom.
+      name:
+        type: string
+        description: Name of the symptom.
+      short_description:
+        type: string
+        description: A short description of the symptom.
+      long_description:
+        type: string
+        description: A long description of the symptom.
+      category:
+        type: array
+        items:
+          $ref: '#/definitions/Category'
+      gender_filter:
+        type: string
+        description: The gender to which the symptom applies.
+                     Possible values are 'male' for male, 'female' for female and 'both' for both.
+  SymptomWithFactors:
+    description: A symptom associated to a list of factors that can be used to describe an occurrence of this symptom more precisly.
+    type: object
+    allOf:
+    - $ref: '#/definitions/Symptom'
+    - type: object
+      properties:
+        factors:
+          type: array
+          items:
+            $ref: '#/definitions/Factor'
+  Category:
+    type: object
+    description: Categorize the symptoms to help finding them.
+    properties:
+      id:
+        type: number
+        description: Unique ID of the category.
+      name:
+        type: string
+        description: Name of the category.
+      short_description:
+        type: string
+        description: A short description of the category.
+      long_description:
+        type: string
+        description: A long description of the category.
+      parent_id:
+        type: number
+        description: ID of the parent category.
+      children:
+        type: array
+        items:
+          $ref: '#/definitions/Category'
+  Factor:
+    type: object
+    description: A factor describe more accuratly an occurrence of a symptom. For example it can describe the intensity of pain or the precise location of a pain.
+    properties:
+      id:
+        type: number
+        description: Unique ID of the factor
+      name:
+        type: string
+        description: Name of the factor.
+      type:
+        type: string
+        description: Type of the factor.
+  FactorInstance:
+    type: object
+    description: Factor with a value.
+    properties:
+      id:
+        type: number
+        description: Unique ID of the instance.
+      factor_id:
+        type: number
+        description: Unique ID of the linked factor.
+      value:
+        type: string
+        description: Value of the factor. Depending on the type of the factor, the value can be a number, a date, etc. This field always store the textual representation.
+  Occurrence:
+    type: object
+    description: An occurrence of a symptom describe the moment when the symptom appeared and add some factors to describe the occurrence.
+    properties:
+      id:
+        type: number
+        description: Unique ID of the occurrence.
+      symptom_id:
+        type: number
+        description: Unique ID of the linked symptom.
+      date:
+        type: string
+        format: date-time
+        description: Date and time when the symptom occured.
+      gps_coordinate:
+        $ref: '#/definitions/GPSCoordinates'
+      factors:
+        type: array
+        items:
+          $ref: '#/definitions/FactorInstance'
+      photos:
+        type: array
+        items:
+          $ref: '#/definitions/Photo'
+  GPSCoordinates:
+    type: object
+    description: A GPS location as described in https://github.com/apache/cordova-plugin-geolocation#coordinates
+    properties:
+      latitude:
+        type: number
+        format: float
+        description: Latitude in degrees.
+      longitude:
+        type: number
+        format: float
+        description: Longitude in degrees.
+      altitude:
+        type: number
+        format: float
+        description: Altitude in meters above the ellipsoid.
+      accuracy:
+        type: number
+        format: float
+        description: Accuracy of position in meters.
+      altitude_accuracy:
+        type: number
+        format: float
+        description: Accuracy of altitude in meters.
+      heading: 
+        type: number
+        format: float
+        description: Direction if travel, specified in degress couting clockwise relative to the true north.
+      speed:
+        type: number
+        format: float
+        description: Current ground speed of the device, specified in meters per second.
+  Photo:
+    type: object
+  Error:
+    type: object
+  Account:
+    type: object
+    description: An account from https://github.com/lynndylanhurley/devise_token_auth
+    properties:
+      id:
+        type: number
+      provider:
+        type: string
+      uid:
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      image:
+        type: string
+      email:
+        type: string
+  NewAccount:
+    type: object
+    description: A new account containing an email, a password and a confirmation of the password.
+    properties:
+      email:
+        type: string
+        description: The email address of the new account
+      password:
+        type: string
+        description: The password of the new account
+      password_confirmation:
+        type: string
+        description: A confirmation of the password of the new account
+        
+        
+        
+        
+        
+        
+        
