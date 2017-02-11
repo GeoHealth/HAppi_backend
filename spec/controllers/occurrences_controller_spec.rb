@@ -66,8 +66,8 @@ RSpec.describe OccurrencesController, type: :controller do
 
       context 'when the given occurrence reference a non existing symptom' do
         before(:each) do
-          @valid_occurrence = build(:occurrence_with_non_existing_symptom)
-          post :create, occurrence: @valid_occurrence.to_json
+          @occurrence = build(:occurrence_with_non_existing_symptom)
+          post :create, occurrence: @occurrence.to_json
         end
 
         it 'responds with 422' do

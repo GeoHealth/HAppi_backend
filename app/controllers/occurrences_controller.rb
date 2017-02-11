@@ -4,6 +4,7 @@ class OccurrencesController < ApplicationController
 
   def create
     @occurrence = OccurrenceFactory.build_from_params(params[:occurrence])
+    @occurrence.user = current_user
     begin
       if @occurrence.save
         render json: @occurrence, status: 201
