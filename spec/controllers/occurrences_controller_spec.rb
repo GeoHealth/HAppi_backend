@@ -48,6 +48,11 @@ RSpec.describe OccurrencesController, type: :controller do
           parsed_response = JSON.parse(response.body)
           expect(parsed_response['id']).not_to be_nil
         end
+
+        it 'is associated to the logged in user' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['user_id']).to eq @user.id
+        end
       end
 
       context 'when no occurrence is given' do
@@ -114,6 +119,11 @@ RSpec.describe OccurrencesController, type: :controller do
           parsed_response = JSON.parse(response.body)
           expect(parsed_response['id']).not_to be_nil
           expect(parsed_response['gps_coordinate']['id']).not_to be_nil
+        end
+
+        it 'is associated to the logged in user' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['user_id']).to eq @user.id
         end
       end
     end
