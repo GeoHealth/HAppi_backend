@@ -12,7 +12,7 @@ script:
 - bundle exec rake spec
 after_success:
 - bundle exec codeclimate-test-reporter
-- cp flynn-ca.cer /usr/local/share/ca-certificates/flynn-ca.crt
+- sudo cp flynn-ca.cer /usr/local/share/ca-certificates/flynn-ca.crt
 - sudo update-ca-certificates
 - git pull
 - git push https://seza443:$FLYNN_KEY@git.yxvj.flynnhub.com/geohealth-happibackend-master.git master
