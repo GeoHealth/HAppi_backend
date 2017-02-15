@@ -1,6 +1,7 @@
 HAppi backend
 =============
 
+[![Build Status](https://travis-ci.org/GeoHealth/HAppi_backend.svg?branch=master)](https://travis-ci.org/GeoHealth/HAppi_backend)
 [![Code Climate](https://codeclimate.com/github/GeoHealth/happi_backend/badges/gpa.svg)](https://codeclimate.com/github/GeoHealth/happi_backend)
 [![Test Coverage](https://codeclimate.com/github/GeoHealth/happi_backend/badges/coverage.svg)](https://codeclimate.com/github/GeoHealth/happi_backend/coverage)
 [![Issue Count](https://codeclimate.com/github/GeoHealth/happi_backend/badges/issue_count.svg)](https://codeclimate.com/github/GeoHealth/happi_backend)
