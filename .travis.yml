@@ -13,7 +13,7 @@ script:
 after_success:
 - bundle exec codeclimate-test-reporter
 - git pull
-- git remote add flynn https://seza443:$FLYNN_KEY@git.https://controller.yxvj.flynnhub.com/geohealth-happibackend-master.git
+- git remote add flynn https://seza443:$FLYNN_KEY@git.yxvj.flynnhub.com/geohealth-happibackend-master.git
 - git push flynn master
 notifications:
   slack:
