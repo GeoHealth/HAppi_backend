@@ -3,7 +3,7 @@ info:
   title: HAppi API
   description: Track symptoms with the HAppi API
   version: 1.0.0
-host: 51.254.135.79:3000
+host: geohealth-happibackend-master.yxvj.flynnhub.com
 schemes:
   - https
 basePath: /v1
@@ -45,7 +45,7 @@ paths:
           required: true
           type: string
       tags:
-        - Symptoms
+        - Symptom
       responses:
         '200':
           description: An array of symptoms with their associated factors.
@@ -202,6 +202,21 @@ paths:
           description: Successfully logged out.
         '404':
           description: The user was not logged in.
+  /stats/symptoms:
+    get:
+      summary: Get a list of symptoms with the linked occurrences for the current user.
+      description: The returned list contained all the symptoms along with their occurrences that occurred.
+      tags:
+        - Statistic
+        - Symptom
+        - Occurrence
+      responses:
+        '200':
+          description: An array of symptoms, associated with their occurrences.
+          schema: 
+            type: array
+            items:
+              $ref: '#/definitions/SymptomWithOccurrences'
 definitions:
   Symptom:
     type: object
@@ -345,8 +360,6 @@ definitions:
         description: Current ground speed of the device, specified in meters per second.
   Photo:
     type: object
-  Error:
-    type: object
   Account:
     type: object
     description: An account from https://github.com/lynndylanhurley/devise_token_auth
@@ -378,7 +391,21 @@ definitions:
       password_confirmation:
         type: string
         description: A confirmation of the password of the new account
-        
+  SymptomWithOccurrences:
+    type: object
+    description: A symptom with a list of all the occurrences that occurred for the current user.
+    properties:
+      id:
+        type: number
+        description: Unique ID of the symptom.
+      name:
+        type: string
+        description: Name of the symptom.
+      occurrences:
+        type: array
+        items:
+          $ref: '#/definitions/Occurrence'
+          
         
         
         
