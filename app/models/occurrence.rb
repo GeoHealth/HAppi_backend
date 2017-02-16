@@ -9,6 +9,6 @@ class Occurrence < ActiveRecord::Base
   validates_presence_of :user_id
 
   def as_json(options={})
-    super(:include =>[:gps_coordinate])
+    super(options.merge(:include =>[:gps_coordinate]))
   end
 end
