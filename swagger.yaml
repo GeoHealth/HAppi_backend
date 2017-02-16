@@ -232,19 +232,28 @@ paths:
         
   /stats/symptoms:
     get:
-      summary: Get a list of symptoms with the linked occurrences for the current user.
-      description: The returned list contained all the symptoms along with their occurrences that occurred.
+      summary: Get a list of symptoms, each with an array of dates associated to the number of occurrences occurring that date.
+      description: The returned list contained all the symptoms of the current user along with the number of occurrences that occurred for each possible date.
       tags:
         - Statistic
         - Symptom
         - Occurrence
+      parameters:
+        - name: period
+          in: query
+          description: | 
+            Count occurrences per day, month or year. The 'period' parameter must take one of the following value: 'day', 'month', 'year'. The default value is per 'day'
+          required: false
+          type: string
+          enum: [day, month, year]
+          default: day
       responses:
         '200':
-          description: An array of symptoms, associated with their occurrences.
+          description: An array of symptoms, associated with their number of occurrences.
           schema: 
             type: array
             items:
-              $ref: '#/definitions/SymptomWithOccurrences'
+              $ref: '#/definitions/StatsPerDate'
 definitions:
   Symptom:
     type: object
@@ -415,9 +424,11 @@ definitions:
         description: The email address of the new account
       password:
         type: string
+        format: password
         description: The password of the new account
       password_confirmation:
         type: string
+        format: password
         description: A confirmation of the password of the new account
   SymptomWithOccurrences:
     type: object
@@ -433,6 +444,31 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Occurrence'
+  StatsPerDate:
+    type: object
+    description: An array of symptoms, each containing an array of dates associated with a number of occurrence that occurred at that particular date.
+    properties:
+      id:
+        type: number
+        description: Unique ID of the symptom.
+      name:
+        type: string
+        description: Name of the symptom.
+      dates:
+        type: array
+        items:
+          $ref: '#/definitions/NumberOfOccurrencePerDate'
+  NumberOfOccurrencePerDate:
+    type: object
+    description: A date associated to a number of occurrences that occurred at this date.
+    properties:
+      date:
+        type: string
+        format: date
+        description: The date.
+      number:
+        type: integer
+        description: The number of occurrences that occurred at the date.
           
         
         
