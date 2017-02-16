@@ -202,6 +202,34 @@ paths:
           description: Successfully logged out.
         '404':
           description: The user was not logged in.
+  /auth/validate_token:
+    get:
+      summary: Check if the given token is still valid.
+      description: Returns true if the given token is valid or false.
+      tags:
+        - Authentication
+      parameters:
+        - name: uid
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+        - name: client
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+        - name: access-token
+          in: header
+          description: Authentication information.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Token is valid.
+        '401':
+          description: Token is not valid.
+        
   /stats/symptoms:
     get:
       summary: Get a list of symptoms with the linked occurrences for the current user.
