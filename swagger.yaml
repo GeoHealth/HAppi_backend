@@ -264,9 +264,8 @@ paths:
         '200':
           description: An array of symptoms, associated with their average number of occurrences.
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/AveragePerPeriod'
+            $ref: '#/definitions/AveragePerPeriod'
+              
 definitions:
   Symptom:
     type: object
