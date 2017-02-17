@@ -53,6 +53,20 @@ paths:
             type: array
             items:
               $ref: '#/definitions/SymptomWithFactors'
+  /symptoms/occurrences:
+    get:
+      summary: Get a list of symptoms with the linked occurrences for the current user.
+      description: The returned list contained all the symptoms along with their occurrences that occurred.
+      tags:
+        - Symptom
+        - Occurrence
+      responses:
+        '200':
+          description: An array of symptoms, associated with their occurrences.
+          schema: 
+            type: array
+            items:
+              $ref: '#/definitions/SymptomWithOccurrences'
   /occurrence:
     post:
       summary: Add a symptom occurrence
@@ -230,7 +244,31 @@ paths:
         '401':
           description: Token is not valid.
         
-  /stats/symptoms:
+  /stats/count:
+    get:
+      summary: Get a list of symptoms, each with an array of dates associated to the number of occurrences occurring that date.
+      description: The returned list contained all the symptoms of the current user along with the number of occurrences that occurred for each possible date.
+      tags:
+        - Statistic
+        - Symptom
+        - Occurrence
+      parameters:
+        - name: period
+          in: query
+          description: | 
+            Count occurrences per day, month or year. The 'period' parameter must take one of the following value: 'day', 'month', 'year'. The default value is per 'day'
+          required: false
+          type: string
+          enum: [day, month, year]
+          default: day
+      responses:
+        '200':
+          description: An array of symptoms, associated with their number of occurrences.
+          schema: 
+            type: array
+            items:
+              $ref: '#/definitions/StatsPerDate'
+  /stats/average:
     get:
       summary: Get a list of symptoms, each with an array of dates associated to the number of occurrences occurring that date.
       description: The returned list contained all the symptoms of the current user along with the number of occurrences that occurred for each possible date.
@@ -433,17 +471,14 @@ definitions:
   SymptomWithOccurrences:
     type: object
     description: A symptom with a list of all the occurrences that occurred for the current user.
-    properties:
-      id:
-        type: number
-        description: Unique ID of the symptom.
-      name:
-        type: string
-        description: Name of the symptom.
-      occurrences:
-        type: array
-        items:
-          $ref: '#/definitions/Occurrence'
+    allOf:
+    - $ref: '#/definitions/Symptom'
+    - type: object
+      properties:
+        occurrences:
+          type: array
+          items:
+            $ref: '#/definitions/Occurrence'
   StatsPerDate:
     type: object
     description: An array of symptoms, each containing an array of dates associated with a number of occurrence that occurred at that particular date.
