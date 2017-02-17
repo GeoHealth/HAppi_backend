@@ -247,7 +247,7 @@ paths:
   /stats/count:
     get:
       summary: Get a list of symptoms, each with an array of dates associated to the number of occurrences occurring that date.
-      description: The returned list contained all the symptoms of the current user along with the number of occurrences that occurred for each possible date.
+      description: The returned list contained all the symptoms of the current user along with the number of occurrences that occurred for each possible date. The occurrences can be counted by day, month or year.
       tags:
         - Statistic
         - Symptom
@@ -270,8 +270,8 @@ paths:
               $ref: '#/definitions/StatsPerDate'
   /stats/average:
     get:
-      summary: Get a list of symptoms, each with an array of dates associated to the number of occurrences occurring that date.
-      description: The returned list contained all the symptoms of the current user along with the number of occurrences that occurred for each possible date.
+      summary: Get a list of symptoms, each with an array of dates associated to the average number of occurrences occurring that date.
+      description: The returned list contained all the symptoms of the current user along with the average number of occurrences that occurred for each possible date. The average number of occurrences can be calculated by hour, day of the week, month or year. For example, if you want to see the average number of occurrences per day of the week, the returned JSON will contain a list of symptoms containing an array with the days of the week and the average number of occurrences of the symptom that occurred at that day of the week.
       tags:
         - Statistic
         - Symptom
@@ -280,14 +280,14 @@ paths:
         - name: period
           in: query
           description: | 
-            Count occurrences per day, month or year. The 'period' parameter must take one of the following value: 'day', 'month', 'year'. The default value is per 'day'
+            Count average occurrences per hour, day of the week, month or year. The 'period' parameter must take one of the following value: 'hour', 'day_of_week', 'month', 'year'. The default value is per 'hour'
           required: false
           type: string
-          enum: [day, month, year]
-          default: day
+          enum: ['hour', 'day_of_week', 'month', 'year']
+          default: hour
       responses:
         '200':
-          description: An array of symptoms, associated with their number of occurrences.
+          description: An array of symptoms, associated with their average number of occurrences.
           schema: 
             type: array
             items:
