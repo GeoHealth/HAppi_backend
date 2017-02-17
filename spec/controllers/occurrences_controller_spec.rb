@@ -1,20 +1,9 @@
 require 'rails_helper'
-require 'authentication_test_helper'
 
 RSpec.describe OccurrencesController, type: :controller do
   describe '#create' do
     it { should route(:post, '/occurrences').to(action: :create) }
-
-    context 'without valid authentication headers' do
-      before(:each) do
-        @valid_occurrence = build(:occurrence)
-        @created_occurrence = post :create, occurrence: @valid_occurrence.to_json
-      end
-
-      it 'responds with 401' do
-        is_expected.to respond_with 401
-      end
-    end
+    it_behaves_like 'POST protected with authentication controller', :create, occurrence: @valid_occurrence.to_json
 
     context 'with valid authentication headers' do
       before(:each) do

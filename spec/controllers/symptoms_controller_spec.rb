@@ -5,17 +5,7 @@ RSpec.describe SymptomsController, type: :controller do
     number_of_symptoms_to_create = 25
 
     it { should route(:get, '/symptoms').to(action: :index) }
-
-    context 'without valid authentication headers' do
-      before(:each) do
-        @symptom = create_list(:symptom, number_of_symptoms_to_create)
-        get :index
-      end
-
-      it 'responds with 401' do
-        is_expected.to respond_with 401
-      end
-    end
+    it_behaves_like 'GET protected with authentication controller', :index
 
     context 'with valid authentication headers' do
       before(:each) do
@@ -108,15 +98,7 @@ RSpec.describe SymptomsController, type: :controller do
   describe '#occurrences' do
     it { should route(:get, '/symptoms/occurrences').to(action: :occurrences) }
 
-    context 'without valid authentication headers' do
-      before(:each) do
-        get :occurrences
-      end
-
-      it 'responds with 401' do
-        is_expected.to respond_with 401
-      end
-    end
+    it_behaves_like 'GET protected with authentication controller', :occurrences
 
     context 'with valid authentication headers' do
       before(:each) do
