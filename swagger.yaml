@@ -28,7 +28,7 @@ paths:
           description: Category of researched symptoms.
           required: false
           type: string
-          
+
         - name: uid
           in: header
           description: Authentication information.
@@ -49,7 +49,7 @@ paths:
       responses:
         '200':
           description: An array of symptoms with their associated factors.
-          schema: 
+          schema:
             type: array
             items:
               $ref: '#/definitions/SymptomWithFactors'
@@ -63,7 +63,7 @@ paths:
       responses:
         '200':
           description: An array of symptoms, associated with their occurrences.
-          schema: 
+          schema:
             type: array
             items:
               $ref: '#/definitions/SymptomWithOccurrences'
@@ -81,7 +81,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Occurrence'
-        
+
         - name: uid
           in: header
           description: Authentication information.
@@ -243,31 +243,6 @@ paths:
           description: Token is valid.
         '401':
           description: Token is not valid.
-        
-  /stats/count:
-    get:
-      summary: Get a list of symptoms, each with an array of dates associated to the number of occurrences occurring that date.
-      description: The returned list contained all the symptoms of the current user along with the number of occurrences that occurred for each possible date. The occurrences can be counted by day, month or year.
-      tags:
-        - Statistic
-        - Symptom
-        - Occurrence
-      parameters:
-        - name: period
-          in: query
-          description: | 
-            Count occurrences per day, month or year. The 'period' parameter must take one of the following value: 'day', 'month', 'year'. The default value is per 'day'
-          required: false
-          type: string
-          enum: [day, month, year]
-          default: day
-      responses:
-        '200':
-          description: An array of symptoms, associated with their number of occurrences.
-          schema: 
-            type: array
-            items:
-              $ref: '#/definitions/StatsPerDate'
   /stats/average:
     get:
       summary: Get a list of symptoms, each with an array of dates associated to the average number of occurrences occurring that date.
@@ -279,7 +254,7 @@ paths:
       parameters:
         - name: period
           in: query
-          description: | 
+          description: |
             Count average occurrences per hour, day of the week, month or year. The 'period' parameter must take one of the following value: 'hour', 'day_of_week', 'month', 'year'. The default value is per 'hour'
           required: false
           type: string
@@ -288,10 +263,10 @@ paths:
       responses:
         '200':
           description: An array of symptoms, associated with their average number of occurrences.
-          schema: 
+          schema:
             type: array
             items:
-              $ref: '#/definitions/StatsPerDate'
+              $ref: '#/definitions/AveragePerPeriod'
 definitions:
   Symptom:
     type: object
@@ -425,7 +400,7 @@ definitions:
         type: number
         format: float
         description: Accuracy of altitude in meters.
-      heading: 
+      heading:
         type: number
         format: float
         description: Direction if travel, specified in degress couting clockwise relative to the true north.
@@ -479,9 +454,9 @@ definitions:
           type: array
           items:
             $ref: '#/definitions/Occurrence'
-  StatsPerDate:
+  SymptomWithAverage:
     type: object
-    description: An array of symptoms, each containing an array of dates associated with a number of occurrence that occurred at that particular date.
+    description: A list of all symptoms with the number of occurrences during a period
     properties:
       id:
         type: number
@@ -489,25 +464,19 @@ definitions:
       name:
         type: string
         description: Name of the symptom.
-      dates:
+      averages:
         type: array
         items:
-          $ref: '#/definitions/NumberOfOccurrencePerDate'
-  NumberOfOccurrencePerDate:
+          type: number
+  AveragePerPeriod:
     type: object
-    description: A date associated to a number of occurrences that occurred at this date.
+    description: An array of symptoms, each containing an array of dates associated with a number of occurrence that occurred at that particular date.
     properties:
-      date:
+      symptoms:
+        type: array
+        items:
+          $ref: '#/definitions/SymptomWithAverage'
+      unit:
         type: string
-        format: date
-        description: The date.
-      number:
-        type: integer
-        description: The number of occurrences that occurred at the date.
-          
-        
-        
-        
-        
-        
-        
+        enum: ['hour', 'day_of_week', 'month', 'year']
+        default: 'hour'
