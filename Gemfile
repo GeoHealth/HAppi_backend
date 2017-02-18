@@ -88,5 +88,9 @@ group :test do
   # Use Factories instead of Fixtures: https://semaphoreci.com/blog/2014/01/14/rails-testing-antipatterns-fixtures-and-factories.html
   # https://github.com/thoughtbot/factory_girl_rails
   gem 'factory_girl_rails', '~> 4.8'
+
+  # Mutation testing tool
+  # https://github.com/mbj/mutant
+  gem 'mutant-rspec'
 end
 
