@@ -45,12 +45,13 @@ RSpec.describe StatsController, type: :controller do
             JSON.parse(response.body)
           end
 
-          it 'contains a key name symptoms' do
+          it 'contains a key name symptoms that is an array' do
             expect(@parsed_response).to have_key('symptoms')
+            expect(@parsed_response['symptoms']).to be_an Array
           end
 
-          it 'contains an array' do
-            expect(@parsed_response['symptoms']).to be_an Array
+          it 'contains a key name unit' do
+            expect(@parsed_response).to have_key('unit')
           end
 
           describe 'each element of the array "symptoms"' do
@@ -70,12 +71,12 @@ RSpec.describe StatsController, type: :controller do
               end
             end
 
-            # it 'contains an array named "dates"' do
-            #   @symptoms.each do |symptom|
-            #     expect(symptom).to have_key('dates')
-            #     expect(symptom['dates']).to be_an Array
-            #   end
-            # end
+            it 'contains an array named "averages"' do
+              @symptoms.each do |symptom|
+                expect(symptom).to have_key('averages')
+                expect(symptom['averages']).to be_an Array
+              end
+            end
 
             it 'does not contains useless attributes: short_description, long_description, category, gender_filter' do
               @symptoms.each do |symptom|
@@ -83,6 +84,16 @@ RSpec.describe StatsController, type: :controller do
                 expect(symptom).not_to have_key('long_description')
                 expect(symptom).not_to have_key('category')
                 expect(symptom).not_to have_key('gender_filter')
+              end
+            end
+
+            describe 'each element of the array "averages"' do
+              it 'is an Integer' do
+                @symptoms.each do |symptom|
+                  symptom['averages'].each do |average|
+                    expect(average).to be_an Integer
+                  end
+                end
               end
             end
           end

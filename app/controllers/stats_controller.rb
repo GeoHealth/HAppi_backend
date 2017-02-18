@@ -3,7 +3,6 @@ class StatsController < ApplicationController
   before_action :authenticate_user!
 
   def average
-    symptoms = Symptom.all
-    render json: {symptoms: symptoms}, :except => [:short_description, :long_description, :category, :gender_filter], status: 200
+    render json: AverageStatsFactory.per_hour_for_user(current_user), status: 200
   end
 end

@@ -37,5 +37,13 @@ FactoryGirl.define do
     uid 'fake@mail.com'
     email 'fake@mail.com'
     password '11112222'
+    current_sign_in_at Time.now
+    last_sign_in_at Time.now
+  end
+
+  factory :symptom_with_average do
+    sequence(:id)
+    name 'pain'
+    averages []
   end
 end
