@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 ruby '~> 2.2.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.3'
+gem 'rails', '4.2.7'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.19.0'
 # Use SCSS for stylesheets
@@ -47,6 +47,10 @@ gem 'puma'
 
 # This gem enables serving assets in production and setting your logger to standard out
 gem 'rails_12factor', group: :production
+
+# ActiveModelSerializers
+# https://github.com/rails-api/active_model_serializers
+gem 'active_model_serializers', '~> 0.10.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
