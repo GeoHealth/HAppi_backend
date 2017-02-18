@@ -6,13 +6,11 @@ FactoryGirl.define do
 
   factory :occurrence do
     symptom_id { create(:symptom).id }
-    user_id { create(:user).id }
     date { Date.new }
   end
 
   factory :occurrence_with_non_existing_symptom, class: Occurrence do
     symptom_id -1
-    user_id { create(:user).id }
     date { Date.new }
   end
 
@@ -32,13 +30,15 @@ FactoryGirl.define do
     altitude 25.3
   end
 
+  sequence :email do |n|
+    "person#{n}@example.com"
+  end
+
   factory :user do
     provider 'email'
-    uid 'fake@mail.com'
-    email 'fake@mail.com'
+    uid { generate(:email) }
+    email { uid }
     password '11112222'
-    current_sign_in_at Time.now
-    last_sign_in_at Time.now
   end
 
   factory :symptom_with_average do

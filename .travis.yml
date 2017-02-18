@@ -10,6 +10,8 @@ before_script:
 - bundle exec rake db:test:prepare
 script:
 - COVERAGE=true bundle exec rake spec
+- RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec OccurrencesController
+- RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec SymptomsController
 after_success:
 - bundle exec codeclimate-test-reporter
 - sudo cp flynn-ca.cer /usr/local/share/ca-certificates/flynn-ca.crt
