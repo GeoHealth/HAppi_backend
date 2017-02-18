@@ -12,7 +12,6 @@ RSpec.describe OccurrencesController, type: :controller do
       end
 
       context 'when a valid, basic (no gps_location, no factors) occurrence is given' do
-
         before(:each) do
           @valid_occurrence = build(:occurrence)
           @created_occurrence = post :create, occurrence: @valid_occurrence.to_json
@@ -56,6 +55,10 @@ RSpec.describe OccurrencesController, type: :controller do
         it 'does not add any occurrence' do
           expect(Occurrence.count).to eq 0
         end
+
+        it 'does not returns anything in the body' do
+          expect(response.body).to be_empty
+        end
       end
 
       context 'when the given occurrence reference a non existing symptom' do
@@ -70,6 +73,10 @@ RSpec.describe OccurrencesController, type: :controller do
 
         it 'does not add any occurrence' do
           expect(Occurrence.count).to eq 0
+        end
+
+        it 'does not returns anything in the body' do
+          expect(response.body).to be_empty
         end
       end
 

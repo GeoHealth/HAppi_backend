@@ -9,10 +9,10 @@ class OccurrencesController < ApplicationController
       if @occurrence.save
         render json: @occurrence, status: 201
       else
-        render json: @occurrence, status: 422
+        render :nothing => true, status: 422
       end
     rescue ActiveRecord::InvalidForeignKey
-      render json: @occurrence, status: 422
+      render :nothing => true, status: 422
     end
   end
 end
