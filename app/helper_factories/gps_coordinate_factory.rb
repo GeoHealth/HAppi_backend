@@ -1,6 +1,6 @@
 class GpsCoordinateFactory
   def self.build_from_params(json_gpscoordinate)
-    json_gpscoordinate = JSON.parse(json_gpscoordinate) if json_gpscoordinate.class == String
+    json_gpscoordinate = JSON.parse(json_gpscoordinate) if json_gpscoordinate.class.equal?(String)
 
     gps_coordinate = GpsCoordinate.new
     if json_gpscoordinate
@@ -14,6 +14,7 @@ class GpsCoordinateFactory
           longitude: json_gpscoordinate['longitude']
       )
     end
-    return gps_coordinate
+
+    gps_coordinate
   end
 end
