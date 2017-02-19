@@ -3,8 +3,8 @@ class SymptomsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    if params[:name]
-      symptoms = Symptom.where('name ilike ?', "%#{params[:name]}%")
+    if params.key?(:name)
+      symptoms = Symptom.where('name ilike ?', "%#{params.fetch(:name)}%")
     else
       symptoms = Symptom.all
     end
