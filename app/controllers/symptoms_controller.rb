@@ -12,7 +12,7 @@ class SymptomsController < ApplicationController
   end
 
   def occurrences
-    @symptoms = Symptom.includes(:occurrences).where(occurrences: {user_id: current_user.id})
-    render json: {symptoms: @symptoms}, :include => [:occurrences]
+    @symptoms = Symptom.includes(:occurrences).where(occurrences: {user: current_user})
+    render json: {symptoms: @symptoms}, :include => :occurrences
   end
 end
