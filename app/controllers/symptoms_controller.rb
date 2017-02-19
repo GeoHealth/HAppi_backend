@@ -11,8 +11,8 @@ class SymptomsController < ApplicationController
     render json: {symptoms: symptoms}
   end
 
-  # def occurrences
-  #   @symptoms = Symptom.includes(:occurrences).where(occurrences: {user_id: current_user.id})
-  #   render json: {symptoms: @symptoms}, :include => [:occurrences], status: 200
-  # end
+  def occurrences
+    @symptoms = Symptom.includes(:occurrences).where(occurrences: {user_id: current_user.id})
+    render json: {symptoms: @symptoms}, :include => [:occurrences], status: 200
+  end
 end
