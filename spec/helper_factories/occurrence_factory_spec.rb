@@ -19,14 +19,6 @@ RSpec.describe OccurrenceFactory do
     expect(@received_occurrence.symptom_id).to be_nil
     expect(@received_occurrence.date).to be_nil
     expect(@received_occurrence.gps_coordinate).to be_nil
-
-    # expect(@received_occurrence.gps_coordinate.accuracy).to be_nil
-    # expect(@received_occurrence.gps_coordinate.altitude).to be_nil
-    # expect(@received_occurrence.gps_coordinate.altitude_accuracy).to be_nil
-    # expect(@received_occurrence.gps_coordinate.heading).to be_nil
-    # expect(@received_occurrence.gps_coordinate.speed).to be_nil
-    # expect(@received_occurrence.gps_coordinate.latitude).to be_nil
-    # expect(@received_occurrence.gps_coordinate.longitude).to be_nil
   end
 
   describe '.build_from_params' do

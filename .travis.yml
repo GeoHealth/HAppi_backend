@@ -14,6 +14,10 @@ script:
 - RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec SymptomsController
 - RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec GpsCoordinateFactory
 - RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec OccurrenceFactory
+- RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec Factor
+- RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec FactorInstance
+- RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec GpsCoordinate
+- RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec Occurrence
 after_success:
 - bundle exec codeclimate-test-reporter
 - sudo cp flynn-ca.cer /usr/local/share/ca-certificates/flynn-ca.crt
