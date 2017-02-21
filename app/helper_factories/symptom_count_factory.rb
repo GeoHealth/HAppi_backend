@@ -3,7 +3,7 @@ class SymptomCountFactory
     Symptom.includes(:occurrences)
         .where('occurrences.user_id = :user_id AND occurrences.date BETWEEN :start_date AND :end_date',
                {user_id: user_id, start_date: start_date, end_date: end_date})
-        .references(:occurrences)
+        .references(nil)
         .find(symptom_id)
   end
 
