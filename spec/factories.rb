@@ -11,12 +11,12 @@ FactoryGirl.define do
     gender_filter 'both'
   end
 
-  # SymptomWithAverages
-  factory :symptom_with_average do
-    sequence(:id)
-    name 'pain'
-    averages []
-  end
+  # # SymptomWithAverages
+  # factory :symptom_with_average do
+  #   id { create(:symptom).id }
+  #   name { build(:symptom).name }
+  #   averages []
+  # end
 
   #Occurrences
   factory :occurrence do
@@ -49,5 +49,11 @@ FactoryGirl.define do
     uid { generate(:email) }
     email { uid }
     password '11112222'
+  end
+
+  # CountPerDate
+  factory :count_per_date do
+    date Time.now
+    count 1
   end
 end
