@@ -21,7 +21,8 @@ FactoryGirl.define do
   #Occurrences
   factory :occurrence do
     symptom_id { create(:symptom).id }
-    date { Date.new }
+    date { Time.new }
+    user_id { create(:user).id }
   end
 
   factory :occurrence_with_gps_coordinates, parent: :occurrence do
