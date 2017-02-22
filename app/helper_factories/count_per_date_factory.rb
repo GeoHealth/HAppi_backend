@@ -9,7 +9,7 @@ class CountPerDateFactory
     counts_per_date = generate_array_per_hours(Time.zone.parse(first_occurrence.date), Time.zone.parse(last_occurrence.date))
     occurrences.each do |occurrence|
       index = compute_hours_between(Time.zone.parse(first_occurrence.date), Time.zone.parse(occurrence.date))
-      counts_per_date[index].count += 1
+      counts_per_date.fetch(index).count += 1
     end
     counts_per_date
   end
