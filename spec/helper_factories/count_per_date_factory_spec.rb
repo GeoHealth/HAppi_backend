@@ -8,6 +8,24 @@ RSpec.shared_examples 'all CountPerDate have count=0' do
   end
 end
 
+RSpec.shared_examples 'the result looks like [6, 6, 1]' do
+  it 'returns an array of length 3' do
+    expect(subject.length).to eq 3
+  end
+
+  it 'contains a count of 6 for the first element' do
+    expect(subject[0].count).to eq 6
+  end
+
+  it 'contains a count of 6 for the second element' do
+    expect(subject[1].count).to eq 6
+  end
+
+  it 'contains a count of 1 for the third element' do
+    expect(subject[2].count).to eq 1
+  end
+end
+
 RSpec.describe CountPerDateFactory do
   first = Time.zone.parse('2005-10-10 10:10:10')
 
@@ -194,7 +212,7 @@ RSpec.describe CountPerDateFactory do
   describe '.per_hour' do
     subject { CountPerDateFactory.per_hour(occurrences) }
 
-    context 'when an array of 10 occurrences is given, each separated by one hour' do
+    context 'when an array of 10 occurrences is given, each separated by one hour, ordered ASC' do
       number_of_occurrences = 10
       let(:occurrences) {
         occurrences = Array.new(number_of_occurrences) { Occurrence.new }
@@ -215,8 +233,8 @@ RSpec.describe CountPerDateFactory do
       end
     end
 
-    context 'when an array of 12 occurrences is given, each separated by 10 minutes' do
-      number_of_occurrences = 12
+    context 'when an array of 13 occurrences is given, each separated by 10 minutes, ordered ASC' do
+      number_of_occurrences = 13
       let(:occurrences) {
         occurrences = Array.new(number_of_occurrences) { Occurrence.new }
         for i in 0..number_of_occurrences-1 do
@@ -225,15 +243,37 @@ RSpec.describe CountPerDateFactory do
         occurrences
       }
 
-      it 'returns an array of length 2' do
-        expect(subject.length).to eq 2
-      end
+      it_behaves_like 'the result looks like [6, 6, 1]'
+    end
 
-      it 'contains a "count" of 6 for each CountPerDate' do
-        subject.each do |count_per_date|
-          expect(count_per_date.count).to eq 6
+    context 'when an array of 13 occurrences is given, each separated by 10 minutes, unordered' do
+      number_of_occurrences = 13
+      let(:occurrences) {
+        occurrences = Array.new(number_of_occurrences) { Occurrence.new }
+        for i in 0..number_of_occurrences-1 do
+          occurrences[i].date = (first - (i * 10).minutes)
         end
-      end
+        occurrences[0], occurrences[5] = occurrences[5], occurrences[0]
+        occurrences
+      }
+
+      it_behaves_like 'the result looks like [6, 6, 1]'
+    end
+
+    context 'when an array of 13 occurrences is given, each separated by 10 minutes, unordered, and the Timezone is changed' do
+      number_of_occurrences = 13
+      let(:occurrences) {
+        zones = ['Midway Island', 'Hawaii', 'Alaska', 'Pacific Time (US & Canada)', 'Arizona', 'Azores', 'Dublin', 'London', 'Ljubljana', 'Brussels', 'Bucharest', 'Sofia', 'Bangkok']
+        occurrences = Array.new(number_of_occurrences) { Occurrence.new }
+        for i in 0..number_of_occurrences-1 do
+          Time.zone = zones[i]
+          occurrences[i].date = Time.zone.at((first - (i * 10).minutes).to_i)
+        end
+        occurrences[0], occurrences[5] = occurrences[5], occurrences[0]
+        occurrences
+      }
+
+      it_behaves_like 'the result looks like [6, 6, 1]'
     end
 
     context 'when an array of one occurrence is given' do
