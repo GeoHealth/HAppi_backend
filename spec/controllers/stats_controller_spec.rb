@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe StatsController, type: :controller do
   describe '#count' do
     it { should route(:get, '/stats/count').to(action: :count) }
-    it_behaves_like 'GET protected with authentication controller', :average
+    it_behaves_like 'GET protected with authentication controller', :count
 
     context 'with valid authentication headers' do
       number_of_symptoms_to_create = 2
