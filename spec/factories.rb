@@ -50,4 +50,11 @@ FactoryGirl.define do
     date { Time.now }
     count 1
   end
+
+  # SymptomCount
+  factory :symptom_count do
+    id { create(:symptom).id }
+    name 'name'
+    counts { create_list(:count_per_date, 5) }
+  end
 end

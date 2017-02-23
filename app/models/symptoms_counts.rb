@@ -1,3 +1,3 @@
-class SymptomsCount
+class SymptomsCounts
   attr_accessor :symptoms, :unit
 end

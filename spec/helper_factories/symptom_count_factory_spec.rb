@@ -3,17 +3,8 @@ require 'support/shared_example_symptom_count_factory'
 
 RSpec.describe SymptomCountFactory do
   before(:each) do
-    @user = create(:user)
-    @symptom = create(:symptom)
-    @january_2005_10_o_clock = Time.zone.parse('2005-01-01 10:00:00')
-    @one_hour_later = @january_2005_10_o_clock + 1.hour
-    @two_hours_later = @january_2005_10_o_clock + 2.hour
-    # 3 occurrences at 01-01-2005, 10:00:00
-    create_list(:occurrence, 3, {symptom_id: @symptom.id, date: @january_2005_10_o_clock, user_id: @user.id})
-    # 2 occurrences at 01-01-2005, 11:00:00
-    create_list(:occurrence, 2, {symptom_id: @symptom.id, date: @one_hour_later, user_id: @user.id})
-    # 1 occurrence at 01-01-2005, 12:00:00
-    create(:occurrence, symptom_id: @symptom.id, date: @two_hours_later, user_id: @user.id)
+    @user, symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_count_for_spec
+    @symptom = symptoms[0]
   end
 
   describe '.get_symptom' do

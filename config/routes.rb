@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :occurrences, :only => [:create]
   resources :symptoms, :only => [:index]
   get 'symptoms/occurrences' => 'symptoms#occurrences'
-  get 'stats/average' => 'stats#average'
+  get 'stats/count' => 'stats#count'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

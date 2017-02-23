@@ -1,3 +1,20 @@
+def create_symptom_count_for_spec (number_of_symptoms_to_create = 1)
+  user = create(:user)
+  symptoms = create_list(:symptom, number_of_symptoms_to_create)
+  january_2005_10_o_clock = Time.zone.parse('2005-01-01 10:00:00')
+  one_hour_later = january_2005_10_o_clock + 1.hour
+  two_hours_later = january_2005_10_o_clock + 2.hour
+  symptoms.each do |symptom|
+    # 3 occurrences at 01-01-2005, 10:00:00
+    create_list(:occurrence, 3, {symptom_id: symptom.id, date: january_2005_10_o_clock, user_id: user.id})
+    # 2 occurrences at 01-01-2005, 11:00:00
+    create_list(:occurrence, 2, {symptom_id: symptom.id, date: one_hour_later, user_id: user.id})
+    # 1 occurrence at 01-01-2005, 12:00:00
+    create(:occurrence, symptom_id: symptom.id, date: two_hours_later, user_id: user.id)
+  end
+
+  return user, symptoms, january_2005_10_o_clock, one_hour_later, two_hours_later
+end
 
 RSpec.shared_examples 'all occurrences are included in the given interval' do
   it 'has the correct symptom_id' do
