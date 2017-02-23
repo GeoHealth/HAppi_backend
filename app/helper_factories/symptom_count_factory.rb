@@ -17,9 +17,9 @@ class SymptomCountFactory
   # @param [DateTime] start_date all occurrences before this date are ignored. Default value is original Epoch (1 January 1970).
   # @param [DateTime] end_date all occurrences after this date are ignored. Default value is the current time.
   # @return [SymptomCount]
-  def self.per_hour (symptom_id, user_id, start_date = Time.new(1970), end_date= Time.current)
+  def self.per_hour (symptom_id, user_id, start_date = Time.at(0), end_date= Time.current)
     symptom_count = SymptomCount.new
-    symptom = SymptomCountFactory.get_symptom(symptom_id, user_id, start_date, end_date)
+    symptom = get_symptom(symptom_id, user_id, start_date, end_date)
 
     symptom_count.id = symptom.id
     symptom_count.name = symptom.name
