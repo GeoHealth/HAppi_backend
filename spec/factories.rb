@@ -11,13 +11,6 @@ FactoryGirl.define do
     gender_filter 'both'
   end
 
-  # # SymptomWithAverages
-  # factory :symptom_with_average do
-  #   id { create(:symptom).id }
-  #   name { build(:symptom).name }
-  #   averages []
-  # end
-
   #Occurrences
   factory :occurrence do
     symptom_id { create(:symptom).id }
