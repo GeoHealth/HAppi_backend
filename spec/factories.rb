@@ -21,7 +21,7 @@ FactoryGirl.define do
   #Occurrences
   factory :occurrence do
     symptom_id { create(:symptom).id }
-    date { Time.new }
+    date { Time.now }
     user_id { create(:user).id }
   end
 
@@ -54,7 +54,7 @@ FactoryGirl.define do
 
   # CountPerDate
   factory :count_per_date do
-    date Time.now
+    date { Time.now }
     count 1
   end
 end

@@ -4,7 +4,7 @@ RSpec.describe OccurrenceFactory do
 
   def check_all_attributes
     expect(@received_occurrence.symptom_id).to eq(@valid_occurrence[:symptom_id])
-    expect(@received_occurrence.date).to eq(@valid_occurrence[:date])
+    expect(@received_occurrence.date).to be_within(1.second).of (Time.zone.parse(@valid_occurrence[:date]))
 
     expect(@received_occurrence.gps_coordinate.accuracy).to eq(@valid_occurrence[:gps_coordinate][:accuracy])
     expect(@received_occurrence.gps_coordinate.altitude).to eq(@valid_occurrence[:gps_coordinate][:altitude])
@@ -51,7 +51,7 @@ RSpec.describe OccurrenceFactory do
       before(:each) do
         @valid_occurrence = {
             symptom_id: 2,
-            date: '2016-12-15',
+            date: '2016-12-15 00:00:00',
             gps_coordinate: {
                 latitude: 50.65,
                 longitude: 4.06,

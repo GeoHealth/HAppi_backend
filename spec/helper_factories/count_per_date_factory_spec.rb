@@ -260,20 +260,26 @@ RSpec.describe CountPerDateFactory do
       it_behaves_like 'the result looks like [6, 6, 1]'
     end
 
-    context 'when an array of 13 occurrences is given, each separated by 10 minutes, unordered, and the Timezone is changed' do
-      number_of_occurrences = 13
+    context 'when an array of 3 occurrences is given, each within the same hour and the Timezone is changed' do
+      number_of_occurrences = 3
       let(:occurrences) {
-        zones = ['Midway Island', 'Hawaii', 'Alaska', 'Pacific Time (US & Canada)', 'Arizona', 'Azores', 'Dublin', 'London', 'Ljubljana', 'Brussels', 'Bucharest', 'Sofia', 'Bangkok']
         occurrences = Array.new(number_of_occurrences) { Occurrence.new }
-        for i in 0..number_of_occurrences-1 do
-          Time.zone = zones[i]
-          occurrences[i].date = Time.zone.at((first - (i * 10).minutes).to_i)
-        end
-        occurrences[0], occurrences[5] = occurrences[5], occurrences[0]
+        Time.zone='Brussels'
+        occurrences[0].date = Time.zone.at(first.to_i)
+        Time.zone='Hawaii'
+        occurrences[1].date = Time.zone.at((first+30.minutes).to_i)
+        Time.zone='Bangkok'
+        occurrences[2].date = Time.zone.at((first+30.minutes).to_i)
         occurrences
       }
 
-      it_behaves_like 'the result looks like [6, 6, 1]'
+      it 'returns an array of length 1' do
+        expect(subject.length).to eq 1
+      end
+
+      it 'contains a "count" of 3' do
+        expect(subject[0].count).to eq 3
+      end
     end
 
     context 'when an array of one occurrence is given' do

@@ -3,12 +3,12 @@ class CountPerDateFactory
   # @param [Array<Occurrence>] occurrences
   # @return [Array<CountPerDate>]
   def self.per_hour(occurrences)
-    occurrences.sort! { |a, b| Time.zone.parse(a.date) <=> Time.zone.parse(b.date) }
+    occurrences = occurrences.sort { |a, b| a.date <=> b.date }
     first_occurrence = occurrences.first
     last_occurrence = occurrences.last
-    counts_per_date = generate_array_per_hours(Time.zone.parse(first_occurrence.date), Time.zone.parse(last_occurrence.date))
+    counts_per_date = generate_array_per_hours(first_occurrence.date, last_occurrence.date)
     occurrences.each do |occurrence|
-      index = compute_hours_between(Time.zone.parse(first_occurrence.date), Time.zone.parse(occurrence.date))
+      index = compute_hours_between(first_occurrence.date, occurrence.date)
       counts_per_date.fetch(index).count += 1
     end
     counts_per_date
