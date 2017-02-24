@@ -3,6 +3,7 @@
 #   it { should have_attr_accessor(:value) }
 #   it { should have_attr_accessor(:value).read_only }
 #   it { should have_attr_accessor(:value).write_only }
+# :nocov:
 module Shoulda
   module Matchers
     module ActiveModel # :nodoc
@@ -78,3 +79,4 @@ module Shoulda
     end
   end
 end
+# :nocov:
