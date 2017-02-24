@@ -64,10 +64,11 @@ RSpec.describe StatsController, type: :controller do
               end
             end
 
-            it 'contains an array named "counts"' do
+            it 'contains an array named "counts" of size 1' do
               @symptoms.each do |symptom|
                 expect(symptom).to have_key('counts')
                 expect(symptom['counts']).to be_an Array
+                expect(symptom['counts'].length).to eq 1
               end
             end
 

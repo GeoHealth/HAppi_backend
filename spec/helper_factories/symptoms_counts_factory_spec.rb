@@ -3,6 +3,43 @@ require 'support/shared_example_symptom_count_factory'
 
 RSpec.describe SymptomsCountsFactory do
 
+  describe '.build_for' do
+    context 'when the unit is not given' do
+      it 'calls per_days_for_user' do
+        expect(SymptomsCountsFactory).to receive(:per_days_for_user)
+        SymptomsCountsFactory.build_for nil
+      end
+    end
+
+    context 'when the unit is days' do
+      it 'calls per_days_for_user' do
+        expect(SymptomsCountsFactory).to receive(:per_days_for_user)
+        SymptomsCountsFactory.build_for nil, nil, nil, 'days'
+      end
+    end
+
+    context 'when the unit is hours' do
+      it 'calls per_hours_for_user' do
+        expect(SymptomsCountsFactory).to receive(:per_hours_for_user)
+        SymptomsCountsFactory.build_for nil, nil, nil, 'hours'
+      end
+    end
+
+    context 'when the unit is months' do
+      it 'calls per_months_for_user' do
+        expect(SymptomsCountsFactory).to receive(:per_months_for_user)
+        SymptomsCountsFactory.build_for nil, nil, nil, 'months'
+      end
+    end
+
+    context 'when the unit is years' do
+      it 'calls per_years_for_user' do
+        expect(SymptomsCountsFactory).to receive(:per_years_for_user)
+        SymptomsCountsFactory.build_for nil, nil, nil, 'years'
+      end
+    end
+  end
+
   describe '.per_hour_for_user' do
     number_of_symptoms = 2
     before(:each) do
@@ -13,10 +50,10 @@ RSpec.describe SymptomsCountsFactory do
       let(:user) {@user}
 
       context 'with only the required parameter user'  do
-        subject { SymptomsCountsFactory.per_hour_for_user user }
+        subject { SymptomsCountsFactory.per_hours_for_user user }
 
-        it 'has a unit = "days"' do
-          expect(subject.unit).to eq 'days'
+        it 'has a unit = "hours"' do
+          expect(subject.unit).to eq 'hours'
         end
 
         it 'has 2 symptoms' do

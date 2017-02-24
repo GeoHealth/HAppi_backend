@@ -69,7 +69,7 @@ RSpec.describe SymptomCountFactory do
       let(:user_id) { @user.id }
 
       context 'when no start date and end date are given' do
-        subject { SymptomCountFactory.per_hour symptom_id, user_id }
+        subject { SymptomCountFactory.per_hours symptom_id, user_id }
 
         include_examples 'all occurrences are included in the given interval'
       end
@@ -78,7 +78,7 @@ RSpec.describe SymptomCountFactory do
         let(:start_date) { @january_2005_10_o_clock - 1.day }
         let(:end_date) { @january_2005_10_o_clock + 10.day }
 
-        subject { SymptomCountFactory.per_hour symptom_id, user_id, start_date, end_date }
+        subject { SymptomCountFactory.per_hours symptom_id, user_id, start_date, end_date }
 
         include_examples 'all occurrences are included in the given interval'
       end
@@ -87,7 +87,7 @@ RSpec.describe SymptomCountFactory do
         let(:start_date) { @january_2005_10_o_clock }
         let(:end_date) { @january_2005_10_o_clock + 10.day }
 
-        subject { SymptomCountFactory.per_hour symptom_id, user_id, start_date, end_date }
+        subject { SymptomCountFactory.per_hours symptom_id, user_id, start_date, end_date }
 
         include_examples 'all occurrences are included in the given interval'
       end
@@ -96,7 +96,7 @@ RSpec.describe SymptomCountFactory do
         let(:start_date) { @january_2005_10_o_clock }
         let(:end_date) { @two_hours_later }
 
-        subject { SymptomCountFactory.per_hour symptom_id, user_id, start_date, end_date }
+        subject { SymptomCountFactory.per_hours symptom_id, user_id, start_date, end_date }
 
         include_examples 'all occurrences are included in the given interval'
       end
@@ -105,7 +105,7 @@ RSpec.describe SymptomCountFactory do
         let(:start_date) { @january_2005_10_o_clock + 30.minutes }
         let(:end_date) { @two_hours_later }
 
-        subject { SymptomCountFactory.per_hour symptom_id, user_id, start_date, end_date }
+        subject { SymptomCountFactory.per_hours symptom_id, user_id, start_date, end_date }
 
         it 'has 2 counts' do
           expect(subject.counts.length).to eq 2
@@ -144,7 +144,7 @@ RSpec.describe SymptomCountFactory do
         let(:start_date) { @january_2005_10_o_clock + 30.minutes }
         let(:end_date) { @two_hours_later - 30.minutes}
 
-        subject { SymptomCountFactory.per_hour symptom_id, user_id, start_date, end_date }
+        subject { SymptomCountFactory.per_hours symptom_id, user_id, start_date, end_date }
 
         it 'has 1 counts' do
           expect(subject.counts.length).to eq 1
