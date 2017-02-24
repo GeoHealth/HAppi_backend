@@ -6,7 +6,7 @@ RSpec.describe SymptomsCountsFactory do
   describe '.per_hour_for_user' do
     number_of_symptoms = 2
     before(:each) do
-      @user, @symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_count_for_spec(number_of_symptoms)
+      @user, @symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec(number_of_symptoms)
     end
 
     context 'with a valid user' do

@@ -1,5 +1,5 @@
-def create_symptom_count_for_spec (number_of_symptoms_to_create = 1)
-  user = create(:user)
+def create_symptom_and_occurrences_for_spec (number_of_symptoms_to_create = 1, user = nil)
+  user = user || create(:user)
   symptoms = create_list(:symptom, number_of_symptoms_to_create)
   january_2005_10_o_clock = Time.zone.parse('2005-01-01 10:00:00')
   one_hour_later = january_2005_10_o_clock + 1.hour

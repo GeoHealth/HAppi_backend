@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/shared_example_symptom_count_factory'
 
 RSpec.describe StatsController, type: :controller do
   describe '#count' do
@@ -6,8 +7,7 @@ RSpec.describe StatsController, type: :controller do
     it_behaves_like 'GET protected with authentication controller', :count
 
     context 'with valid authentication headers' do
-      number_of_symptoms_to_create = 2
-      number_of_occurrence_to_create = 10
+      number_of_symptoms = 2
 
       before(:each) do
         @user = AuthenticationTestHelper.set_valid_authentication_headers(@request)
@@ -15,15 +15,7 @@ RSpec.describe StatsController, type: :controller do
       end
 
       before(:each) do
-        @symptoms = create_list(:symptom, number_of_symptoms_to_create)
-        today = Date.new
-        a_week_ago = today - 1.week
-        two_weeks_ago = a_week_ago - 1.week
-        @symptoms.each do |symptom|
-          create_list(:occurrence, number_of_occurrence_to_create, user_id: @user.id, symptom_id: symptom.id, date: today)
-          create_list(:occurrence, number_of_occurrence_to_create, user_id: @user.id, symptom_id: symptom.id, date: a_week_ago)
-          create_list(:occurrence, number_of_occurrence_to_create, user_id: @user.id, symptom_id: symptom.id, date: two_weeks_ago)
-        end
+        @user, @symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec(number_of_symptoms, @user)
       end
 
       context 'without parameters' do

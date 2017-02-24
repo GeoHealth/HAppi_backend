@@ -3,7 +3,7 @@ require 'support/shared_example_symptom_count_factory'
 
 RSpec.describe SymptomCountFactory do
   before(:each) do
-    @user, symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_count_for_spec
+    @user, symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec
     @symptom = symptoms[0]
   end
 
