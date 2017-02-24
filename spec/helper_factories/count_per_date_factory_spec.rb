@@ -13,7 +13,7 @@ RSpec.shared_examples 'the result looks like [6, 6, 1]' do
     expect(subject.length).to eq 3
   end
 
-  it 'contains a count of 6 for the first element' do
+  it 'contains a count of 6 for the start_date element' do
     expect(subject[0].count).to eq 6
   end
 
@@ -27,289 +27,354 @@ RSpec.shared_examples 'the result looks like [6, 6, 1]' do
 end
 
 RSpec.describe CountPerDateFactory do
-  first = Time.zone.parse('2005-10-10 10:10:10')
+  start_date = Time.zone.parse('2005-10-10 10:10:10')
 
-  describe '.compute_hours_between' do
-    subject { CountPerDateFactory.compute_hours_between(first, last) }
+  describe '.compute_number_of_units_between' do
+    subject { CountPerDateFactory.compute_number_of_units_between(start_date, end_date, unit) }
+    let(:start_date) { start_date }
 
-    context 'when start date is 2 hours before end date' do
-      let(:first) { first }
-      let(:last) { first + 2.hours }
+    context 'when unit = hours' do
+      let(:unit) { 'hours' }
 
-      it { is_expected.to eq 2 }
-    end
+      context 'when start date is 2 hours before end date' do
+        let(:end_date) { start_date + 2.hours }
 
-    context 'when start date is 2 hours after end date' do
-      let(:first) { first }
-      let(:last) { first - 2.hours }
-
-      it { is_expected.to eq 2 }
-    end
-
-    context 'when start date is equal to end date' do
-      let(:first) { first }
-      let(:last) { first }
-
-      it { is_expected.to eq 0 }
-    end
-
-    context 'when start date is 2 minutes before end date' do
-      let(:first) { first }
-      let(:last) { first + 2.minutes }
-
-      it { is_expected.to eq 0 }
-    end
-
-    context 'when start date is 2 minutes after end date' do
-      let(:first) { first }
-      let(:last) { first - 2.minutes }
-
-      it { is_expected.to eq 0 }
-    end
-
-    context 'when start date is 2 days before end date' do
-      let(:first) { first }
-      let(:last) { first + 2.days }
-
-      it { is_expected.to eq 48 }
-    end
-
-    context 'when start date is 2 days after end date' do
-      let(:first) { first }
-      let(:last) { first - 2.days }
-
-      it { is_expected.to eq 48 }
-    end
-  end
-
-  describe '.generate_array_of_count_per_date_for' do
-    subject { CountPerDateFactory.generate_array_per_hours(first, last) }
-
-    context 'when start date is 2 hours before end date' do
-      let(:first) { first }
-      let(:last) { first + 2.hours }
-
-      it 'returns an array of length 3' do
-        expect(subject.length).to eq 3
+        it { is_expected.to eq 2 }
       end
 
-      it 'contains 3 dates: "first", "first + 1 hour" and "first + 2 hours"' do
-        (0..2).each { |i|
-          expect(subject[i].date).to eq first + i.hours
-        }
+      context 'when start date is 2 hours after end date' do
+        let(:end_date) { start_date - 2.hours }
+
+        it { is_expected.to eq 2 }
       end
 
-      it_behaves_like 'all CountPerDate have count=0'
+      context 'when start date is equal to end date' do
+        let(:end_date) { start_date }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 minutes before end date' do
+        let(:end_date) { start_date + 2.minutes }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 minutes after end date' do
+        let(:end_date) { start_date - 2.minutes }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 days before end date' do
+        let(:end_date) { start_date + 2.days }
+
+        it { is_expected.to eq 48 }
+      end
+
+      context 'when start date is 2 days after end date' do
+        let(:end_date) { start_date - 2.days }
+
+        it { is_expected.to eq 48 }
+      end
     end
 
-    context 'when start date is 2 minutes before end date' do
-      let(:first) { first }
-      let(:last) { first + 2.minutes }
+    context 'when unit = days' do
+      let(:unit) { 'days' }
 
-      it 'returns an array of length 1' do
-        expect(subject.length).to eq 1
+      context 'when start date is 2 hours before end date' do
+        let(:end_date) { start_date + 2.hours }
+
+        it { is_expected.to eq 0 }
       end
 
-      it 'contains 1 date = first' do
-        expect(subject[0].date).to eq first
+      context 'when start date is 2 hours after end date' do
+        let(:end_date) { start_date - 2.hours }
+
+        it { is_expected.to eq 0 }
       end
 
-      it_behaves_like 'all CountPerDate have count=0'
+      context 'when start date is equal to end date' do
+        let(:end_date) { start_date }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 minutes before end date' do
+        let(:end_date) { start_date + 2.minutes }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 minutes after end date' do
+        let(:end_date) { start_date - 2.minutes }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 days before end date' do
+        let(:end_date) { start_date + 2.days }
+
+        it { is_expected.to eq 2 }
+      end
+
+      context 'when start date is 2 days after end date' do
+        let(:end_date) { start_date - 2.days }
+
+        it { is_expected.to eq 2 }
+      end
     end
 
-    context 'when start date is 2 hours after end date' do
-      let(:first) { first }
-      let(:last) { first - 2.hours }
+    context 'when unit = months' do
+      let(:unit) { 'months' }
 
-      it 'returns an array of length 3' do
-        expect(subject.length).to eq 3
+      context 'when start date is 2 hours before end date' do
+        let(:end_date) { start_date + 2.hours }
+
+        it { is_expected.to eq 0 }
       end
 
-      it 'contains 2 dates: "first", "first + 1 hour" and "first + 2 hours"' do
-        (0..1).each { |i|
-          expect(subject[i].date).to eq first + i.hours
-        }
+      context 'when start date is 2 hours after end date' do
+        let(:end_date) { start_date - 2.hours }
+
+        it { is_expected.to eq 0 }
       end
 
-      it_behaves_like 'all CountPerDate have count=0'
+      context 'when start date is equal to end date' do
+        let(:end_date) { start_date }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 months before end date' do
+        let(:end_date) { start_date + 2.months }
+
+        it { is_expected.to eq 2 }
+      end
+
+      context 'when start date is 2 months after end date' do
+        let(:end_date) { start_date - 2.months }
+
+        it { is_expected.to eq 2 }
+      end
+
+      context 'when start date is 2 years before end date' do
+        let(:end_date) { start_date + 2.years }
+
+        it { is_expected.to eq 24 }
+      end
+
+      context 'when start date is 2 years after end date' do
+        let(:end_date) { start_date - 2.years }
+
+        it { is_expected.to eq 24 }
+      end
     end
 
-    context 'when start date is 2 days before end date' do
-      let(:first) { first }
-      let(:last) { first + 2.days }
+    context 'when unit = years' do
+      let(:unit) { 'years' }
 
-      it 'returns an array of length 49' do
-        expect(subject.length).to eq 49
+      context 'when start date is 2 hours before end date' do
+        let(:end_date) { start_date + 2.hours }
+
+        it { is_expected.to eq 0 }
       end
 
-      it 'contains 49 dates, starting from "first", incremented by 1 hour' do
-        (0..48).each { |i|
-          expect(subject[i].date).to eq first + i.hours
-        }
+      context 'when start date is 2 hours after end date' do
+        let(:end_date) { start_date - 2.hours }
+
+        it { is_expected.to eq 0 }
       end
 
-      it_behaves_like 'all CountPerDate have count=0'
+      context 'when start date is equal to end date' do
+        let(:end_date) { start_date }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 years before end date' do
+        let(:end_date) { start_date + 2.years }
+
+        it { is_expected.to eq 2 }
+      end
+
+      context 'when start date is 2 years after end date' do
+        let(:end_date) { start_date - 2.years }
+
+        it { is_expected.to eq 2 }
+      end
+
+      context 'when start date is 2 months before end date' do
+        let(:end_date) { start_date + 2.months }
+
+        it { is_expected.to eq 0 }
+      end
+
+      context 'when start date is 2 months after end date' do
+        let(:end_date) { start_date - 2.months }
+
+        it { is_expected.to eq 0 }
+      end
+    end
+
+    context 'when unit is invalid' do
+      let(:unit) { 'invalid' }
+      let(:end_date) { start_date - 2.months }
+
+      it { expect { subject }.to raise_error ArgumentError }
     end
   end
 
   describe '.generate_array_for_unit' do
-    subject { CountPerDateFactory.generate_array_for_unit(first, number_of_elements, unit) }
+    subject { CountPerDateFactory.generate_array_for_unit(start_date, end_date, unit) }
 
-    context 'with 10 elements' do
-      number_of_elements = 10
-      let(:number_of_elements) { number_of_elements }
+    context 'when start_date and end_date are separated by 1 year, 2 months, 3 days and 4 hours' do
+      let(:start_date) { start_date }
+      let(:end_date) { start_date + 1.year + 2.months + 3.days + 4.hours }
 
       context 'with unit = hours' do
-        let(:unit) { :hours }
+        let(:unit) { 'hours' }
 
-        it 'returns 10 elements separated by 1 hour' do
-          (0..number_of_elements-1).each { |i|
-            expect(subject[i].date).to eq first + i.hours
-          }
+        it 'returns 10301 elements separated by 1 hour' do
+          expect(subject.length).to eq 10301
+          (0..10301-1).each { |i| expect(subject[i].date).to eq start_date + i.hours }
         end
       end
 
       context 'with unit = days' do
-        let(:unit) { :days }
+        let(:unit) { 'days' }
 
-        it 'returns 10 elements separated by 1 day' do
-          (0..number_of_elements-1).each { |i|
-            expect(subject[i].date).to eq first + i.days
+        it 'returns 430 elements separated by 1 day' do
+          expect(subject.length).to eq 430
+          (0..430-1).each { |i|
+            expect(subject[i].date).to eq start_date + i.days
           }
         end
       end
 
       context 'with unit = month' do
-        let(:unit) { :months }
+        let(:unit) { 'months' }
 
-        it 'returns 10 elements separated by 1 month' do
-          (0..number_of_elements-1).each { |i|
-            expect(subject[i].date).to eq first + i.months
+        it 'returns 15 elements separated by 1 month' do
+          expect(subject.length).to eq 15
+          (0..15-1).each { |i|
+            expect(subject[i].date).to eq start_date + i.months
           }
         end
       end
 
       context 'with unit = years' do
-        let(:unit) { :years }
+        let(:unit) { 'years' }
 
-        it 'returns 10 elements separated by 1 year' do
-          for i in 0..number_of_elements-1 do
-            expect(subject[i].date).to eq first + i.years
+        it 'returns 2 elements separated by 1 year' do
+          expect(subject.length).to eq 2
+          for i in 0..2-1 do
+            expect(subject[i].date).to eq start_date + i.years
           end
         end
       end
 
       context 'with invalid unit' do
-        let(:unit) { :invalid_unit }
+        let(:unit) { 'invalid' }
 
         it 'raise a NoMethodError' do
-          expect { subject }.to raise_error NoMethodError
+          expect { subject }.to raise_error ArgumentError
         end
       end
     end
   end
 
-  describe '.per_hour' do
-    subject { CountPerDateFactory.per_hour(occurrences) }
+  describe '.group_by' do
+    subject { CountPerDateFactory.group_by(occurrences, start_date, end_date, unit) }
 
-    context 'when an array of 10 occurrences is given, each separated by one hour, ordered ASC' do
+    context 'when an array of 10 occurrences is given, each separated by one hour' do
       number_of_occurrences = 10
       let(:occurrences) {
         occurrences = Array.new(number_of_occurrences) { Occurrence.new }
         for i in 0..number_of_occurrences-1 do
-          occurrences[i].date = (first + i.hour)
+          occurrences[i].date = (start_date + i.hour)
         end
         occurrences
       }
 
-      it 'returns an array of length 10' do
-        expect(subject.length).to eq 10
-      end
+      context 'when start_date is at the same date as the first occurrence' do
+        let(:start_date) { start_date }
 
-      it 'contains a "count" of 1 for each CountPerDate' do
-        subject.each do |count_per_date|
-          expect(count_per_date.count).to eq 1
+        context 'when end_date is at the same date as the last occurrence' do
+          let(:end_date) { start_date+(number_of_occurrences-1).hours }
+
+          context 'with unit = hours' do
+            let(:unit) { 'hours' }
+
+            it 'returns an array of length 10' do
+              expect(subject.length).to eq 10
+            end
+
+            it 'contains a "count" of 1 for each CountPerDate' do
+              subject.each do |count_per_date|
+                expect(count_per_date.count).to eq 1
+              end
+            end
+          end
+
+          context 'with unit = days' do
+            let(:unit) { 'days' }
+
+            it 'returns an array of length 1' do
+              expect(subject.length).to eq 1
+            end
+
+            it 'contains a "count" of 10' do
+              expect(subject[0].count).to eq 10
+            end
+          end
+
+          context 'with unit = months' do
+            let(:unit) { 'months' }
+
+            it 'returns an array of length 1' do
+              expect(subject.length).to eq 1
+            end
+
+            it 'contains a "count" of 10' do
+              expect(subject[0].count).to eq 10
+            end
+          end
+
+          context 'with unit = years' do
+            let(:unit) { 'years' }
+
+            it 'returns an array of length 1' do
+              expect(subject.length).to eq 1
+            end
+
+            it 'contains a "count" of 10' do
+              expect(subject[0].count).to eq 10
+            end
+          end
         end
       end
     end
 
-    context 'when an array of 13 occurrences is given, each separated by 10 minutes, ordered ASC' do
-      number_of_occurrences = 13
-      let(:occurrences) {
-        occurrences = Array.new(number_of_occurrences) { Occurrence.new }
-        for i in 0..number_of_occurrences-1 do
-          occurrences[i].date = (first + (i * 10).minutes)
-        end
-        occurrences
-      }
-
-      it_behaves_like 'the result looks like [6, 6, 1]'
-    end
-
-    context 'when an array of 13 occurrences is given, each separated by 10 minutes, unordered' do
-      number_of_occurrences = 13
-      let(:occurrences) {
-        occurrences = Array.new(number_of_occurrences) { Occurrence.new }
-        for i in 0..number_of_occurrences-1 do
-          occurrences[i].date = (first - (i * 10).minutes)
-        end
-        occurrences[0], occurrences[5] = occurrences[5], occurrences[0]
-        occurrences
-      }
-
-      it_behaves_like 'the result looks like [6, 6, 1]'
-    end
-
-    context 'when an array of 3 occurrences is given, each within the same hour and the Timezone is changed' do
-      number_of_occurrences = 3
-      let(:occurrences) {
-        occurrences = Array.new(number_of_occurrences) { Occurrence.new }
-        Time.zone='Brussels'
-        occurrences[0].date = Time.zone.at(first.to_i)
-        Time.zone='Hawaii'
-        occurrences[1].date = Time.zone.at((first+30.minutes).to_i)
-        Time.zone='Bangkok'
-        occurrences[2].date = Time.zone.at((first+30.minutes).to_i)
-        occurrences
-      }
-
-      it 'returns an array of length 1' do
-        expect(subject.length).to eq 1
-      end
-
-      it 'contains a "count" of 3' do
-        expect(subject[0].count).to eq 3
-      end
-    end
-
-    context 'when an array of one occurrence is given' do
-      let(:occurrences) {
-        occurrences = Array.new(1) { Occurrence.new }
-        occurrences[0].date = first
-        occurrences
-      }
-
-      it 'returns an array of length 1' do
-        expect(subject.length).to eq 1
-      end
-
-      it 'contains a "count" of 1 for each CountPerDate' do
-        expect(subject[0].count).to eq 1
-      end
-    end
 
     context 'when an empty array is given' do
       let(:occurrences) { Array.new }
+      let(:start_date) { start_date }
+      let(:end_date) { start_date + 1.day }
+      let(:unit) { 'hours' }
 
-      it 'raise an error' do
-        expect { subject }.to raise_error NoMethodError
+      it 'has a length equal to the number of units between the start_date and the end_date +1' do
+        expect(subject.length).to eq 25
       end
     end
 
     context 'when nil is given' do
       let(:occurrences) { nil }
+      let(:start_date) { start_date }
+      let(:end_date) { start_date + 1.day }
+      let(:unit) { 'hours' }
 
-      it 'raise an error' do
+      it 'raises an error' do
         expect { subject }.to raise_error NoMethodError
       end
     end
