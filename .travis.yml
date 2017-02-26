@@ -20,6 +20,7 @@ script:
 - RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec Occurrence
 - RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec Symptom
 - RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec CountPerDate
+- RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec SymptomCountFactory
 
 after_success:
 - bundle exec codeclimate-test-reporter
