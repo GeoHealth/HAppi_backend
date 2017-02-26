@@ -15,12 +15,24 @@ RSpec.describe StatsController, type: :controller do
       end
 
       before(:each) do
-        @user, @symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec_per_hours(number_of_symptoms, @user)
+        @user, @symptoms, @january_2005_10_o_clock, @one_day_later, @two_days_later = create_symptom_and_occurrences_for_spec_per_hours(number_of_symptoms, @user)
       end
 
       context 'without parameters' do
         before(:each) do
           get :count
+        end
+
+        it 'responds with status 400' do
+          is_expected.to respond_with 400
+        end
+      end
+
+      context 'with a valid start and end parameters' do
+        start_date = '2005-01-01 10:00:00'
+        end_date = '2005-01-01 12:00:00'
+        before(:each) do
+          get :count, start: start_date, end: end_date
         end
 
         it 'responds with status 200' do
