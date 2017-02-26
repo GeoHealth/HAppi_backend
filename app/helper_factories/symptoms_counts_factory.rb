@@ -3,7 +3,10 @@ class SymptomsCountsFactory
     unit = unit || 'days'
     start_date, end_date, symptoms, symptoms_count = initialize_symptoms_counts(user_id, start_date, end_date, symptoms, unit)
     symptoms.each do |id|
-      symptoms_count.symptoms.push(SymptomCountFactory.build_for(id, user_id.id, start_date, end_date, unit))
+      begin
+        symptoms_count.symptoms.push(SymptomCountFactory.build_for(id, user_id, start_date, end_date, unit))
+      rescue
+      end
     end
     symptoms_count
   end

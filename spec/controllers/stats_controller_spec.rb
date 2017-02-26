@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'support/shared_example_symptom_count_factory'
+require 'support/shared_example_symptoms_counts_factory'
 
 RSpec.describe StatsController, type: :controller do
   describe '#count' do
@@ -37,12 +37,12 @@ RSpec.describe StatsController, type: :controller do
             JSON.parse(response.body)
           end
 
-          it 'contains a key name symptoms that is an array' do
+          it 'contains a key named symptoms that is an array' do
             expect(@parsed_response).to have_key('symptoms')
             expect(@parsed_response['symptoms']).to be_an Array
           end
 
-          it 'contains a key name unit that is equal to "days"' do
+          it 'contains a key named unit that is equal to "days"' do
             expect(@parsed_response).to have_key('unit')
             expect(@parsed_response['unit']).to eq 'days'
           end
@@ -69,15 +69,6 @@ RSpec.describe StatsController, type: :controller do
                 expect(symptom).to have_key('counts')
                 expect(symptom['counts']).to be_an Array
                 expect(symptom['counts'].length).to eq 1
-              end
-            end
-
-            it 'does not contains useless attributes: short_description, long_description, category, gender_filter' do
-              @symptoms.each do |symptom|
-                expect(symptom).not_to have_key('short_description')
-                expect(symptom).not_to have_key('long_description')
-                expect(symptom).not_to have_key('category')
-                expect(symptom).not_to have_key('gender_filter')
               end
             end
 

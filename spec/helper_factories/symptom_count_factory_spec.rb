@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'support/shared_example_symptom_count_factory'
+require 'support/shared_example_symptoms_counts_factory'
 
 RSpec.describe SymptomCountFactory do
   describe '.get_symptom' do
@@ -60,6 +60,30 @@ RSpec.describe SymptomCountFactory do
         end
       end
     end
+
+    context 'with invalid user_id' do
+      let(:user_id) { -1 }
+      let(:symptom_id) { @symptom.id }
+
+      let(:start_date) { @january_2005_10_o_clock - 1.day }
+      let(:end_date) { @january_2005_10_o_clock + 1.day }
+
+      it 'raises an exception' do
+        expect { subject }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    context 'with invalid symptom_id' do
+      let(:user_id) { @user.id }
+      let(:symptom_id) { -1 }
+
+      let(:start_date) { @january_2005_10_o_clock - 1.day }
+      let(:end_date) { @january_2005_10_o_clock + 1.day }
+
+      it 'raises an exception' do
+        expect { subject }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe '.build_for' do
@@ -70,11 +94,12 @@ RSpec.describe SymptomCountFactory do
       let(:user_id) { @user.id }
 
       context 'when unit = hours' do
+        let(:unit) { 'hours' }
+
         before(:each) do
           @user, symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec_per_hours
           @symptom = symptoms[0]
         end
-        let(:unit) { 'hours' }
 
         context 'when the start_date is exactly equal to the first occurrence and the end_date is exactly equals to the last occurrence' do
           let(:start_date) { @january_2005_10_o_clock }
@@ -193,7 +218,7 @@ RSpec.describe SymptomCountFactory do
               expect(@first_count.count).to eq 2
             end
           end
-          
+
           describe 'the second count' do
             before(:each) do
               @second_count = subject.counts[1]
@@ -632,7 +657,44 @@ RSpec.describe SymptomCountFactory do
           end
         end
       end
-      
+
     end
+
+    context 'with invalid user_id' do
+      let(:user_id) { -1 }
+      let(:symptom_id) { @symptom.id }
+
+      let(:start_date) { @january_2005_10_o_clock - 1.day }
+      let(:end_date) { @january_2005_10_o_clock + 1.day }
+      let(:unit) { 'hours' }
+
+      before(:each) do
+        @user, symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec_per_hours
+        @symptom = symptoms[0]
+      end
+
+      it 'raises an exception' do
+        expect { subject }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    context 'with invalid symptom_id' do
+      let(:user_id) { @user.id }
+      let(:symptom_id) { -1 }
+
+      let(:start_date) { @january_2005_10_o_clock - 1.day }
+      let(:end_date) { @january_2005_10_o_clock + 1.day }
+      let(:unit) { 'hours' }
+
+      before(:each) do
+        @user, symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec_per_hours
+        @symptom = symptoms[0]
+      end
+
+      it 'raises an exception' do
+        expect { subject }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
   end
 end

@@ -69,3 +69,58 @@ def create_symptom_and_occurrences_for_spec_per_years (number_of_symptoms_to_cre
 
   return user, symptoms, january_2005_10_o_clock, one_year_later, two_years_later
 end
+
+
+RSpec.shared_examples 'verify unit, number of symptoms, number of counts and number of count' do |unit, number_of_symptoms, number_of_counts, number_of_count_in_each_count_per_date|
+  it "has a unit = '#{unit}'" do
+    expect(subject.unit).to eq unit
+  end
+
+  it "has #{number_of_symptoms} symptoms" do
+    expect(subject.symptoms.length).to eq number_of_symptoms
+  end
+
+  describe 'each symptom' do
+    it "has #{number_of_counts} CountPerDate" do
+      subject.symptoms.each do |symptom_count|
+        expect(symptom_count.counts.length).to eq number_of_counts
+      end
+    end
+
+    describe 'each CountPerDate' do
+      it "has a count = #{number_of_count_in_each_count_per_date}" do
+        subject.symptoms.each do |symptom_count|
+          symptom_count.counts.each_with_index do |count_per_date, index|
+            expect(count_per_date.count).to eq number_of_count_in_each_count_per_date.fetch(index)
+          end
+        end
+      end
+    end
+  end
+end
+
+RSpec.shared_examples 'different values for symptoms parameter' do |unit, number_of_symptoms, number_of_counts, number_of_count_in_each_count_per_date|
+  context 'with an undefined symptoms parameter' do
+    let(:symptoms) { nil }
+
+    include_examples 'verify unit, number of symptoms, number of counts and number of count', unit, number_of_symptoms, number_of_counts, number_of_count_in_each_count_per_date
+  end
+
+  context 'with a symptoms parameter that contains the 2 symptoms explicitly' do
+    let(:symptoms) { [@symptoms[0].id, @symptoms[1].id] }
+
+    include_examples 'verify unit, number of symptoms, number of counts and number of count', unit, number_of_symptoms, number_of_counts, number_of_count_in_each_count_per_date
+  end
+
+  context 'with a symptoms parameter that contains only 1 symptom' do
+    let(:symptoms) { [@symptoms[1].id] }
+
+    include_examples 'verify unit, number of symptoms, number of counts and number of count', unit, number_of_symptoms == 0 ? 0 : 1, number_of_counts, number_of_count_in_each_count_per_date
+  end
+
+  context 'with an invalid symptoms parameter' do
+    let(:symptoms) { [-1] }
+
+    include_examples 'verify unit, number of symptoms, number of counts and number of count', unit, 0, 0, nil
+  end
+end
