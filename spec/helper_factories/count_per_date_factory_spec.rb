@@ -1,31 +1,5 @@
 require 'rails_helper'
 
-RSpec.shared_examples 'all CountPerDate have count=0' do
-  it 'has count=0 for all instances of CountPerDate' do
-    subject.each do |count_per_date|
-      expect(count_per_date.count).to eq 0
-    end
-  end
-end
-
-RSpec.shared_examples 'the result looks like [6, 6, 1]' do
-  it 'returns an array of length 3' do
-    expect(subject.length).to eq 3
-  end
-
-  it 'contains a count of 6 for the start_date element' do
-    expect(subject[0].count).to eq 6
-  end
-
-  it 'contains a count of 6 for the second element' do
-    expect(subject[1].count).to eq 6
-  end
-
-  it 'contains a count of 1 for the third element' do
-    expect(subject[2].count).to eq 1
-  end
-end
-
 RSpec.describe CountPerDateFactory do
   start_date = Time.zone.parse('2005-10-10 10:10:10')
 
