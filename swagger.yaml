@@ -258,14 +258,14 @@ paths:
       parameters:
         - name: start
           in: query
-          description: Start date of the occurrences to count. Any occurrences that were created before this date will be ignored. If this parameter is ignored, no filter will be made on the start date.
-          required: false
+          description: Start date of the occurrences to count. Any occurrences that were created before this date will be ignored.
+          required: true
           type: string
           format: date-time
         - name: end
           in: query
-          description: End date of the occurrences to count. Any occurrences that were created after this date will be ignored. If this parameter is ignored, no filter will be made on the end date.
-          required: false
+          description: End date of the occurrences to count. Any occurrences that were created after this date will be ignored.
+          required: true
           type: string
           format: date-time
         - name: unit

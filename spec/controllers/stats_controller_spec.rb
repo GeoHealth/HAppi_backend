@@ -15,7 +15,7 @@ RSpec.describe StatsController, type: :controller do
       end
 
       before(:each) do
-        @user, @symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec(number_of_symptoms, @user)
+        @user, @symptoms, @january_2005_10_o_clock, @one_hour_later, @two_hours_later = create_symptom_and_occurrences_for_spec_per_hours(number_of_symptoms, @user)
       end
 
       context 'without parameters' do
