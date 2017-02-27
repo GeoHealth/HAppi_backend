@@ -40,4 +40,8 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.web_console.development_only = false
+
+  # disabled anything that would prevent errors from being propagated to the Raven::Rack middleware
+  # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
 end

@@ -48,9 +48,9 @@ gem 'puma'
 # This gem enables serving assets in production and setting your logger to standard out
 gem 'rails_12factor', group: :production
 
-# ActiveModelSerializers
-# https://github.com/rails-api/active_model_serializers
-gem 'active_model_serializers', '~> 0.10.0'
+# Error tracking
+# https://sentry.io
+gem 'sentry-raven'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
