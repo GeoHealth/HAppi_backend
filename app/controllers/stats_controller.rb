@@ -2,7 +2,7 @@ class StatsController < ApplicationController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_user!
 
-  rescue_from *[ActionController::ParameterMissing, ArgumentError] do
+  rescue_from(*[ActionController::ParameterMissing, ArgumentError]) do
     render :nothing => true, :status => 400
   end
 
