@@ -28,7 +28,7 @@ RSpec.describe StatsController, type: :controller do
         end
       end
 
-      context 'with a valid start and end parameters but no other parameters' do
+      context 'with a valid start and end parameters' do
         start_date = '2005-01-01 10:00:00'
         end_date = '2005-01-01 12:00:00'
 
@@ -113,11 +113,56 @@ RSpec.describe StatsController, type: :controller do
             get :count, start: start_date, end: end_date, unit: unit
           end
 
-          it 'responds with an error 200' do
+          it 'responds with a status 200' do
             is_expected.to respond_with 200
           end
 
           it 'has unit = hours' do
+            expect(JSON.parse(response.body)['unit']).to eq unit
+          end
+        end
+
+        context 'with unit = days' do
+          unit = 'days'
+          before(:each) do
+            get :count, start: start_date, end: end_date, unit: unit
+          end
+
+          it 'responds with a status 200' do
+            is_expected.to respond_with 200
+          end
+
+          it 'has unit = days' do
+            expect(JSON.parse(response.body)['unit']).to eq unit
+          end
+        end
+
+        context 'with unit = months' do
+          unit = 'months'
+          before(:each) do
+            get :count, start: start_date, end: end_date, unit: unit
+          end
+
+          it 'responds with a status 200' do
+            is_expected.to respond_with 200
+          end
+
+          it 'has unit = months' do
+            expect(JSON.parse(response.body)['unit']).to eq unit
+          end
+        end
+
+        context 'with unit = years' do
+          unit = 'years'
+          before(:each) do
+            get :count, start: start_date, end: end_date, unit: unit
+          end
+
+          it 'responds with a status 200' do
+            is_expected.to respond_with 200
+          end
+
+          it 'has unit = years' do
             expect(JSON.parse(response.body)['unit']).to eq unit
           end
         end
@@ -133,12 +178,34 @@ RSpec.describe StatsController, type: :controller do
           end
         end
 
-         context 'with symptoms that filter only one symptom' do
+        context 'with symptoms that filter only one symptom' do
+          before(:each) do
+            symptoms = [@symptoms[0].id]
+            get :count, start: start_date, end: end_date, symptoms: symptoms
+          end
 
-         end
+          it 'responds with a status 200' do
+            is_expected.to respond_with 200
+          end
+
+          it 'has one symptoms' do
+            expect(JSON.parse(response.body)['symptoms'].length).to eq 1
+          end
+        end
 
         context 'with invalid symptoms' do
+          symptoms = [-1]
+          before(:each) do
+            get :count, start: start_date, end: end_date, symptoms: symptoms
+          end
 
+          it 'responds with a status 200' do
+            is_expected.to respond_with 200
+          end
+
+          it 'has no symptoms' do
+            expect(JSON.parse(response.body)['symptoms'].length).to eq 0
+          end
         end
       end
 
@@ -152,7 +219,6 @@ RSpec.describe StatsController, type: :controller do
         it 'responds with an error 400' do
           is_expected.to respond_with 400
         end
-
       end
 
     end
