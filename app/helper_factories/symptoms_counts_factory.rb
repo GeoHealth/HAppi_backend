@@ -5,7 +5,7 @@ class SymptomsCountsFactory
     symptoms.each do |id|
       begin
         symptoms_count.symptoms.push(SymptomCountFactory.build_for(id, user_id, start_date, end_date, unit))
-      rescue
+      rescue ActiveRecord::RecordNotFound
       end
     end
     symptoms_count
