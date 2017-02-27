@@ -10,3 +10,4 @@ class StatsController < ApplicationController
     render json: SymptomsCountsFactory.build_for(current_user.id, Time.parse(params.fetch(:start)), Time.parse(params.fetch(:end)), params[:unit], params[:symptoms])
   end
 end
+
