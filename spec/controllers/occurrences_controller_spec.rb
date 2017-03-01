@@ -32,7 +32,7 @@ RSpec.shared_examples 'the given occurrence is valid' do ||
 
     it 'contains the occurrence that has been saved' do
       expect(subject['symptom_id']).to eq @valid_occurrence.symptom_id
-      expect(Time.parse(subject['date'])).to be_within(1.second).of @valid_occurrence.date
+      expect(Time.zone.parse(subject['date'])).to be_within(1.second).of @valid_occurrence.date
     end
 
     it 'contains the generated ID' do
