@@ -24,10 +24,6 @@ script:
 
 after_success:
 - bundle exec codeclimate-test-reporter
-- sudo cp flynn-ca.cer /usr/local/share/ca-certificates/flynn-ca.crt
-- sudo update-ca-certificates
-- git pull
-- git push https://seza443:$FLYNN_KEY@git.yxvj.flynnhub.com/geohealth-happibackend-test.git master &> /dev/null
 notifications:
   slack:
     secure: Xaooc8J/JccmRvuPBok2ocHoby0PF7rfWTbt4TMqDSNvxjy/d7cwOfw1ijjjX8wA6n8oTENGsEXXWizXLh9y2E+1iS/UR1AlMENHbUw+9v0pcopbJcSZfI0k69QjwHmggfmYEjRHJxqxiEDkLTA4w4qeagTg9CH56f8npoojDf1zE4KVF1bjwMg+3U7Pv7VNubWORX9Gp91I6GqVvfVDnLGlejh/VHyoCp+p8m05fish81nDI2QPex7f+2faEqXhEQAGbhifJvoVMaQ2ybJzYbjv28vuslXr6ju7QJkHkmad6b+mfvo+lJb/KQHb0RbB75+P3rDQQJWHEkFelkgTF9qKjXgl1arZvLGYzlYYbJeAnBylf8u0xXEld7a9+HQdY3BMjaXu+LlSaxZwAG7pQ5S6CIK4g4c/WkRQwAWFoeuNapAZ8uZO7lL0IonizuuBxYv2GTyK6Eox+KPtntI2Zr6s/mhZVxUH3ddvbKiYbNuIvVkzrK5Fz5M06G+dsFrs6mmyIw9xBwn/A4xWqqssG1OVYafMI+tyn6l99MTla30OfSO+2pHLu8Z8VyNYMDn8frt0rHiqd49JZwhCs/xVQKvE1BUJ7kf+ULOHfq/9baZQOqf5J/l5EbnJg/RckL0899nrkp3u9r/1e9xbZci6OltPg0kUJ+7ilPczVIC3C/Q=
