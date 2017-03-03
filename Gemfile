@@ -17,9 +17,9 @@ gem 'coffee-rails', '~> 4.1.0'
 # gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 4.2.2'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'turbolinks', '~> 5.0.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -40,17 +40,17 @@ gem 'rack-cors', '0.4'
 
 # Use for authentication
 # https://github.com/lynndylanhurley/devise_token_auth
-gem 'devise_token_auth'
+gem 'devise_token_auth', '~> 0.1.4'
 
 # Puma gem for multi threaded server
-gem 'puma'
+gem 'puma', '~> 3.7.1'
 
 # This gem enables serving assets in production and setting your logger to standard out
-gem 'rails_12factor', group: :production
+gem 'rails_12factor', '~>0.0.3', group: :production
 
 # Error tracking
 # https://sentry.io
-gem 'sentry-raven'
+gem 'sentry-raven', '~> 2.3.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -93,4 +93,3 @@ group :test do
   # https://github.com/mbj/mutant
   gem 'mutant-rspec'
 end
-
