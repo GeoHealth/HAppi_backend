@@ -57,4 +57,10 @@ FactoryGirl.define do
     name 'name'
     counts { create_list(:count_per_date, 5) }
   end
+
+  # SymptomsUser
+  factory :symptoms_user do
+    user_id { create(:user).id }
+    symptom_id { create(:symptom).id}
+  end
 end
