@@ -71,4 +71,74 @@ RSpec.describe SymptomsUserController, type: :controller do
       end
     end
   end
+
+  describe '#create' do
+    it { should route(:post, '/symptoms_user').to(action: :create) }
+
+    context 'when no user is logged in' do
+      it_behaves_like 'POST protected with authentication controller', :create
+    end
+
+    context 'when an user is logged in' do
+      before(:each) do
+        @user = AuthenticationTestHelper.set_valid_authentication_headers(@request)
+        sign_in @user
+      end
+
+      context 'when the given symptom_id is correct' do
+        before(:each) do
+          @valid_symptoms_user = build(:symptoms_user, user_id: @user.id)
+          post :create, symptom_id: @valid_symptoms_user.symptom_id
+        end
+
+        it 'responds with status 200' do
+          is_expected.to respond_with 200
+        end
+
+        it 'adds a symptoms_user to the database with the correct symptom_id and the user_id of the logged in user' do
+          expect(SymptomsUser.count).to eq 1
+          expect(SymptomsUser.first.user_id).to eq @user.id
+          expect(SymptomsUser.first.symptom_id).to eq @valid_symptoms_user.symptom_id
+        end
+
+        it 'returns the created object' do
+          expect(JSON.parse(response.body)['user_id']).to eq @user.id
+          expect(JSON.parse(response.body)['symptom_id']).to eq @valid_symptoms_user.symptom_id
+        end
+      end
+
+      context 'when the symptom_id is invalid' do
+        before(:each) do
+          @valid_symptoms_user = build(:symptoms_user)
+          post :create, symptom_id: -1
+        end
+
+        it 'responds with status 422' do
+          is_expected.to respond_with 422
+        end
+      end
+
+      context 'when the symptom_id key is not present' do
+        before(:each) do
+          @valid_symptoms_user = build(:symptoms_user)
+          post :create, foo: nil
+        end
+
+        it 'responds with status 422' do
+          is_expected.to respond_with 422
+        end
+      end
+
+      context 'when the symptom_id already exists for the user' do
+        before(:each) do
+          @valid_symptoms_user = create(:symptoms_user, user_id: @user.id)
+          post :create, symptom_id: @valid_symptoms_user.symptom_id
+        end
+
+        it 'responds with status 422' do
+          is_expected.to respond_with 422
+        end
+      end
+    end
+  end
 end
