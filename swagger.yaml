@@ -302,6 +302,26 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Symptom'
+        '401':
+          description: The user has not the authorization
+    post:
+      summary: Add the given symptoms_user to the database
+      tags:
+        - SymptomsUser
+      parameters:
+        - name: 'symptoms_user'
+          in: body
+          description: The new account information
+          required: true
+          schema:
+            $ref: '#/definitions/SymptomsUser'
+      responses:
+        '200':
+          description: The symptoms_user is correctly added
+          schema:
+            $ref: '#/definitions/SymptomsUser'
+        '401':
+          description: The user has not the authorization
           
 definitions:
   Symptom:
@@ -524,5 +544,13 @@ definitions:
         type: string
         format: date-time
       count:
+        type: integer
+  SymptomsUser:
+    type: object
+    description: Associated a user to a symptom
+    properties:
+      user_id:
+        type: string
+      symptom_id:
         type: integer
   
