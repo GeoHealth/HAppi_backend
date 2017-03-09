@@ -309,12 +309,12 @@ paths:
       tags:
         - SymptomsUser
       parameters:
-        - name: 'symptoms_user'
+        - name: 'symptom_id'
           in: body
-          description: The new account information
+          description: The symptom's id to link to the user (that is currently logged in)
           required: true
           schema:
-            $ref: '#/definitions/SymptomsUser'
+            type: integer
       responses:
         '200':
           description: The symptoms_user is correctly added
@@ -322,6 +322,28 @@ paths:
             $ref: '#/definitions/SymptomsUser'
         '401':
           description: The user has not the authorization
+        '422':
+          description: The given symptom_id is not valid or already exist for the user
+    delete:
+      summary: Remove the symptom_id associated to the user
+      tags:
+        - SymptomsUser
+      parameters:
+      - name: 'symptom_id'
+        in: body
+        description: The symptom's id to link to the user (that is currently logged in)
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: The symptoms_user is correctly deleted
+          schema:
+            $ref: '#/definitions/SymptomsUser'
+        '401':
+          description: The user has not the authorization
+        '422':
+          description: The given symptom_id is not valid or does not exist for the user
           
 definitions:
   Symptom:
