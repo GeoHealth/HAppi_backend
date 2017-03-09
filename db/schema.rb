@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170223132756) do
+ActiveRecord::Schema.define(version: 20170309144024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,15 @@ ActiveRecord::Schema.define(version: 20170223132756) do
     t.datetime "updated_at",        null: false
   end
 
+  create_table "symptoms_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "symptom_id"
+  end
+
+  add_index "symptoms_users", ["symptom_id"], name: "index_symptoms_users_on_symptom_id", using: :btree
+  add_index "symptoms_users", ["user_id", "symptom_id"], name: "index_symptoms_users_on_user_id_and_symptom_id", unique: true, using: :btree
+  add_index "symptoms_users", ["user_id"], name: "index_symptoms_users_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "provider",               default: "email", null: false
     t.string   "uid",                    default: "",      null: false
@@ -103,4 +112,6 @@ ActiveRecord::Schema.define(version: 20170223132756) do
   add_foreign_key "occurrences", "gps_coordinates"
   add_foreign_key "occurrences", "symptoms"
   add_foreign_key "occurrences", "users"
+  add_foreign_key "symptoms_users", "symptoms"
+  add_foreign_key "symptoms_users", "users"
 end
