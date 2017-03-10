@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :occurrences, :only => [:create]
   resources :symptoms, :only => [:index]
   resources :symptoms_user, :only => [:index, :create]
+  delete 'symptoms_user' => 'symptoms_user#destroy'
   get 'symptoms/occurrences' => 'symptoms#occurrences'
   get 'stats/count' => 'stats#count'
 

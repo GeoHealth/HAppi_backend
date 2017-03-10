@@ -141,4 +141,48 @@ RSpec.describe SymptomsUserController, type: :controller do
       end
     end
   end
+
+  describe '#delete' do
+    it { should route(:delete, '/symptoms_user').to(action: :destroy) }
+
+    context 'when no user is logged in' do
+      it_behaves_like 'DELETE protected with authentication controller', :destroy
+    end
+
+    context 'when an user is logged in' do
+      before(:each) do
+        @user = AuthenticationTestHelper.set_valid_authentication_headers(@request)
+        sign_in @user
+      end
+
+      context 'when the symptom is in the database' do
+
+        before(:each) do
+          @valid_symptoms_user = create(:symptoms_user, user_id: @user.id)
+        end
+
+        context 'when the given symptom id is valide' do
+          before(:each) do
+            delete :destroy, symptom_id: @valid_symptoms_user.symptom_id
+          end
+
+          it 'responds with status 200' do
+            is_expected.to respond_with 200
+          end
+
+          it 'deletes the symptom' do
+            expect(SymptomsUser.count).to eq 0
+          end
+
+          it 'returns the destroy object' do
+            expect(JSON.parse(response.body)['user_id']).to eq @user.id
+            expect(JSON.parse(response.body)['symptom_id']).to eq @valid_symptoms_user.symptom_id
+          end
+        end
+
+      end
+
+    end
+
+  end
 end
