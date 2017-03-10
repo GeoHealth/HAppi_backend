@@ -330,11 +330,10 @@ paths:
         - SymptomsUser
       parameters:
       - name: 'symptom_id'
-        in: body
+        in: query
         description: The symptom's id to link to the user (that is currently logged in)
         required: true
-        schema:
-          type: integer
+        type: integer
       responses:
         '200':
           description: The symptoms_user is correctly deleted
