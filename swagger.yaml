@@ -290,6 +290,60 @@ paths:
             $ref: '#/definitions/SymptomsCounts'
         '422':
           description: Invalid parameter, the end date is before the start date.
+  /symptoms_user:
+    get:
+      summary: Return a list of symptoms associated to the logged in user
+      tags:
+        - SymptomsUser
+      responses:
+        '200':
+          description: A list of symptoms used by the logged in user.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Symptom'
+        '401':
+          description: The user has not the authorization
+    post:
+      summary: Add the given symptoms_user to the database
+      tags:
+        - SymptomsUser
+      parameters:
+        - name: 'symptom_id'
+          in: body
+          description: The symptom's id to link to the user (that is currently logged in)
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The symptoms_user is correctly added
+          schema:
+            $ref: '#/definitions/SymptomsUser'
+        '401':
+          description: The user has not the authorization
+        '422':
+          description: The given symptom_id is not valid or already exist for the user
+    delete:
+      summary: Remove the symptom_id associated to the user
+      tags:
+        - SymptomsUser
+      parameters:
+      - name: 'symptom_id'
+        in: query
+        description: The symptom's id to link to the user (that is currently logged in)
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: The symptoms_user is correctly deleted
+          schema:
+            $ref: '#/definitions/SymptomsUser'
+        '401':
+          description: The user has not the authorization
+        '422':
+          description: The given symptom_id is not valid or does not exist for the user
+          
 definitions:
   Symptom:
     type: object
@@ -511,5 +565,13 @@ definitions:
         type: string
         format: date-time
       count:
+        type: integer
+  SymptomsUser:
+    type: object
+    description: Associated a user to a symptom
+    properties:
+      user_id:
+        type: string
+      symptom_id:
         type: integer
   
