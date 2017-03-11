@@ -156,7 +156,6 @@ RSpec.describe SymptomsUserController, type: :controller do
       end
 
       context 'when the symptom is in the database' do
-
         before(:each) do
           @valid_symptoms_user = create(:symptoms_user, user_id: @user.id)
         end
@@ -178,6 +177,36 @@ RSpec.describe SymptomsUserController, type: :controller do
             expect(JSON.parse(response.body)['user_id']).to eq @user.id
             expect(JSON.parse(response.body)['symptom_id']).to eq @valid_symptoms_user.symptom_id
           end
+        end
+
+        context 'when the given symptom id is not valide' do
+          before(:each) do
+            delete :destroy, symptom_id: -1
+          end
+
+          it 'responds with status 422' do
+            is_expected.to respond_with 422
+          end
+
+          it 'does not delete the symptom' do
+            expect(SymptomsUser.count).to eq 1
+          end
+
+        end
+
+        context 'when the symptom id is not given' do
+          before(:each) do
+            delete :destroy
+          end
+
+          it 'responds with status 422' do
+            is_expected.to respond_with 422
+          end
+
+          it 'does not delete the symptom' do
+            expect(SymptomsUser.count).to eq 1
+          end
+
         end
 
       end
