@@ -4,7 +4,7 @@ class SymptomsController < ApplicationController
 
   def index
     if params.key?(:name)
-      symptoms = Symptom.where('name ilike ?', "%#{params.fetch(:name)}%")
+      symptoms = Symptom.where('name ilike ?', "%#{params.fetch(:name).strip}%")
     else
       symptoms = Symptom.all
     end
