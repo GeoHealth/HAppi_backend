@@ -21,7 +21,7 @@ class SymptomsUserController < ApplicationController
     begin
       symptoms_user = SymptomsUser.find_by(user_id: current_user.id, symptom_id: params.fetch(:symptom_id))
       symptoms_user.destroy
-      render json: symptoms_user, status: 200
+      render json: symptoms_user
     rescue *[NoMethodError, ActionController::ParameterMissing]
       render :nothing => true, status: 422
     end

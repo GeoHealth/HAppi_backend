@@ -1,5 +1,15 @@
 require 'rails_helper'
 
+RSpec.shared_examples 'status 422 and one symptom user' do
+  it 'responds with status 422' do
+    is_expected.to respond_with 422
+  end
+
+  it 'does not delete the symptom' do
+    expect(SymptomsUser.count).to eq 1
+  end
+end
+
 RSpec.describe SymptomsUserController, type: :controller do
   describe '#index' do
 
@@ -142,7 +152,7 @@ RSpec.describe SymptomsUserController, type: :controller do
     end
   end
 
-  describe '#delete' do
+  describe '#destroy' do
     it { should route(:delete, '/symptoms_user').to(action: :destroy) }
 
     context 'when no user is logged in' do
@@ -160,7 +170,7 @@ RSpec.describe SymptomsUserController, type: :controller do
           @valid_symptoms_user = create(:symptoms_user, user_id: @user.id)
         end
 
-        context 'when the given symptom id is valide' do
+        context 'when the given symptom id is valid' do
           before(:each) do
             delete :destroy, symptom_id: @valid_symptoms_user.symptom_id
           end
@@ -179,18 +189,12 @@ RSpec.describe SymptomsUserController, type: :controller do
           end
         end
 
-        context 'when the given symptom id is not valide' do
+        context 'when the given symptom id is not valid or' do
           before(:each) do
             delete :destroy, symptom_id: -1
           end
 
-          it 'responds with status 422' do
-            is_expected.to respond_with 422
-          end
-
-          it 'does not delete the symptom' do
-            expect(SymptomsUser.count).to eq 1
-          end
+          include_examples 'status 422 and one symptom user'
 
         end
 
@@ -199,13 +203,7 @@ RSpec.describe SymptomsUserController, type: :controller do
             delete :destroy
           end
 
-          it 'responds with status 422' do
-            is_expected.to respond_with 422
-          end
-
-          it 'does not delete the symptom' do
-            expect(SymptomsUser.count).to eq 1
-          end
+          include_examples 'status 422 and one symptom user'
 
         end
 
