@@ -67,7 +67,21 @@ paths:
             type: array
             items:
               $ref: '#/definitions/SymptomWithOccurrences'
-  /occurrence:
+  /occurrences:
+    get:
+      summary: Get the list of symptom occurences
+      description: Get the list of symptom occurences from the database
+      tags:
+        - Occurrence
+      responses:
+          '200':
+            description: List of symptom occurences
+            schema:
+              type: array
+              items:
+                $ref: '#/definitions/Occurrence'
+          '401':
+            description: Not allowed to get list of symptom occurences
     post:
       summary: Add a symptom occurrence
       description:
@@ -246,7 +260,7 @@ paths:
   /stats/count:
     get:
       summary: Count how many occurrences of some symptoms occurred between a start date and an end date, based on a given unit, for a given set of symptoms.
-      description: 
+      description:
         Compute the number of occurrences that occurred for all the symptoms of the current user.
         The default unit to count the occurrences is per 'days' but it can also be counted per 'hours', 'months' and 'years'.
         The list of symptoms can be filtered via the 'symptoms' parameter that receives a list of 'symptom_id'.
@@ -343,7 +357,7 @@ paths:
           description: The user has not the authorization
         '422':
           description: The given symptom_id is not valid or does not exist for the user
-          
+
 definitions:
   Symptom:
     type: object
@@ -574,4 +588,3 @@ definitions:
         type: string
       symptom_id:
         type: integer
-  
