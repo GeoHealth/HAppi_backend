@@ -15,4 +15,10 @@ class OccurrencesController < ApplicationController
       render :nothing => true, status: 422
     end
   end
+
+  def index
+    @occurrences = Occurrence.includes(:user).where(user: current_user).references(:user)
+    render json: {occurrences: @occurrences}
+
+  end
 end

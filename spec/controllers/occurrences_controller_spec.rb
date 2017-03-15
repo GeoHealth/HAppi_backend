@@ -45,6 +45,18 @@ RSpec.shared_examples 'the given occurrence is valid' do ||
   end
 end
 
+RSpec.shared_examples 'no error occurs' do ||
+  it 'responds with 200' do
+    is_expected.to respond_with 200
+  end
+
+  it 'returns a JSON containing the key "occurences"' do
+    expect(response.body).to be_instance_of(String)
+    parsed_response = JSON.parse(response.body)
+    expect(parsed_response).to have_key('occurrences')
+  end
+end
+
 RSpec.describe OccurrencesController, type: :controller do
   describe '#create' do
     it { should route(:post, '/occurrences').to(action: :create) }
@@ -109,6 +121,94 @@ RSpec.describe OccurrencesController, type: :controller do
           end
         end
       end
+    end
+  end
+
+  describe '#index' do
+    it { should route(:get, '/occurrences').to(action: :index) }
+
+    context 'when no user is logged in' do
+      it_behaves_like 'GET protected with authentication controller', :create
+    end
+
+    context 'with valid authentication headers' do
+
+      before(:each) do
+        @user = AuthenticationTestHelper.set_valid_authentication_headers(@request)
+        sign_in @user
+      end
+
+
+      context 'when the user has not added an occurrence' do
+
+        before(:each) do
+          get :index
+        end
+
+        include_examples 'no error occurs'
+
+        it 'returns no occurrence' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['occurrences'].length).to eq 0
+        end
+
+      end
+
+      context 'when the user has added an occurrence' do
+
+        before(:each) do
+          @valid_occurrence = create(:occurrence, user_id: @user.id)
+        end
+
+        before(:each) do
+          get :index
+        end
+
+        include_examples 'no error occurs'
+
+        it 'returns one occurrence' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['occurrences'].length).to eq 1
+        end
+
+      end
+
+      context 'when the user has added ten occurrences' do
+
+        before(:each) do
+          @valid_occurrence = create_list(:occurrence, 10, user_id: @user.id)
+        end
+
+        before(:each) do
+          get :index
+        end
+
+        include_examples 'no error occurs'
+
+        it 'returns ten occurrences' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['occurrences'].length).to eq 10
+        end
+
+        context 'when an other user added also ten occurrences' do
+
+          before(:each) do
+            @valid_occurrence = create_list(:occurrence, 10)
+          end
+
+          before(:each) do
+            get :index
+          end
+
+          it 'returns ten occurrences' do
+            parsed_response = JSON.parse(response.body)
+            expect(parsed_response['occurrences'].length).to eq 10
+          end
+
+        end
+
+      end
+
     end
   end
 end

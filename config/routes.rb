@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks]
 
-  resources :occurrences, :only => [:create]
+  resources :occurrences, :only => [:create, :index]
   resources :symptoms, :only => [:index]
   resources :symptoms_user, :only => [:index, :create]
   delete 'symptoms_user' => 'symptoms_user#destroy'
