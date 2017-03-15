@@ -97,7 +97,7 @@ RSpec.describe SymptomsController, type: :controller do
         end
       end
 
-      context 'when an partial bad_key_name is given as parameter' do
+      context 'when a partial bad_key_name is given as parameter' do
         before(:each) do
           get :index, bad_key_name: 'super'
         end
@@ -107,6 +107,20 @@ RSpec.describe SymptomsController, type: :controller do
         it 'returns a JSON containing all symptoms' do
           parsed_response = JSON.parse(response.body)
           expect(parsed_response['symptoms'].length).to eq 5
+        end
+      end
+
+      context 'when a full symptom name containing spaces before and after itself is given' do
+        before(:each) do
+          get :index, name: '   ' + unique_name + '   '
+        end
+
+        include_examples 'no error occurs'
+
+        it 'returns a JSON containing only the symptom matching the given name' do
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response['symptoms'].length).to eq 1
+          expect(parsed_response['symptoms'][0]['name']).to eq unique_name
         end
       end
     end
