@@ -13,10 +13,14 @@ RSpec.describe Occurrence, type: :model do
   describe '#as_json' do
     context 'when gps_coordinate is defined' do
       before(:each) do
-        @occurrence = Occurrence.new(gps_coordinate: GpsCoordinate.new)
+        @occurrence = build(:occurrence_with_gps_coordinates)
       end
       it 'includes the gps_coordinate' do
         expect(@occurrence.as_json['gps_coordinate']).not_to be_nil
+      end
+
+      it 'includes the symptom' do
+        expect(@occurrence.as_json['symptom']).not_to be_nil
       end
 
       it 'includes the date' do
