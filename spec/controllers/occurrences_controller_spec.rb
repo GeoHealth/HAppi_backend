@@ -171,6 +171,12 @@ RSpec.describe OccurrencesController, type: :controller do
           expect(parsed_response['occurrences'].length).to eq 1
         end
 
+        it 'returns one occurrence with its symptom' do
+          subject = JSON.parse(response.body)['occurrences']
+          subject.each do |occurrence|
+            expect(occurrence).to have_key 'symptom'
+          end
+        end
       end
 
       context 'when the user has added ten occurrences' do

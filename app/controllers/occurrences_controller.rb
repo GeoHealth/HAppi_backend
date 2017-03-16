@@ -17,8 +17,8 @@ class OccurrencesController < ApplicationController
   end
 
   def index
-    @occurrences = Occurrence.where(user: current_user)
-    render json: {occurrences: @occurrences}
+    @occurrences = Occurrence.includes(:symptom).where(user: current_user)
+    render json: {occurrences: @occurrences}, :include => :symptom
 
   end
 end
