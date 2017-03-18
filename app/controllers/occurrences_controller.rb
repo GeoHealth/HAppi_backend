@@ -20,4 +20,14 @@ class OccurrencesController < ApplicationController
     @occurrences = Occurrence.where(user: current_user)
     render json: {occurrences: @occurrences}
   end
+
+  def destroy
+    begin
+      occurrence = Occurrence.find_by(id: params.fetch(:occurrence_id))
+      occurrence.destroy
+      render json: occurrence
+    rescue ActionController::ParameterMissing
+      render :nothing => true, status: 422
+    end
+  end
 end

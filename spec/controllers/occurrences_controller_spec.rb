@@ -57,6 +57,16 @@ RSpec.shared_examples 'no error occurs' do ||
   end
 end
 
+RSpec.shared_examples 'status 422 and one occurrence' do
+  it 'responds with status 422' do
+    is_expected.to respond_with 422
+  end
+
+  it 'does not delete the occurrence' do
+    expect(Occurrence.count).to eq 1
+  end
+end
+
 RSpec.describe OccurrencesController, type: :controller do
   describe '#create' do
     it { should route(:post, '/occurrences').to(action: :create) }
@@ -216,5 +226,58 @@ RSpec.describe OccurrencesController, type: :controller do
       end
 
     end
+  end
+  describe '#destroy' do
+    it { should route(:delete, '/occurrences').to(action: :destroy) }
+
+    context 'when no user is logged in' do
+      it_behaves_like 'DELETE protected with authentication controller', :destroy
+    end
+
+    context 'when an user is logged in' do
+
+      before(:each) do
+        @user = AuthenticationTestHelper.set_valid_authentication_headers(@request)
+        sign_in @user
+      end
+
+      context 'when the occurrence is in the database'do
+        before(:each) do
+          @valid_occurrence = create(:occurrence, user_id: @user.id)
+        end
+
+        context 'when the occurrence id is valid' do
+          before(:each) do
+            delete :destroy, occurrence_id: @valid_occurrence.id
+          end
+
+          it 'responds with status 200' do
+            is_expected.to respond_with 200
+          end
+
+          it 'deletes the occurrence' do
+            expect(Occurrence.count).to eq 0
+          end
+
+          it 'returns the destroy object' do
+            expect(JSON.parse(response.body)['user_id']).to eq @user.id
+            expect(JSON.parse(response.body)['id']).to eq @valid_occurrence.id
+          end
+        end
+
+        context 'when the given occurrence id is not valid or' do
+          before(:each) do
+            delete :destroy, symptom_id: -1
+          end
+
+          include_examples 'status 422 and one occurrence'
+
+
+        end
+      end
+
+
+    end
+
   end
 end
