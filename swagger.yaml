@@ -121,6 +121,26 @@ paths:
             $ref: '#/definitions/Occurrence'
         '422':
           description: The given object is not a valid occurrence.
+    delete:
+      summary: Remove the occurrence associated to the id
+      tags:
+        - Occurrence
+      parameters:
+        - name: 'occurrence_id'
+          in: query
+          description: Id of the occurrence to delete
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: The occurrence linked to the id is correctly deleted
+          schema:
+            $ref: '#/definitions/Occurrence'
+        '401':
+          description: The user has not the authorization
+        '422':
+          description: The given occurrence_id is not valid or does not exist for the useret
+
   /auth:
     post:
       summary: Create account
