@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative '__version__'
 
 RSpec.shared_examples 'status 422 and one symptom user' do
   it 'responds with status 422' do
@@ -10,10 +11,10 @@ RSpec.shared_examples 'status 422 and one symptom user' do
   end
 end
 
-RSpec.describe SymptomsUserController, type: :controller do
+RSpec.describe  V1::SymptomsUserController, type: :controller do
   describe '#index' do
 
-    it { should route(:get, '/symptoms_user').to(action: :index) }
+    it { should route(:get, @version + '/symptoms_user').to(action: :index) }
 
     context 'when no user is logged in' do
       it_behaves_like 'GET protected with authentication controller', :index
@@ -83,7 +84,7 @@ RSpec.describe SymptomsUserController, type: :controller do
   end
 
   describe '#create' do
-    it { should route(:post, '/symptoms_user').to(action: :create) }
+    it { should route(:post, @version + '/symptoms_user').to(action: :create) }
 
     context 'when no user is logged in' do
       it_behaves_like 'POST protected with authentication controller', :create
@@ -153,7 +154,7 @@ RSpec.describe SymptomsUserController, type: :controller do
   end
 
   describe '#destroy' do
-    it { should route(:delete, '/symptoms_user').to(action: :destroy) }
+    it { should route(:delete, @version + '/symptoms_user').to(action: :destroy) }
 
     context 'when no user is logged in' do
       it_behaves_like 'DELETE protected with authentication controller', :destroy

@@ -1,13 +1,15 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks]
 
-  resources :occurrences, :only => [:create, :index]
-  resources :symptoms, :only => [:index]
-  resources :symptoms_user, :only => [:index, :create]
-  delete 'symptoms_user' => 'symptoms_user#destroy'
-  delete 'occurrences' => 'occurrences#destroy'
-  get 'symptoms/occurrences' => 'symptoms#occurrences'
-  get 'stats/count' => 'stats#count'
+  api_version(:module => 'V1', :path => {:value => 'v1'}, :default => true) do
+    resources :occurrences, :only => [:create, :index]
+    resources :symptoms, :only => [:index]
+    resources :symptoms_user, :only => [:index, :create]
+    delete 'symptoms_user' => 'symptoms_user#destroy'
+    delete 'occurrences' => 'occurrences#destroy'
+    get 'symptoms/occurrences' => 'symptoms#occurrences'
+    get 'stats/count' => 'stats#count'
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

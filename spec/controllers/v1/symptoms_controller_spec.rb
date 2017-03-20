@@ -1,6 +1,7 @@
 require 'rails_helper'
+require_relative '__version__'
 
-RSpec.shared_examples 'no error occurs' do ||
+RSpec.shared_examples 'no error occurs and the key symptoms is present' do ||
   it 'responds with 200' do
     is_expected.to respond_with 200
   end
@@ -12,10 +13,10 @@ RSpec.shared_examples 'no error occurs' do ||
   end
 end
 
-RSpec.describe SymptomsController, type: :controller do
+RSpec.describe  V1::SymptomsController, type: :controller do
   describe '#index' do
 
-    it { should route(:get, '/symptoms').to(action: :index) }
+    it { should route(:get, @version + '/symptoms').to(action: :index) }
     it_behaves_like 'GET protected with authentication controller', :index
 
     context 'with valid authentication headers' do
@@ -36,7 +37,7 @@ RSpec.describe SymptomsController, type: :controller do
           get :index
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key symptoms is present'
 
         describe 'the response' do
           subject { JSON.parse(response.body)['symptoms'] }
@@ -62,7 +63,7 @@ RSpec.describe SymptomsController, type: :controller do
           get :index, name: unique_name
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key symptoms is present'
 
         it 'returns a JSON containing only the symptom matching the given name' do
           parsed_response = JSON.parse(response.body)
@@ -76,7 +77,7 @@ RSpec.describe SymptomsController, type: :controller do
           get :index, name: 'col'
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key symptoms is present'
 
         it 'returns a JSON containing all the symptoms matching the partial given name' do
           parsed_response = JSON.parse(response.body)
@@ -89,7 +90,7 @@ RSpec.describe SymptomsController, type: :controller do
           get :index, name: 'anything'
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key symptoms is present'
 
         it 'returns a JSON containing no symptoms' do
           parsed_response = JSON.parse(response.body)
@@ -102,7 +103,7 @@ RSpec.describe SymptomsController, type: :controller do
           get :index, bad_key_name: 'super'
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key symptoms is present'
 
         it 'returns a JSON containing all symptoms' do
           parsed_response = JSON.parse(response.body)
@@ -115,7 +116,7 @@ RSpec.describe SymptomsController, type: :controller do
           get :index, name: '   ' + unique_name + '   '
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key symptoms is present'
 
         it 'returns a JSON containing only the symptom matching the given name' do
           parsed_response = JSON.parse(response.body)
@@ -127,7 +128,7 @@ RSpec.describe SymptomsController, type: :controller do
   end
 
 describe '#occurrences' do
-  it { should route(:get, '/symptoms/occurrences').to(action: :occurrences) }
+  it { should route(:get, @version + '/symptoms/occurrences').to(action: :occurrences) }
   it_behaves_like 'GET protected with authentication controller', :occurrences
 
   context 'with valid authentication headers' do

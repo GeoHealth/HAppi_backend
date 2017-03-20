@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative '__version__'
 
 RSpec.shared_examples 'the given occurrence is not valid' do ||
   it 'responds with 422' do
@@ -45,12 +46,12 @@ RSpec.shared_examples 'the given occurrence is valid' do ||
   end
 end
 
-RSpec.shared_examples 'no error occurs' do ||
+RSpec.shared_examples 'no error occurs and the key occurrences is present' do ||
   it 'responds with 200' do
     is_expected.to respond_with 200
   end
 
-  it 'returns a JSON containing the key "occurences"' do
+  it 'returns a JSON containing the key "occurrences"' do
     expect(response.body).to be_instance_of(String)
     parsed_response = JSON.parse(response.body)
     expect(parsed_response).to have_key('occurrences')
@@ -67,9 +68,9 @@ RSpec.shared_examples 'status 422 and one occurrence' do
   end
 end
 
-RSpec.describe OccurrencesController, type: :controller do
+RSpec.describe  V1::OccurrencesController, type: :controller do
   describe '#create' do
-    it { should route(:post, '/occurrences').to(action: :create) }
+    it { should route(:post, @version + '/occurrences').to(action: :create) }
     it_behaves_like 'POST protected with authentication controller', :create, occurrence: @valid_occurrence.to_json
 
     context 'with valid authentication headers' do
@@ -135,7 +136,7 @@ RSpec.describe OccurrencesController, type: :controller do
   end
 
   describe '#index' do
-    it { should route(:get, '/occurrences').to(action: :index) }
+    it { should route(:get, @version + '/occurrences').to(action: :index) }
 
     context 'when no user is logged in' do
       it_behaves_like 'GET protected with authentication controller', :create
@@ -155,7 +156,7 @@ RSpec.describe OccurrencesController, type: :controller do
           get :index
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key occurrences is present'
 
         it 'returns no occurrence' do
           parsed_response = JSON.parse(response.body)
@@ -174,7 +175,7 @@ RSpec.describe OccurrencesController, type: :controller do
           get :index
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key occurrences is present'
 
         it 'returns one occurrence' do
           parsed_response = JSON.parse(response.body)
@@ -199,7 +200,7 @@ RSpec.describe OccurrencesController, type: :controller do
           get :index
         end
 
-        include_examples 'no error occurs'
+        include_examples 'no error occurs and the key occurrences is present'
 
         it 'returns ten occurrences' do
           parsed_response = JSON.parse(response.body)
@@ -228,7 +229,7 @@ RSpec.describe OccurrencesController, type: :controller do
     end
   end
   describe '#destroy' do
-    it { should route(:delete, '/occurrences').to(action: :destroy) }
+    it { should route(:delete, @version + '/occurrences').to(action: :destroy) }
 
     context 'when no user is logged in' do
       it_behaves_like 'DELETE protected with authentication controller', :destroy
