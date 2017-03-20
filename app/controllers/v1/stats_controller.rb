@@ -1,4 +1,4 @@
-class StatsController < ApplicationController
+class  V1::StatsController < V1::BaseController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_user!
 

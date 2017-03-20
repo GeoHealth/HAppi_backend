@@ -1,9 +1,10 @@
 require 'rails_helper'
 require 'support/shared_example_symptoms_counts_factory'
+require_relative '__version__'
 
-RSpec.describe StatsController, type: :controller do
+RSpec.describe  V1::StatsController, type: :controller do
   describe '#count' do
-    it { should route(:get, '/stats/count').to(action: :count) }
+    it { should route(:get, @version + '/stats/count').to(action: :count) }
     it_behaves_like 'GET protected with authentication controller', :count
 
     context 'with valid authentication headers' do

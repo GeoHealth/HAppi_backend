@@ -1,4 +1,4 @@
-class SymptomsUserController < ApplicationController
+class  V1::SymptomsUserController < V1::BaseController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_user!
 

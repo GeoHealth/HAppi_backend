@@ -1,4 +1,4 @@
-class OccurrencesController < ApplicationController
+class  V1::OccurrencesController < V1::BaseController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_user!
 
