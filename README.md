@@ -12,10 +12,18 @@ Rails application to run the REST API of the HAppi application.
 
 1. `bundle install`
 2. `rake db:migrate`
+3. `rake db:seed`
+4. `gem install mailcatcher`
 
-## Start server
+## Run local server
 
+Start he rails server with 
 `rails s`
+
+And start the mailcatcher server with
+`mailcatcher`
+
+The mails can then be seen at [http://localhost:1080/](http://localhost:1080/)
 
 ## Testing
 
