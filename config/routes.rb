@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks]
+  mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks],controllers:{
+      registrations: 'registrations'
+  }
 
   api_version(:module => 'V1', :path => {:value => 'v1'}, :default => true) do
     resources :occurrences, :only => [:create, :index]
@@ -11,6 +13,7 @@ Rails.application.routes.draw do
     get 'stats/count' => 'stats#count'
     post 'shared_occurrences' => 'shared_occurrences#create'
   end
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
