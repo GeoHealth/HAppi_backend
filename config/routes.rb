@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     delete 'occurrences' => 'occurrences#destroy'
     get 'symptoms/occurrences' => 'symptoms#occurrences'
     get 'stats/count' => 'stats#count'
+    post 'shared_occurrences' => 'shared_occurrences#create'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
