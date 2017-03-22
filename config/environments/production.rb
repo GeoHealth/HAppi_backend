@@ -12,6 +12,7 @@ Rails.application.configure do
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
@@ -67,9 +68,6 @@ Rails.application.configure do
       api_key: ENV['MAILGUN_API_KEY'],
       domain: ENV['MAILGUN_DOMAIN']
   }
-  # Perform cache of email views
-  # See: http://guides.rubyonrails.org/action_mailer_basics.html#caching-mailer-view
-  config.action_mailer.perform_caching = true
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
