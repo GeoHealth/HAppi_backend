@@ -7,4 +7,8 @@ class User < ActiveRecord::Base
 
   # note that this include statement comes AFTER the devise block above
   include DeviseTokenAuth::Concerns::User
+
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
+  end
 end
