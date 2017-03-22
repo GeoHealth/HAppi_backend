@@ -3,7 +3,7 @@ class  V1::SharedOccurrencesController < V1::BaseController
   before_action :authenticate_user!
 
   def create
-    ReportMailer.new_report_notification(current_user, nil).deliver
+    ReportMailer.new_report_notification(current_user, nil).deliver_later
     render nothing: true, :status => 200
   end
 end
