@@ -58,6 +58,11 @@ gem 'mailgun_rails'
 
 gem 'sidekiq'
 
+#Use to the weather information
+#https://github.com/wnadeau/wunderground
+gem 'wunderground'
+
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
