@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170320074213) do
+ActiveRecord::Schema.define(version: 20170324123858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,9 +29,9 @@ ActiveRecord::Schema.define(version: 20170320074213) do
 
   create_table "factors", force: :cascade do |t|
     t.string   "name"
-    t.string   "factor_type"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "gps_coordinates", force: :cascade do |t|
@@ -58,6 +58,23 @@ ActiveRecord::Schema.define(version: 20170320074213) do
   add_index "occurrences", ["gps_coordinate_id"], name: "index_occurrences_on_gps_coordinate_id", using: :btree
   add_index "occurrences", ["symptom_id"], name: "index_occurrences_on_symptom_id", using: :btree
   add_index "occurrences", ["user_id"], name: "index_occurrences_on_user_id", using: :btree
+
+  create_table "reports", force: :cascade do |t|
+    t.string   "email"
+    t.datetime "expiration_date"
+    t.string   "token"
+    t.integer  "user_id"
+  end
+
+  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
+
+  create_table "shared_occurrences", force: :cascade do |t|
+    t.integer "reports_id"
+    t.integer "occurrences_id"
+  end
+
+  add_index "shared_occurrences", ["occurrences_id"], name: "index_shared_occurrences_on_occurrences_id", using: :btree
+  add_index "shared_occurrences", ["reports_id"], name: "index_shared_occurrences_on_reports_id", using: :btree
 
   create_table "symptoms", force: :cascade do |t|
     t.string   "name"
