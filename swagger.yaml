@@ -394,7 +394,8 @@ paths:
       responses:
         '201':
           description: 'The shared occurrences report has been created'
-        
+          schema:
+            $ref: '#/definitions/Report'
         
         
         
@@ -647,6 +648,28 @@ definitions:
       expiration_date:
         type: string
         format: date-time
+  Report:
+    type: object
+    description: A report used to share occurrences with a doctor
+    properties:
+      id:
+        type: string
+      start_date:
+        type: string
+        format: date-time
+      end_date:
+        type: string
+        format: date-time
+      email:
+        type: string
+      expiration_date:
+        type: string
+        format: date-time
+      token:
+        type: string
+      user_id:
+        type: string
+        
         
         
         
