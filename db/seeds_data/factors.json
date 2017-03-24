@@ -1,0 +1,1 @@
+[{"name":"temperature","factor_type":"celsius"},{"name":"humidity","factor_type":"percentage"},{"name":"weather_condition","factor_type":"string"}]

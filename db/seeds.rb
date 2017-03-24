@@ -16,4 +16,23 @@ def import_symptoms
   end
 end
 
+def import_factors
+  open('./db/seeds_data/factors.json') do |factors_file|
+    factors_json = JSON.parse factors_file.read
+    factors_json.each { |factor_json|
+      factor = Factor.new(
+          id: factor_json['id'],
+          name: factor_json['name'],
+          factor_type: factor_json['factor_type']
+      )
+      begin
+      factor.save
+      rescue ActiveRecord::RecordNotUnique
+        puts "Factor with id #{factor.id} already exist. Skipped!"
+      end
+    }
+  end
+end
+
 import_symptoms
+import_factors
