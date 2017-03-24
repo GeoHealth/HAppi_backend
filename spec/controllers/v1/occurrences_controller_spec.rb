@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'helpers/occurrences_controller_helper'
 require_relative '__version__'
 
 RSpec.shared_examples 'the given occurrence is not valid' do ||
@@ -110,6 +111,10 @@ RSpec.describe  V1::OccurrencesController, type: :controller do
           @valid_occurrence = build(:occurrence_with_gps_coordinates)
           post :create, occurrence: @valid_occurrence.to_json(include: :gps_coordinate)
         end
+
+        before(:each){OccurrencesControllerHelper.bypass_weather_factor_instances_worker}
+        after(:each){OccurrencesControllerHelper.restore_weather_factor_instances_worker}
+
 
         include_examples 'the given occurrence is valid'
 
