@@ -378,6 +378,30 @@ paths:
         '422':
           description: The given symptom_id is not valid or does not exist for the user
 
+  /shared_occurrences:
+    post:
+      summary: Create a new shared occurrences report containing all the occurrences of the user between the given start_date and end_date. It is associated to the email address of a doctor and have an expiration date.
+      tags:
+        - Occurrence
+        - SharedOccurrences
+      parameters:
+        - name: 'shared_occurrences'
+          in: body
+          description: The shared occurrences parameters
+          required: true
+          schema:
+            $ref: '#/definitions/SharedOccurrencesParameters'
+      responses:
+        '201':
+          description: 'The shared occurrences report has been created'
+        
+        
+        
+        
+        
+        
+        
+
 definitions:
   Symptom:
     type: object
@@ -608,3 +632,31 @@ definitions:
         type: string
       symptom_id:
         type: integer
+  SharedOccurrencesParameters:
+    type: object
+    description: The parameters to POST shared_occurrences
+    properties:
+      start_date:
+        type: string
+        format: date-time
+      end_date:
+        type: string
+        format: date-time
+      email:
+        type: string
+      expiration_date:
+        type: string
+        format: date-time
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
