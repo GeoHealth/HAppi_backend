@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'helpers/occurrences_controller_helper'
 require_relative '__version__'
 
+
 RSpec.shared_examples 'the given occurrence is not valid' do ||
   it 'responds with 422' do
     is_expected.to respond_with 422
@@ -70,6 +71,10 @@ RSpec.shared_examples 'status 422 and one occurrence' do
 end
 
 RSpec.describe  V1::OccurrencesController, type: :controller do
+
+  before(:each){OccurrencesControllerHelper.bypass_weather_factor_instances_worker}
+  after(:each){OccurrencesControllerHelper.restore_weather_factor_instances_worker}
+
   describe '#create' do
     it { should route(:post, @version + '/occurrences').to(action: :create) }
     it_behaves_like 'POST protected with authentication controller', :create, occurrence: @valid_occurrence.to_json
@@ -111,10 +116,6 @@ RSpec.describe  V1::OccurrencesController, type: :controller do
           @valid_occurrence = build(:occurrence_with_gps_coordinates)
           post :create, occurrence: @valid_occurrence.to_json(include: :gps_coordinate)
         end
-
-        before(:each){OccurrencesControllerHelper.bypass_weather_factor_instances_worker}
-        after(:each){OccurrencesControllerHelper.restore_weather_factor_instances_worker}
-
 
         include_examples 'the given occurrence is valid'
 
