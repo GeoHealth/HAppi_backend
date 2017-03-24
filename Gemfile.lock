@@ -342,6 +342,7 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   versionist
   web-console (~> 2.0)
+  wunderground
 
 RUBY VERSION
    ruby 2.2.5p319
