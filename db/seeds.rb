@@ -34,6 +34,5 @@ def import_factors
   end
 end
 
-
 import_symptoms
 import_factors
