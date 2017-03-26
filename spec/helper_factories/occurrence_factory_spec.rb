@@ -22,19 +22,22 @@ RSpec.describe OccurrenceFactory do
   end
 
   describe '.build_from_params' do
+    before(:each) do
+      @valid_occurrence = {
+          symptom_id: 2,
+          date: '2016-12-15',
+          gps_coordinate: {
+              latitude: 50.65,
+              longitude: 4.06,
+              altitude: 25.2,
+              accuracy: 10,
+              altitude_accuracy: 10
+          }
+      }
+    end
+
     context 'when a valid json is given' do
       before(:each) do
-        @valid_occurrence = {
-            symptom_id: 2,
-            date: '2016-12-15',
-            gps_coordinate: {
-                latitude: 50.65,
-                longitude: 4.06,
-                altitude: 25.2,
-                accuracy: 10,
-                altitude_accuracy: 10
-            }
-        }
         @received_occurrence = OccurrenceFactory.build_from_params(@valid_occurrence.as_json)
       end
 
@@ -49,17 +52,6 @@ RSpec.describe OccurrenceFactory do
 
     context 'when a valid json is given as a string' do
       before(:each) do
-        @valid_occurrence = {
-            symptom_id: 2,
-            date: '2016-12-15 00:00:00',
-            gps_coordinate: {
-                latitude: 50.65,
-                longitude: 4.06,
-                altitude: 25.2,
-                accuracy: 10,
-                altitude_accuracy: 10
-            }
-        }
         @received_occurrence = OccurrenceFactory.build_from_params(@valid_occurrence.to_json)
       end
 
