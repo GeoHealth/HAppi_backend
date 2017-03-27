@@ -2,11 +2,17 @@ class  V1::OccurrencesController < V1::BaseController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_user!
 
+
+
   def create
     @occurrence = OccurrenceFactory.build_from_params(params[:occurrence])
     @occurrence.user = current_user
+
     begin
       if @occurrence.save
+        unless @occurrence.gps_coordinate.nil? then
+          WeatherFactorInstancesWorker.perform_async(@occurrence.id)
+        end
         render json: @occurrence, status: 201
       else
         render :nothing => true, status: 422

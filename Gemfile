@@ -58,6 +58,8 @@ gem 'mailgun_rails'
 
 gem 'sidekiq'
 
+gem 'wunderground'
+
 gem 'has_secure_token'
 
 
