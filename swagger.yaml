@@ -380,10 +380,12 @@ paths:
 
   /reports:
     post:
-      summary: Create a new shared occurrences report containing all the occurrences of the user between the given start_date and end_date. It is associated to the email address of a doctor and have an expiration date.
+      summary: Create a new shared occurrences report.
+      description: Create a new shared occurrences report containing all the occurrences of the user between the given start_date and end_date. It is associated to the email address of a doctor and have an expiration date. The value of expiration_date is optionnal and will be set to 2 weeks from now by default.
       tags:
         - Occurrence
         - SharedOccurrences
+        - Report
       parameters:
         - name: 'report'
           in: body
@@ -648,6 +650,7 @@ definitions:
       expiration_date:
         type: string
         format: date-time
+        description: This value is optionnal and will be set to 2 weeks from now by default.
   Report:
     type: object
     description: A report used to share occurrences with a doctor

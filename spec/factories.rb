@@ -67,8 +67,9 @@ FactoryGirl.define do
   #Report
   factory :report do
     email { generate(:email) }
-    token 'unique token'
+    expiration_date { Time.now + 2.weeks }
+    start_date { Time.now - 2.weeks }
+    end_date { Time.now }
     user_id { create(:user).id }
-    expiration_date {Time.now + 2.weeks}
   end
 end

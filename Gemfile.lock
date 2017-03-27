@@ -268,6 +268,9 @@ GEM
       rspec-expectations (~> 3.5.0)
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
+    rspec-sidekiq (2.2.0)
+      rspec (~> 3.0, >= 3.0.0)
+      sidekiq (>= 2.4.0)
     rspec-support (3.5.0)
     ruby_dep (1.5.0)
     sass (3.4.23)
@@ -367,6 +370,7 @@ DEPENDENCIES
   rails_12factor (~> 0.0.3)
   rake (~> 12.0)
   rspec-rails (~> 3.5)
+  rspec-sidekiq
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   sentry-raven (~> 2.3.1)

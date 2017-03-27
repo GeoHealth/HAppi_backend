@@ -29,9 +29,9 @@ ActiveRecord::Schema.define(version: 20170324123858) do
 
   create_table "factors", force: :cascade do |t|
     t.string   "name"
-    t.string   "factor_type"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string   "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "gps_coordinates", force: :cascade do |t|

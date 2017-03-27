@@ -73,6 +73,10 @@ RSpec.describe ReportFactory do
           it 'returns an instance attached to the 2 occurrences of the logged in user that are between start_date and end_date' do
             check_attached_occurrences subject, [@o1_cur_user, @o2_cur_user], [@o1_user_x, @o2_user_x, @o3_cur_user, @o3_user_x]
           end
+
+          it 'returns an already saved instance' do
+            expect(subject.new_record?).to be_falsey
+          end
         end
 
         context 'when a valid report (containing an email, start_date, end_date and expiration_date keys) is given as a json string' do
@@ -89,6 +93,10 @@ RSpec.describe ReportFactory do
           it 'returns an instance attached to all occurrences of the logged in user that are between start_date and end_date' do
             check_attached_occurrences subject, [@o1_cur_user, @o2_cur_user], [@o1_user_x, @o2_user_x, @o3_cur_user, @o3_user_x]
           end
+
+          it 'returns an already saved instance' do
+            expect(subject.new_record?).to be_falsey
+          end
         end
 
         context 'when the given json contains none of the following key: containing an email, start_date, end_date and expiration_date' do
@@ -98,12 +106,19 @@ RSpec.describe ReportFactory do
             expect(subject).to be_an_instance_of(Report)
           end
 
-          it 'has all its attributes set to nil and zero occurrences attached' do
+          it 'has all its attributes set to nil (except expiration_date) and zero occurrences attached' do
             expect(subject.email).to be_nil
             expect(subject.start_date).to be_nil
             expect(subject.end_date).to be_nil
-            expect(subject.expiration_date).to be_nil
             expect(subject.occurrences).to be_empty
+          end
+
+          it 'has an expiration_date set to 2 weeks from now' do
+            expect(subject.expiration_date).to be_within(10.seconds).of (Time.zone.now + 2.weeks)
+          end
+
+          it 'returns a non-saved instance' do
+            expect(subject.new_record?).to be_truthy
           end
         end
       end

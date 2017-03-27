@@ -9,6 +9,5 @@ class Report < ActiveRecord::Base
   validates_presence_of :start_date
   validates_presence_of :end_date
   validates_presence_of :expiration_date
-  validates_presence_of :token
   validates_presence_of :user_id
 end

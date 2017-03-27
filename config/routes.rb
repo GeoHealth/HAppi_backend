@@ -7,11 +7,11 @@ Rails.application.routes.draw do
     resources :occurrences, :only => [:create, :index]
     resources :symptoms, :only => [:index]
     resources :symptoms_user, :only => [:index, :create]
+    resource :reports, :only => [:create]
     delete 'symptoms_user' => 'symptoms_user#destroy'
     delete 'occurrences' => 'occurrences#destroy'
     get 'symptoms/occurrences' => 'symptoms#occurrences'
     get 'stats/count' => 'stats#count'
-    post 'shared_occurrences' => 'shared_occurrences#create'
   end
 
 

@@ -8,10 +8,11 @@ class ReportFactory
       report.email = json_report.fetch('email', nil)
       report.start_date = json_report.fetch('start_date', nil)
       report.end_date = json_report.fetch('end_date', nil)
-      report.expiration_date = json_report.fetch('expiration_date', nil)
+      report.expiration_date = json_report.fetch('expiration_date', Time.now + 2.weeks)
     end
-    attach_concerned_occurrences(report, current_user)
-
+    if report.save
+      attach_concerned_occurrences(report, current_user)
+    end
     report
   end
 

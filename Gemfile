@@ -105,4 +105,8 @@ group :test do
   # Mutation testing tool
   # https://github.com/mbj/mutant
   gem 'mutant-rspec'
+
+  # Sidekiq gem test
+  # https://github.com/philostler/rspec-sidekiq
+  gem 'rspec-sidekiq'
 end
