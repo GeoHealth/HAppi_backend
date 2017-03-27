@@ -92,6 +92,8 @@ GEM
     ffi (1.9.18-x86-mingw32)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    has_secure_token (1.0.0)
+      activerecord (>= 3.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     i18n (0.8.1)
@@ -309,6 +311,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   devise_token_auth (~> 0.1.4)
   factory_girl_rails (~> 4.8)
+  has_secure_token
   jbuilder (~> 2.0)
   jquery-rails (~> 4.2.2)
   mailgun_rails

@@ -61,6 +61,14 @@ FactoryGirl.define do
   # SymptomsUser
   factory :symptoms_user do
     user_id { create(:user).id }
-    symptom_id { create(:symptom).id}
+    symptom_id { create(:symptom).id }
+  end
+
+  #Report
+  factory :report do
+    email { generate(:email) }
+    token 'unique token'
+    user_id { create(:user).id }
+    expiration_date {Time.now + 2.weeks}
   end
 end
