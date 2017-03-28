@@ -2,11 +2,9 @@ class WeatherFactorInstancesWorker
   include Sidekiq::Worker
 
   @@w_api = Wunderground.new
-
+  MAX_DATE = 9999
 
   def perform(occurrence_id)
-    # Do something
-
     occurrence = Occurrence.find(occurrence_id)
 
     latitude = occurrence.gps_coordinate.latitude.to_s
@@ -29,7 +27,7 @@ class WeatherFactorInstancesWorker
 
     result_observation = nil
     hour_day = date.strftime("%H%M")
-    min = 9999
+    min = MAX_DATE
 
     observations.each do |observation|
       observation_date = observation['date']['hour'] + observation['date']['min']
