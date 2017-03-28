@@ -21,14 +21,28 @@ class WeatherFactorInstancesWorker
     occurrence.save
   end
 
+  #Returns the closest weather observation of date
   def get_weather_information(latitude, longitude, date)
-    year_month_day = date.strftime("%Y%m%d")
+    #Transform the date into a format Year Month Date
+    observations_date = date.strftime("%Y%m%d")
 
-    response =@@w_api.history_for(year_month_day, "#{latitude},#{longitude}")
+    #Call the Wunderground service to get the observations for the place define
+    #by longitude and latitude for the date (= observations_date)
+    response =@@w_api.history_for(observations_date, "#{latitude},#{longitude}")
     observations = response['history']['observations']
 
-    result_observation = nil
+    get_closest_observation(date, observations)
+  end
+
+  #Returns the closest observation from observations according the time
+  def get_closest_observation(date, observations)
+    closest_observation = nil
+    #Get the Hour and the minutes from date
+    #Tips: to compute the difference between two dates, we concatenate the hour and the minutes for
+    # each date and we compute the difference between them
     hour_day = date.strftime("%H%M")
+    #Min is set to the max value of the difference between the date (of the closest observation)
+    # and the date (of the observations)
     min = 9999
 
     observations.each do |observation|
@@ -36,9 +50,9 @@ class WeatherFactorInstancesWorker
       dif = (observation_date.to_i - hour_day.to_i).abs
       if dif < min then
         min = dif
-        result_observation = observation
+        closest_observation = observation
       end
     end
-    result_observation
+    closest_observation
   end
 end
