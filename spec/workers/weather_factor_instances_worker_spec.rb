@@ -32,9 +32,9 @@ RSpec.describe WeatherFactorInstancesWorker, type: :worker do
               allow(WeatherFactorInstancesWorker.class_variable_get '@@w_api').to receive(:history_for) { expected_hash}
           end
 
-
           it 'returns the observation with the closest date' do
-              result = WeatherFactorInstancesWorker.new.get_weather_information(nil, nil, Time.now)
+              date = Time.parse('2012-07-11 21:00')
+              result = WeatherFactorInstancesWorker.new.get_weather_information(nil, nil, date)
               expect(result).to be_instance_of Hash
               expect(result).to eq @closest_observation
           end
