@@ -74,4 +74,11 @@ FactoryGirl.define do
     end_date { Time.now }
     user_id { create(:user).id }
   end
+
+  #Factor
+  factory :factor do
+    id {create(:factor).id}
+    name 'Foo'
+    factor_type 'Bar'
+  end
 end
