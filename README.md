@@ -13,22 +13,41 @@ Rails application to run the REST API of the HAppi application.
 1. `bundle install`
 2. `rake db:migrate`
 3. `rake db:seed`
-4. `gem install mailcatcher`
+4. `rails s`
 
 ## Run local server
 
-Start he rails server with 
-`rails s`
+Install mailcatcher to intercept mails 
+
+    gem install mailcatcher
+
+Start the rails server with 
+    
+    rails s
+    
+Start sidekiq with
+
+    bundle exec sidekiq -q default -q mailers
 
 And start the mailcatcher server with
-`mailcatcher`
+
+    mailcatcher
 
 The mails can then be seen at [http://localhost:1080/](http://localhost:1080/)
+
+The sidekiq dashboard can be seen at [http://localhost:3000/sidekiq](http://localhost:3000/sidekiq)
 
 ## Testing
 
 ### Preparation
-`rake db:test:prepare`
+
+    rake db:test:prepare
 
 ### Simple run
-`rake spec`
+
+    rake spec
+
+### Rspec documentation
+We can generate some kind of documentation using the Rpsec tests because we described them nicely.
+
+    rspec --format documentation
