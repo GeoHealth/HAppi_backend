@@ -1,1 +1,6 @@
-Your patient <%= @user.first_name %> <%= @user.last_name %> send you this report: #todo generate URL to report
+Your patient <%= @user.first_name %> <%= @user.last_name %> send you
+<a href="https://happi-doctor.be?token=<%= @report.token %>&email=<%= @report.email %>" target="_blank">this report</a>
+<br/><br/>
+If you can't click the link, you can copy-paste this URL in your web browser: <br/>
+
+<p style="padding: 10px; border: solid 1px black">https://happi-doctor.be?token=<%= @report.token %>&email=<%= @report.email %></p>

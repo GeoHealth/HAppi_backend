@@ -3,6 +3,6 @@ class ReportMailer < ApplicationMailer
     @title = 'Dear doctor,'
     @user = user
     @report = report
-    mail to: @user.email, subject: "Report from HAppi user #{@user.first_name} #{@user.last_name}"
+    mail to: @report.email, subject: "Report from HAppi user #{@user.first_name} #{@user.last_name}"
   end
 end
