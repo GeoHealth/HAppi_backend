@@ -43,6 +43,8 @@ FactoryGirl.define do
     uid { generate(:email) }
     email { uid }
     password '11112222'
+    first_name 'Foo'
+    last_name 'Bar'
   end
 
   # CountPerDate
