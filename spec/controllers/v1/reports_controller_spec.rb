@@ -1,4 +1,4 @@
-require 'rails_helper'
+ '# WeatherFactorInstancesWorkerrequire 'rails_helper'
 require_relative '__version__'
 
 RSpec.describe V1::ReportsController, type: :controller do
