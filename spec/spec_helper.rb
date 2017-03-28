@@ -115,4 +115,7 @@ RSpec.configure do |config|
   config.around(:each) do |example|
     Timeout.timeout(15, &example)
   end
+
+  # Ensure that before each example, the array containing the mail to send is empty
+  config.before(:each) { ActionMailer::Base.deliveries.clear }
 end
