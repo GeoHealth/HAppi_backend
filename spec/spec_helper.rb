@@ -113,7 +113,7 @@ RSpec.configure do |config|
 
   # Make tests fail after 15 seconds
   config.around(:each) do |example|
-    Timeout.timeout(15, &example)
+    Timeout.timeout(30, &example)
   end
 
   # Ensure that before each example, the array containing the mail to send is empty

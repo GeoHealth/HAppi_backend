@@ -86,6 +86,25 @@ RSpec.describe V1::ReportsController, type: :controller do
             end
           end
         end
+
+        context 'when an invalid report (without email, start_date, end_date and expiration_date) is given as parameter' do
+          before(:each) do
+            @invalid_report = {foo: 'bar'}
+            post :create, report: @invalid_report.to_json
+          end
+
+          it 'responds with 422' do
+            is_expected.to respond_with 422
+          end
+
+          it 'does not add the report in the database' do
+            expect(Report.count).to eq 0
+          end
+
+          it 'does not enqueue a job to send a mail' do
+            expect{post :create, report: @invalid_report.to_json}.not_to have_enqueued_job.on_queue('mailers')
+          end
+        end
       end
     end
   end

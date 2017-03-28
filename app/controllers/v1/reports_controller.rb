@@ -8,7 +8,7 @@ class V1::ReportsController < V1::BaseController
       ReportMailer.new_report_notification(current_user, @report).deliver_later
       render json: @report, :include => :occurrences, status: 201
     else
-      render nothing: true, status: 400
+      render nothing: true, status: 422
     end
   end
 end

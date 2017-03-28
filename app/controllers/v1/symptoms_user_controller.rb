@@ -4,7 +4,7 @@ class  V1::SymptomsUserController < V1::BaseController
 
   def index
     result = Symptom.where(id: SymptomsUser.where(user_id: current_user.id).pluck(:symptom_id))
-    render json: {'symptoms': result}
+    render json: {symptoms: result}
   end
 
   def create
