@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks],controllers:{
+  mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks], controllers: {
       registrations: 'registrations'
   }
 
@@ -14,10 +14,12 @@ Rails.application.routes.draw do
     get 'stats/count' => 'stats#count'
   end
 
+  # :nocov:
   if Rails.env.development?
     require 'sidekiq/web'
     mount Sidekiq::Web => '/sidekiq'
   end
+  # :nocov:
 
 
   # The priority is based upon order of creation: first created -> highest priority.
