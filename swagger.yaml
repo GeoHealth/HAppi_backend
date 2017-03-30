@@ -398,6 +398,28 @@ paths:
           description: 'The shared occurrences report has been created'
           schema:
             $ref: '#/definitions/Report'
+    get:
+      summary: Retrieve a report based on a token and an email address.
+      description: Return the report associated to the given token. The report was sent to the given email address. It contains all the symptoms and occurrences that the patient agreed to share with its doctor.
+      tags:
+        - Report
+        - SharedOccurrences
+      parameters:
+        - name: token
+          in: query
+          description: A token identifying the report to access.
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: The email address to which the report was sent.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The report was found, the token and email were valid. The expiration_date is not passed yet.
+          schema:
+            $ref: '#/definitions/Report'
         
         
         
