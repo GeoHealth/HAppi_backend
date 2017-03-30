@@ -1,6 +1,7 @@
 class V1::ReportsController < V1::BaseController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_user!
+  skip_before_action :authenticate_user!, only: [:show]
 
   def create
     @report = ReportFactory.build_from_params(params.fetch(:report), current_user)

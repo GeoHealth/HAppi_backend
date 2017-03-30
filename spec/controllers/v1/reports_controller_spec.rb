@@ -129,13 +129,8 @@ RSpec.describe V1::ReportsController, type: :controller do
     it { should route(:get, @version + '/report').to(action: :show) }
 
     context 'when no user is logged in' do
-      it_behaves_like 'GET protected with authentication controller', :show
-    end
-
-    context 'when a user is logged in' do
       before(:each) do
-        @user = AuthenticationTestHelper.set_valid_authentication_headers(@request)
-        sign_in @user
+        @user = create(:user)
       end
 
       #                  start_date                                       end_date
