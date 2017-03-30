@@ -11,5 +11,16 @@ class V1::ReportsController < V1::BaseController
       render nothing: true, status: 422
     end
   end
+
+  def show
+    @token = params.fetch(:token)
+    @email = params.fecth(:email)
+    @report = Report.find_by_token(@token)
+    if @report.email == @email
+      render json: @report.enhanceReportWithSymptoms, :include => :symptoms
+    else
+      render nothing: true, status: 404
+    end
+  end
 end
 

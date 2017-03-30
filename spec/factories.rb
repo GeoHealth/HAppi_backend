@@ -30,6 +30,10 @@ FactoryGirl.define do
     user_id -1
   end
 
+  factory :occurrence_with_3_factor_instances, parent: :occurrence do
+    factor_instances { create_list(:factor_instance, 3) }
+  end
+
   # GPSCoordinates
   factory :gps_coordinate do
     latitude 50.663856999985
@@ -66,12 +70,23 @@ FactoryGirl.define do
     symptom_id { create(:symptom).id }
   end
 
-  #Report
+  # Report
   factory :report do
     email { generate(:email) }
     expiration_date { Time.now + 2.weeks }
     start_date { Time.now - 2.weeks }
     end_date { Time.now }
     user_id { create(:user).id }
+  end
+
+  factory :factor do
+    name 'foo factor'
+    factor_type 'bar type'
+  end
+
+  # FactorInstances
+  factory :factor_instance do
+    factor {create(:factor)}
+    value 'some value'
   end
 end
