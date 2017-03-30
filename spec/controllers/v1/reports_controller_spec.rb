@@ -291,6 +291,21 @@ RSpec.describe V1::ReportsController, type: :controller do
             end
           end
 
+          context 'when the given token does not exist' do
+            before(:each) do
+              @token = @report.token + 'something is wrong'
+              @email = @report.email
+            end
+
+            before(:each) do
+              get :show, token: @token, email: @email
+            end
+
+            it 'responds with status 404' do
+              is_expected.to respond_with 404
+            end
+          end
+
           context 'when no email is given as parameter' do
             before(:each) do
               @token = @report.token
