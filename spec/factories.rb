@@ -80,8 +80,8 @@ FactoryGirl.define do
   end
 
   factory :factor do
-    name 'foo factor'
-    factor_type 'bar type'
+    name 'Foo'
+    factor_type 'Bar'
   end
 
   # FactorInstances
