@@ -659,7 +659,7 @@ definitions:
         type: integer
   ReportParameters:
     type: object
-    description: The parameters to POST shared_occurrences
+    description: The parameters to POST a report.
     properties:
       start_date:
         type: string
@@ -694,6 +694,10 @@ definitions:
         type: string
       user_id:
         type: string
+      symptoms:
+        type: array
+        items:
+          $ref: '#/definitions/SymptomWithOccurrences'
         
         
         
