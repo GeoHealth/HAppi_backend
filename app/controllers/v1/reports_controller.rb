@@ -17,7 +17,7 @@ class V1::ReportsController < V1::BaseController
     begin
       @report = Report.find_by_token(params.fetch(:token))
       if @report && @report.expiration_date > Time.zone.now && @report.email == params.fetch(:email)
-        render json: {report: @report.enhanceReportWithSymptoms}, :include => {:symptoms => {:include => {:occurrences => {:include => :factor_instances}}}}
+        render json: {report: @report.enhanceReportWithSymptoms}, :include => {:symptoms => {:include => {:occurrences => {:include => [:factor_instances, :gps_coordinate]}}}}
       else
         render nothing: true, status: 404
       end

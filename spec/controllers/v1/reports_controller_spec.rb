@@ -30,6 +30,35 @@ RSpec.describe V1::ReportsController, type: :controller do
         sign_in @user
       end
 
+      context 'when a report is created with an occurrence with gps coordinates ' do
+        before(:each) do
+          @start_date = Time.parse('2017-07-11 1:00')
+          @end_date = @start_date + 1.week
+          @expiration_date = @end_date + 2.weeks
+
+          @occ_with_gps = create(:occurrence_with_gps_coordinates)
+          @report = create(:report, user_id: @user.id, start_date: @start_date, end_date: @end_date, expiration_date: @expiration_date)
+          @report.occurrences << [@occ_with_gps]
+          @token = @report.token
+          @email = @report.email
+        end
+
+        before(:each) do
+          get :show, token: @token, email: @email
+        end
+
+        context 'the report of the response' do
+          it 'has the latitude and longitude attributes' do
+            JSON.parse(response.body)['report']['symptoms'].each do |symptom|
+              symptom['occurrences'].each do |occurrence|
+                expect(occurrence['gps_coordinate']).to have_key 'longitude'
+                expect(occurrence['gps_coordinate']).to have_key 'latitude'
+              end
+            end
+          end
+        end
+      end
+
       # start_date                                end_date
       #      |                                       |
       #      |  o1_cur_user       o2_cur_user        |    o3_cur_user
@@ -259,6 +288,8 @@ RSpec.describe V1::ReportsController, type: :controller do
                 end
               end
             end
+
+
 
             context 'when expiration_date is passed' do
               before(:each) do
