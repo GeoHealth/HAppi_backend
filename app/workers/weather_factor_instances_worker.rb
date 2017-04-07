@@ -1,5 +1,6 @@
 class WeatherFactorInstancesWorker
   include Sidekiq::Worker
+  sidekiq_options :retry => 2
 
   @@w_api = Wunderground.new
   MAX_DATE = 9999
