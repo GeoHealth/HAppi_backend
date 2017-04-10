@@ -18,7 +18,8 @@ RSpec.describe ElasticsearchWorker, type: :worker do
       end
       context 'when http post is done' do
         before(:each) do
-          stub_request(:any, "http://localhost:9200/occurrences/#{@occurrence.id}").to_return(status: 202)
+          @url = ENV['ELASTIC_URL'] + @occurrence.id.to_s
+          stub_request(:any, @url).to_return(status: 202)
         end
         it 'returns code 202' do
           expect(@e.perform(@occurrence.id).code).to eq ("202")

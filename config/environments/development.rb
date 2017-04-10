@@ -46,4 +46,6 @@ Rails.application.configure do
   config.action_dispatch.show_exceptions = false
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {:address => 'localhost', :port => 1025 }
+
+  ENV['ELASTIC_URL'] = 'http://localhost:9200/occurrences/'
 end
