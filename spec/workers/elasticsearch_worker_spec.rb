@@ -2,9 +2,12 @@ require 'rails_helper'
 RSpec.describe ElasticsearchWorker, type: :worker do
 
   describe '#perform' do
+    before(:each) do
+      @e = ElasticsearchWorker.new
+    end
     context 'when there is a ELASTIC_URL' do
       before(:each) do
-        @e = ElasticsearchWorker.new
+        ENV['ELASTIC_URL'] = 'http://test:9200/occurrences/'
       end
       context 'when there are no occurrence in db' do
         it 'raise an exception ActiveRecord::RecordNotFound' do
