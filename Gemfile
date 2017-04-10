@@ -111,4 +111,8 @@ group :test do
   # Sidekiq gem test
   # https://github.com/philostler/rspec-sidekiq
   gem 'rspec-sidekiq'
+
+  # Webmock
+  # https://github.com/bblimke/webmock
+  gem 'webmock'
 end

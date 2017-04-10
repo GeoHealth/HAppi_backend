@@ -13,6 +13,7 @@ class  V1::OccurrencesController < V1::BaseController
         unless @occurrence.gps_coordinate.nil? then
           WeatherFactorInstancesWorker.perform_async(@occurrence.id)
         end
+        ElasticsearchWorker.perform_async(@occurrence.id)
         render json: @occurrence, status: 201
       else
         render :nothing => true, status: 422
