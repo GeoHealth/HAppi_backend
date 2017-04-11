@@ -17,8 +17,15 @@ class ElasticsearchWorker
   end
 
   def build_json(occurrence)
-    result = JSON::parse(occurrence.to_json).merge('location' => "#{occurrence.gps_coordinate.latitude}, #{occurrence.gps_coordinate.longitude}")
+    result = {'occurrence_id' => occurrence.id,
+            'symptom_id' => occurrence.symptom_id,
+            'user_id' => occurrence.user_id,
+            'date' => occurrence.date,
+            'symptom_name' => occurrence.symptom.name
+          }
+    if (occurrence.gps_coordinate)
+      result = JSON::parse(result.to_json).merge('location' => "#{occurrence.gps_coordinate.latitude}, #{occurrence.gps_coordinate.longitude}")
+    end
     result.to_json
   end
-
 end
