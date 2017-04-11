@@ -6,7 +6,7 @@ class ElasticsearchWorker
     occurrence = Occurrence.find(occurrence_id)
     if (occurrence)
       raise(Exception, 'No ELASTIC_URL found') if not ENV['ELASTIC_URL']
-      uri = URI(ENV['ELASTIC_URL'] + (occurrence.id).to_s)
+      uri = URI(ENV['ELASTIC_URL'] + '/occurrences/' + (occurrence.id).to_s)
       req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
       req.body = build_json(occurrence)
       res = Net::HTTP.start(uri.hostname, uri.port) do |http|
