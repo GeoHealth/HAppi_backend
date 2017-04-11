@@ -47,6 +47,7 @@ The following environment variables are needed:
 - WUNDERGROUND_API_KEY
 - ELASTIC_URL
 - DEPLOY_TASKS="db:migrate"
+- DEVISE_SECRET_KEY
 
 ## Testing
 
