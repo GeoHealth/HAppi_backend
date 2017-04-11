@@ -37,6 +37,17 @@ The mails can then be seen at [http://localhost:1080/](http://localhost:1080/)
 
 The sidekiq dashboard can be seen at [http://localhost:3000/sidekiq](http://localhost:3000/sidekiq)
 
+## Production
+The following environment variables are needed:
+
+- MAILGUN_API_KEY
+- MAILGUN_DOMAIN
+- RAILS_ENV=production
+- SENTRY_DSN
+- WUNDERGROUND_API_KEY
+- ELASTIC_URL
+- DEPLOY_TASKS="db:migrate"
+
 ## Testing
 
 ### Preparation
