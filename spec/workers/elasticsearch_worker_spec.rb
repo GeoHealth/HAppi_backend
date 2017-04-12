@@ -1,10 +1,11 @@
 require 'rails_helper'
 RSpec.describe ElasticsearchWorker, type: :worker do
 
+  before(:each) do
+    @e = ElasticsearchWorker.new
+  end
+
   describe '#perform' do
-    before(:each) do
-      @e = ElasticsearchWorker.new
-    end
 
     context 'when there is an ELASTIC_URL' do
       before(:each) do
