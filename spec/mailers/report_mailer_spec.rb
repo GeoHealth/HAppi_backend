@@ -17,7 +17,7 @@ RSpec.describe ReportMailer, type: :mailer do
     end
 
     it 'sends the mail from "geohealth.info@gmail.com"' do
-      expect(@mail.from).to eq ['geohealth.info@gmail.com']
+      expect(@mail.from).to eq ['postmaster@mail.happi-doctor.be']
     end
 
     it 'sends the mail with subject "Report from HAppi user Foo Bar"' do
@@ -25,7 +25,7 @@ RSpec.describe ReportMailer, type: :mailer do
     end
 
     it 'sends the mail with the body containing a URL with the generated token' do
-      expect(@mail.encoded).to include" https://happi-doctor.be?token=#{@report.token}&email=#{@report.email}"
+      expect(@mail.encoded).to include" https://happi-doctor.be/#/report?token=#{@report.token}&email=#{@report.email}"
     end
   end
 end
