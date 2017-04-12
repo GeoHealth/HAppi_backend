@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'geohealth.info@gmail.com'
+  default from: 'postmaster@mail.happi-doctor.be'
   layout 'mailer'
 end
