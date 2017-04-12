@@ -1,0 +1,2 @@
+module DataAnalysis::UsersHavingSameSymptomsHelper
+end
