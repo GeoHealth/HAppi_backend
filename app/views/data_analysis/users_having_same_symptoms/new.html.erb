@@ -1,0 +1,22 @@
+<h1>DataAnalysis - New - Number of users having same symptoms</h1>
+
+<%= form_for :analysis, url: :data_analysis_users_having_same_symptoms_create do |f| %>
+    <p>
+      <%= f.label :start_date %><br>
+      <%= f.datetime_select :start_date %>
+    </p>
+
+    <p>
+      <%= f.label :end_date %><br>
+      <%= f.datetime_select :end_date %>
+    </p>
+
+    <p>
+      <%= f.label :threshold %><br>
+      <%= f.number_field :threshold %>
+    </p>
+
+    <p>
+      <%= f.submit %>
+    </p>
+<% end %>
