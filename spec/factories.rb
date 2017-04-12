@@ -86,7 +86,16 @@ FactoryGirl.define do
 
   # FactorInstances
   factory :factor_instance do
-    factor {create(:factor)}
+    factor { create(:factor) }
     value 'some value'
+  end
+
+  # DataAnalysis::AnalysisUsersHavingSameSymptom
+  factory :analysis_users_having_same_symptom, class: DataAnalysis::AnalysisUsersHavingSameSymptom do
+    start_date    { Time.now - 2.days }
+    end_date      { Time.now }
+    threshold     1000
+    output_path   'fake_output_path'
+    status        'created'
   end
 end
