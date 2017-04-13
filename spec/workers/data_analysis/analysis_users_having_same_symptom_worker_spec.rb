@@ -113,7 +113,7 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
         @users.each do |user|
           expected_users_id << user.id
         end
-        expected_users_id.sort
+        expected_users_id.sort!
 
         expected_users_id.each_with_index do |user_id, index|
           expect(subject[index * 2].user_id).to eq user_id

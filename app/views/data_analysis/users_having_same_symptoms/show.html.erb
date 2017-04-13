@@ -18,6 +18,27 @@
   <%= @analysis.threshold %>
 </p>
 
-<div>
-  Someday, this section will show the result of the analysis
-</div>
+<% if @results %>
+    <div>
+      <h3>this section will show the result of the analysis</h3>
+
+      <table>
+        <thead>
+        <tr>
+          <td>Number of match</td>
+          <td>Symptoms names</td>
+        </tr>
+        </thead>
+        <tbody>
+        <% @results.each do |result| %>
+            <tr>
+              <td><%= result[:number_of_match] %></td>
+              <td>
+                <% result[:symptoms].each do |symptom| %> <%= symptom[:name] %> &
+                <% end %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+<% end %>

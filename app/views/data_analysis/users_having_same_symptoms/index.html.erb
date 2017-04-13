@@ -14,6 +14,7 @@
       <th>End date</th>
       <th>Threshold</th>
       <th>Created_at</th>
+      <th>Token</th>
     </tr>
 
     <% @analysis.each do |analys| %>
@@ -24,6 +25,7 @@
           <td><%= analys.end_date %></td>
           <td><%= analys.threshold %></td>
           <td><%= analys.created_at %></td>
+          <td><%= analys.token %></td>
           <td><%= link_to 'Show', data_analysis_users_having_same_symptom_path(analys) %></td>
         </tr>
     <% end %>
