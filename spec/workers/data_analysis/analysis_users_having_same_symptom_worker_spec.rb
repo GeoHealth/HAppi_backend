@@ -3,16 +3,18 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
   before(:each) do
     @job = DataAnalysis::AnalysisUsersHavingSameSymptomWorker.new
     @analysis = create(:analysis_users_having_same_symptom)
+    @input_path = "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
+    @output_path = "./data-analysis-fimi03/outputs/#{@analysis.token}.output"
   end
 
   describe '#perform' do
     before(:each) do
-      @create_input_file_return = "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
+      @create_input_file_return = @input_path
       @system_return = true
       @delete_input_file_return = true
 
       allow(@job).to receive(:create_input_file) {@create_input_file_return}
-      allow(@job).to receive(:system).with("./data-analysis-fimi03/fim_closed ./data-analysis-fimi03/inputs/#{@analysis.token}.input #{@analysis.threshold} ./data-analysis-fimi03/outputs/#{@analysis.token}.output") {@system_return}
+      allow(@job).to receive(:system).with("./data-analysis-fimi03/fim_closed #{@input_path} #{@analysis.threshold} #{@output_path}") {@system_return}
       allow(@job).to receive(:delete_input_file) {@delete_input_file_return}
     end
 
@@ -22,7 +24,7 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
     end
 
     it 'makes a call to system with command ./fimi03/fim_closed and args = "./fimi03/fim_closed/inputs/token.input threshold ./fimi03/fim_closed/outputs/token.output"' do
-      expect(@job).to receive(:system).with("./data-analysis-fimi03/fim_closed ./data-analysis-fimi03/inputs/#{@analysis.token}.input #{@analysis.threshold} ./data-analysis-fimi03/outputs/#{@analysis.token}.output")
+      expect(@job).to receive(:system).with("./data-analysis-fimi03/fim_closed #{@input_path} #{@analysis.threshold} #{@output_path}")
       @job.perform @analysis.id
     end
 
@@ -33,7 +35,7 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
 
     context 'when all calls succeed' do
       before(:each) do
-        @create_input_file_return = "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
+        @create_input_file_return = @input_path
         @system_return = true
         @delete_input_file_return = true
       end
@@ -47,13 +49,12 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
 
     context 'when all calls succeed except system' do
       before(:each) do
-        @create_input_file_return = "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
+        @create_input_file_return = @input_path
         @system_return = false
         @delete_input_file_return = true
       end
 
-      it 'changes the status of the analysis to "dead" and write to the output file the errors' do
-        expect(@job).to receive(:system).with(/echo .* >> \.\/data-analysis-fimi03\/outputs\/#{@analysis.token}\.output/).once
+      it 'changes the status of the analysis to "dead"' do
         @job.perform @analysis.id
         @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.find(@analysis.id)
         expect(@analysis.status).to eq 'dead'
@@ -147,19 +148,19 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
       end
 
       it 'creates a file containing by calling "system touch token.input"' do
-        expect(@job).to receive(:system).with("touch ./data-analysis-fimi03/inputs/#{@analysis.token}.input")
+        expect(@job).to receive(:system).with("touch #{@input_path}")
         @job.create_input_file @analysis
       end
 
       it 'writes 5 times to the input file a line containing the 2 symptoms ids' do
-        expect(@job).to receive(:system).with("touch ./data-analysis-fimi03/inputs/#{@analysis.token}.input").ordered
+        expect(@job).to receive(:system).with("touch #{@input_path}").ordered
         expect(@job).to receive(:system).exactly(5).times.with(/echo '((#{@symptoms[0].id}|#{@symptoms[1].id}) ?)+' >> \.\/data-analysis-fimi03\/inputs\/#{@analysis.token}\.input/).ordered
         @job.create_input_file @analysis
       end
 
       it 'returns the input_path' do
         result = @job.create_input_file @analysis
-        expect(result).to eq "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
+        expect(result).to eq @input_path
       end
     end
   end
