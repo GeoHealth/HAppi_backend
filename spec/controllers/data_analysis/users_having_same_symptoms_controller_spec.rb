@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.shared_examples 'creates the analysis and redirect' do | |
+RSpec.shared_examples 'creates the analysis and redirect' do
   it 'redirects to analysis_url(@analysis)' do
     expect(response).to redirect_to(action: 'show', id: assigns(:analysis).id)
   end
@@ -27,6 +27,7 @@ RSpec.shared_examples 'creates the analysis and redirect' do | |
 end
 
 RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controller do
+  render_views
 
   describe 'GET #index' do
     it 'returns http success' do
@@ -128,8 +129,20 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controlle
         expect(response).to have_http_status(:success)
       end
 
-      it 'renders new' do
+      it 'renders show' do
         expect(get :show, id: @analysis.id).to render_template :show
+      end
+
+      context 'when the analysis status is done' do
+        before(:each) do
+          @analysis.status = 'done'
+          @analysis.save
+        end
+
+        it 'calls DataAnalysis::UsersHavingSameSymptomsResultParser.parse_result' do
+          expect(DataAnalysis::UsersHavingSameSymptomsResultParser).to receive(:parse_result).with(@analysis).once
+          get :show, id: @analysis.id
+        end
       end
     end
   end
