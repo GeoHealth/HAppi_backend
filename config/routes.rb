@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
   namespace :data_analysis do
-    get 'users_having_same_symptoms/index'
-    get 'users_having_same_symptoms', to: redirect('/data_analysis/users_having_same_symptoms/index')
-    get 'users_having_same_symptoms/new'
-    post 'users_having_same_symptoms/create'
-
+    # get 'users_having_same_symptoms/index'
+    # get 'users_having_same_symptoms', to: redirect('/data_analysis/users_having_same_symptoms/index')
+    # get 'users_having_same_symptoms/new'
+    # post 'users_having_same_symptoms/create'
+    resources :users_having_same_symptoms, :only => [:create, :index, :new, :show]
   end
 
   mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks], controllers: {
