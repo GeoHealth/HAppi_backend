@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :data_analysis do
     get 'users_having_same_symptoms/index'
+    get 'users_having_same_symptoms', to: redirect('/data_analysis/users_having_same_symptoms/index')
     get 'users_having_same_symptoms/new'
     post 'users_having_same_symptoms/create'
 
