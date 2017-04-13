@@ -95,7 +95,6 @@ FactoryGirl.define do
     start_date    { Time.now - 2.days }
     end_date      { Time.now }
     threshold     1000
-    output_path   'fake_output_path'
     status        'created'
   end
 end
