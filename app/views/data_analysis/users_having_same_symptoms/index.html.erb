@@ -2,8 +2,30 @@
 
 <%= link_to 'Click here to create a new analysis', :new_data_analysis_users_having_same_symptom %>
 
-<br/>
 
-<div>Here will be displayed a list of already executed analysis.</div>
+<h4>List of already executed analysis.</h4>
 
-<%= DataAnalysis::AnalysisUsersHavingSameSymptom.all %>
+<div>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Status</th>
+      <th>Start date</th>
+      <th>End date</th>
+      <th>Threshold</th>
+      <th>Created_at</th>
+    </tr>
+
+    <% @analysis.each do |analys| %>
+        <tr>
+          <td><%= analys.id %></td>
+          <td><%= analys.status %></td>
+          <td><%= analys.start_date %></td>
+          <td><%= analys.end_date %></td>
+          <td><%= analys.threshold %></td>
+          <td><%= analys.created_at %></td>
+          <td><%= link_to 'Show', data_analysis_users_having_same_symptom_path(analys) %></td>
+        </tr>
+    <% end %>
+  </table>
+</div>

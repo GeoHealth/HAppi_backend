@@ -1,5 +1,6 @@
 class DataAnalysis::UsersHavingSameSymptomsController < ApplicationController
   def index
+    @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.all
   end
 
   def new
@@ -14,11 +15,10 @@ class DataAnalysis::UsersHavingSameSymptomsController < ApplicationController
     else
       render plain: @analysis.errors.inspect, status: 404
     end
-    # system "./fimi03/fim_closed ./fimi03/inputs/chess.dat #{threshold} ./fimi03/outputs/awesome#{threshold}"
-    # render plain: params[:analysis].inspect
   end
 
   def show
+    @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.find(params[:id])
   end
 
   private
