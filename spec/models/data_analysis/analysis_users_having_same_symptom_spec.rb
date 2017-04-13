@@ -5,7 +5,6 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptom, type: :model do
     it { should validate_presence_of(:start_date) }
     it { should validate_presence_of(:end_date) }
     it { should validate_presence_of(:threshold) }
-    it { should validate_presence_of(:output_path) }
     it { should validate_presence_of(:status) }
 
     it { should validate_inclusion_of(:status).in_array(%w( created running done aborted dead )) }
