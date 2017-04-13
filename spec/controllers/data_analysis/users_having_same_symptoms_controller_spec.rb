@@ -1,5 +1,27 @@
 require 'rails_helper'
 
+RSpec.shared_examples 'creates the analysis and redirect' do | |
+  it 'redirects to analysis_url(@analysis)' do
+    expect(response).to redirect_to(action: 'show', id: assigns(:analysis).id)
+  end
+
+  it 'adds an instance of DataAnalysis::AnalysisUsersHavingSameSymptom to the database' do
+    expect(DataAnalysis::AnalysisUsersHavingSameSymptom.count).to eq 1
+  end
+
+  it 'saves the given json' do
+    saved_instance = DataAnalysis::AnalysisUsersHavingSameSymptom.first
+    expect(saved_instance.start_date).to be_within(1.second).of(Time.zone.parse(@start_date))
+    expect(saved_instance.end_date).to be_within(1.second).of(Time.zone.parse(@end_date))
+    expect(saved_instance.threshold).to eq @threshold
+  end
+
+  it 'has the status created' do
+    saved_instance = DataAnalysis::AnalysisUsersHavingSameSymptom.first
+    expect(saved_instance.status).to eq 'created'
+  end
+end
+
 RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controller do
 
   describe 'GET #index' do
@@ -25,21 +47,46 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controlle
   end
 
   describe 'POST #create' do
-    context 'when a json analysis with threshold, start_date and end_date is given' do
+    before(:each) do
+      @start_date = '2017-02-25 10:10:00'
+      @end_date = '2017-04-13 20:10:00'
+      @threshold = 1000
+    end
+
+    context 'when a json analysis with threshold, (atomic) start_date and (atomic) end_date is given' do
       before(:each) do
         @valid_analysis = {
-            start_date: '2017-02-25 10:10:00',
-            end_date: '2017-04-13 20:10:00',
-            threshold: 1000
+            start_date: @start_date,
+            end_date: @end_date,
+            threshold: @threshold
         }
 
         post :create, analysis: @valid_analysis.as_json
       end
 
-      it 'redirects to analysis_url(@analysis)' do
-        expect(response).to redirect_to analysis_users_having_same_symptom_url(assigns(:analysis))
+      include_examples 'creates the analysis and redirect'
+    end
+
+    context 'when a json analysis with threshold, (atomic) start_date and (atomic) end_date is given' do
+      before(:each) do
+        @valid_analysis = {
+            'start_date(1i)': '2017',
+            'start_date(2i)': '02',
+            'start_date(3i)': '25',
+            'start_date(4i)': '10',
+            'start_date(5i)': '10',
+            'end_date(1i)': '2017',
+            'end_date(2i)': '04',
+            'end_date(3i)': '13',
+            'end_date(4i)': '20',
+            'end_date(5i)': '10',
+            threshold: @threshold
+        }
+
+        post :create, analysis: @valid_analysis.as_json
       end
 
+      include_examples 'creates the analysis and redirect'
     end
 
   end
