@@ -11,6 +11,7 @@ class DataAnalysis::AnalysisUsersHavingSameSymptomWorker
       @analysis.status = 'done'
     else
       @analysis.status = 'dead'
+      system "echo #{$?} >> #{output_path}"
     end
     delete_input_file input_path
     @analysis.save

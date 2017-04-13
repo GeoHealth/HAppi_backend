@@ -52,7 +52,8 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
         @delete_input_file_return = true
       end
 
-      it 'changes the status of the analysis to "dead"' do
+      it 'changes the status of the analysis to "dead" and write to the output file the errors' do
+        expect(@job).to receive(:system).with(/echo .* >> \.\/data-analysis-fimi03\/outputs\/#{@analysis.token}\.output/).once
         @job.perform @analysis.id
         @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.find(@analysis.id)
         expect(@analysis.status).to eq 'dead'
