@@ -9,6 +9,7 @@ class DataAnalysis::UsersHavingSameSymptomsController < ApplicationController
     @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.new(analysis_params)
     @analysis.status = 'created'
     if @analysis.save
+      DataAnalysis::AnalysisUsersHavingSameSymptomWorker.perform_async(@analysis.id)
       redirect_to action: 'show', id: @analysis.id
     else
       render plain: @analysis.errors.inspect, status: 404

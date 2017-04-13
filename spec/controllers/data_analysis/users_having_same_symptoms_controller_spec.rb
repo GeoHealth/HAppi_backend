@@ -20,6 +20,10 @@ RSpec.shared_examples 'creates the analysis and redirect' do | |
     saved_instance = DataAnalysis::AnalysisUsersHavingSameSymptom.first
     expect(saved_instance.status).to eq 'created'
   end
+
+  it 'adds a job to the queue of worker DataAnalysis::AnalysisUsersHavingSameSymptomWorker' do
+    expect(DataAnalysis::AnalysisUsersHavingSameSymptomWorker.jobs.size).to eq 1
+  end
 end
 
 RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controller do
@@ -100,6 +104,14 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controlle
 
       it 'returns a 404' do
         expect(response).to have_http_status(:not_found)
+      end
+
+      it 'does not add an instance of DataAnalysis::AnalysisUsersHavingSameSymptom to the database' do
+        expect(DataAnalysis::AnalysisUsersHavingSameSymptom.count).to eq 0
+      end
+
+      it 'does not add any job to the queue of worker DataAnalysis::AnalysisUsersHavingSameSymptomWorker' do
+        expect(DataAnalysis::AnalysisUsersHavingSameSymptomWorker.jobs.size).to eq 0
       end
     end
 
