@@ -89,5 +89,19 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controlle
       include_examples 'creates the analysis and redirect'
     end
 
+    context 'when an invalid json is given' do
+      before(:each) do
+        @invalid_analysis = {
+            foo: 'bar'
+        }
+
+        post :create, analysis: @invalid_analysis.as_json
+      end
+
+      it 'returns a 404' do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
   end
 end
