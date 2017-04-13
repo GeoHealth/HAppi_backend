@@ -5,13 +5,14 @@ class DataAnalysis::AnalysisUsersHavingSameSymptomWorker
 
   def perform(analysis_id)
     @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.find analysis_id
-    create_input_file @analysis
-    if system "./data-analysis-fimi03/fim_closed ./data-analysis-fimi03/inputs/#{@analysis.token}.input #{@analysis.threshold} ./data-analysis-fimi03/outputs/#{@analysis.token}.output"
+    input_path = create_input_file @analysis
+    output_path = "./data-analysis-fimi03/outputs/#{@analysis.token}.output"
+    if system "./data-analysis-fimi03/fim_closed #{input_path} #{@analysis.threshold} #{output_path}"
       @analysis.status = 'done'
     else
       @analysis.status = 'dead'
     end
-    delete_input_file @analysis
+    delete_input_file input_path
     @analysis.save
   end
 
@@ -21,8 +22,20 @@ class DataAnalysis::AnalysisUsersHavingSameSymptomWorker
 
     occurrences = get_occurrences_matching_analysis analysis
 
-
-    system("echo content >> #{input_path}")
+    current_user_id = nil
+    current_line = ''
+    occurrences.each do |occurrence|
+      if current_user_id == occurrence.user_id
+        current_line = current_line + ' ' unless current_line == ''
+        current_line = current_line + occurrence.symptom_id.to_s
+      else
+        system("echo '#{current_line}' >> #{input_path}") unless current_user_id.nil?
+        current_user_id = occurrence.user_id
+        current_line = occurrence.symptom_id.to_s
+      end
+    end
+    system("echo '#{current_line}' >> #{input_path}")
+    input_path
   end
 
   def get_occurrences_matching_analysis(analysis)
@@ -33,7 +46,7 @@ class DataAnalysis::AnalysisUsersHavingSameSymptomWorker
         .order(:user_id)
   end
 
-  def delete_input_file(analysis)
-    # code here
+  def delete_input_file(input_file_path)
+    system("rm #{input_file_path}")
   end
 end

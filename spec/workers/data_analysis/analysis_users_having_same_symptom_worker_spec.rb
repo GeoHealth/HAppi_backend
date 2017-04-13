@@ -7,7 +7,7 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
 
   describe '#perform' do
     before(:each) do
-      @create_input_file_return = true
+      @create_input_file_return = "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
       @system_return = true
       @delete_input_file_return = true
 
@@ -33,7 +33,7 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
 
     context 'when all calls succeed' do
       before(:each) do
-        @create_input_file_return = true
+        @create_input_file_return = "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
         @system_return = true
         @delete_input_file_return = true
       end
@@ -47,7 +47,7 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
 
     context 'when all calls succeed except system' do
       before(:each) do
-        @create_input_file_return = true
+        @create_input_file_return = "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
         @system_return = false
         @delete_input_file_return = true
       end
@@ -122,13 +122,23 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
   end
 
   describe '#create_input_file' do
-    context 'when there are 5 users in the database having 3 occurrences between the start_date and end_date of the report' do
+    #                  start_date                                       end_date
+    #-----------------------|----------------------------------------------|---------
+    #    occ1_s1 occ2_s1    |      occ_1_symptom_1      occ_2_symptom_1    | <= each user have those occurrences
+    #        occ1_s2        |                 occ_1_symptom_2              |
+    #-----------------------|----------------------------------------------|---------
+    context 'when there are 5 users in the database having 3 occurrences (2 of the same symptom and 1 other) between the start_date and end_date of the report and 3 occurrences outside this range' do
       before(:each) do
         @users = create_list(:user, 5)
+        @symptoms = create_list(:symptom, 2)
         @users.each do |user|
-          create_list(:occurrence, 3, date: @analysis.start_date + 1.hour)
-          create_list(:occurrence, 3, date: @analysis.start_date - 1.day)
+          create_list(:occurrence, 2, user_id: user.id, symptom_id: @symptoms[0].id, date: @analysis.start_date + 1.hour)
+          create_list(:occurrence, 1, user_id: user.id, symptom_id: @symptoms[1].id, date: @analysis.start_date + 1.hour)
+          create_list(:occurrence, 2, user_id: user.id, symptom_id: @symptoms[0].id, date: @analysis.start_date - 1.day)
+          create_list(:occurrence, 1, user_id: user.id, symptom_id: @symptoms[1].id, date: @analysis.start_date - 1.day)
         end
+
+        allow(@job).to receive(:system)
       end
 
       before(:each) do
@@ -139,6 +149,28 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
         expect(@job).to receive(:system).with("touch ./data-analysis-fimi03/inputs/#{@analysis.token}.input")
         @job.create_input_file @analysis
       end
+
+      it 'writes 5 times to the input file a line containing the 2 symptoms ids' do
+        expect(@job).to receive(:system).with("touch ./data-analysis-fimi03/inputs/#{@analysis.token}.input").ordered
+        expect(@job).to receive(:system).exactly(5).times.with(/echo '((#{@symptoms[0].id}|#{@symptoms[1].id}) ?)+' >> \.\/data-analysis-fimi03\/inputs\/#{@analysis.token}\.input/).ordered
+        @job.create_input_file @analysis
+      end
+
+      it 'returns the input_path' do
+        result = @job.create_input_file @analysis
+        expect(result).to eq "./data-analysis-fimi03/inputs/#{@analysis.token}.input"
+      end
+    end
+  end
+
+  describe '#delete_input_file' do
+    before(:each) do
+      @input_path = 'foo/bar'
+    end
+
+    it 'calls system rm file' do
+      expect(@job).to receive(:system).with("rm #{@input_path}").once
+      @job.delete_input_file @input_path
     end
   end
 end
