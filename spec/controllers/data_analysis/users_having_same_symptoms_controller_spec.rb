@@ -116,4 +116,21 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controlle
     end
 
   end
+
+  describe 'GET #show' do
+    context 'when the given id exist' do
+      before(:each) do
+        @analysis = create(:analysis_users_having_same_symptom)
+      end
+
+      it 'returns http success' do
+        get :show, id: @analysis.id
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'renders new' do
+        expect(get :show, id: @analysis.id).to render_template :show
+      end
+    end
+  end
 end

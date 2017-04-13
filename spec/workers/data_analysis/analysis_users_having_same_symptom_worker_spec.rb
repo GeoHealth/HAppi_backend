@@ -44,6 +44,20 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
         expect(@analysis.status).to eq 'done'
       end
     end
+
+    context 'when all calls succeed except system' do
+      before(:each) do
+        @create_input_file_return = true
+        @system_return = false
+        @delete_input_file_return = true
+      end
+
+      it 'changes the status of the analysis to "dead"' do
+        @job.perform @analysis.id
+        @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.find(@analysis.id)
+        expect(@analysis.status).to eq 'dead'
+      end
+    end
   end
 
   describe '#create_input_file' do
