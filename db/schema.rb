@@ -11,19 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170413001513) do
+ActiveRecord::Schema.define(version: 20170414110520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "data_analysis_analysis_users_having_same_symptoms", force: :cascade do |t|
-    t.datetime "start_date"
-    t.datetime "end_date"
+  create_table "data_analysis_basis_analyses", force: :cascade do |t|
     t.integer  "threshold"
     t.string   "token"
     t.string   "status"
+    t.string   "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "start_date"
+    t.datetime "end_date"
   end
 
   create_table "factor_instances", force: :cascade do |t|

@@ -90,6 +90,12 @@ FactoryGirl.define do
     value 'some value'
   end
 
+  # DataAnalysis::BasisAnalysis
+  factory :basis_analysis, class: DataAnalysis::BasisAnalysis do
+    threshold     1000
+    status        'created'
+  end
+
   # DataAnalysis::AnalysisUsersHavingSameSymptom
   factory :analysis_users_having_same_symptom, class: DataAnalysis::AnalysisUsersHavingSameSymptom do
     start_date    { Time.now - 2.days }
