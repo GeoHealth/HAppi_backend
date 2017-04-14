@@ -83,6 +83,10 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
   end
 
   describe '#create_input_file' do
+    before(:each) do
+      allow(@job).to receive(:system)
+    end
+
     it 'calls system touch input_file' do
       expect(@job).to receive(:system).with("touch #{@input_path}").once
       @job.create_input_file @analysis
