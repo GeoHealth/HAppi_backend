@@ -13,13 +13,14 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
       @system_return = true
       @delete_input_file_return = true
 
-      allow(@job).to receive(:create_input_file) {@create_input_file_return}
+      allow(@job).to receive(:create_input_file) {@input_path}
+      allow(@job).to receive(:generate_input_file) {@create_input_file_return}
       allow(@job).to receive(:system).with("./data-analysis-fimi03/fim_closed #{@input_path} #{@analysis.threshold} #{@output_path}") {@system_return}
       allow(@job).to receive(:delete_input_file) {@delete_input_file_return}
     end
 
     it 'makes a call to create_input_file' do
-      expect(@job).to receive(:create_input_file)
+      expect(@job).to receive(:generate_input_file)
       @job.perform @analysis.id
     end
 
@@ -123,7 +124,7 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
     end
   end
 
-  describe '#create_input_file' do
+  describe '#generate_input_file' do
     #                  start_date                                       end_date
     #-----------------------|----------------------------------------------|---------
     #    occ1_s1 occ2_s1    |      occ_1_symptom_1      occ_2_symptom_1    | <= each user have those occurrences
@@ -147,20 +148,9 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
         allow(@job).to receive(:system)
       end
 
-      it 'creates a file containing by calling "system touch token.input"' do
-        expect(@job).to receive(:system).with("touch #{@input_path}")
-        @job.create_input_file @analysis
-      end
-
       it 'writes 5 times to the input file a line containing the 2 symptoms ids' do
-        expect(@job).to receive(:system).with("touch #{@input_path}").ordered
         expect(@job).to receive(:system).exactly(5).times.with(/echo '((#{@symptoms[0].id}|#{@symptoms[1].id}) ?)+' >> \.\/data-analysis-fimi03\/inputs\/#{@analysis.token}\.input/).ordered
-        @job.create_input_file @analysis
-      end
-
-      it 'returns the input_path' do
-        result = @job.create_input_file @analysis
-        expect(result).to eq @input_path
+        @job.generate_input_file @analysis, @input_path
       end
     end
   end

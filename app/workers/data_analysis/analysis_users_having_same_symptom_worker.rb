@@ -5,7 +5,8 @@ class DataAnalysis::AnalysisUsersHavingSameSymptomWorker
 
   def perform(analysis_id)
     @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.find analysis_id
-    input_path = create_input_file @analysis
+    input_path = create_input_file(@analysis)
+    generate_input_file @analysis, input_path
     output_path = "./data-analysis-fimi03/outputs/#{@analysis.token}.output"
     if system "#{@@bin_lcm_path}/fim_closed #{input_path} #{@analysis.threshold} #{output_path}"
       @analysis.status = 'done'
@@ -16,10 +17,7 @@ class DataAnalysis::AnalysisUsersHavingSameSymptomWorker
     @analysis.save
   end
 
-  def create_input_file(analysis)
-    input_path = "#{@@bin_lcm_path}/inputs/#{analysis.token}.input"
-    system "touch #{input_path}"
-
+  def generate_input_file(analysis, input_path)
     occurrences = get_occurrences_matching_analysis analysis
 
     current_user_id = nil
@@ -35,8 +33,8 @@ class DataAnalysis::AnalysisUsersHavingSameSymptomWorker
       end
     end
     system("echo '#{current_line}' >> #{input_path}")
-    input_path
   end
+
 
   def get_occurrences_matching_analysis(analysis)
     Occurrence
@@ -48,5 +46,12 @@ class DataAnalysis::AnalysisUsersHavingSameSymptomWorker
 
   def delete_input_file(input_file_path)
     system("rm #{input_file_path}")
+  end
+
+  private
+  def create_input_file(analysis)
+    input_path = "#{@@bin_lcm_path}/inputs/#{analysis.token}.input"
+    system "touch #{input_path}"
+    input_path
   end
 end
