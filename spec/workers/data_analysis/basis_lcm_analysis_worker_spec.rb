@@ -17,10 +17,16 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
       allow(@job).to receive(:generate_input_file)
       allow(@job).to receive(:system).with("./data-analysis-fimi03/fim_closed #{@input_path} #{@analysis.threshold} #{@output_path}") {@system_return}
       allow(@job).to receive(:delete_input_file) {@delete_input_file_return}
+      allow(@job).to receive(:chmod_x_fim_closed)
     end
 
     it 'makes a call to retrieve_analysis_from_id' do
       expect(@job).to receive(:retrieve_analysis_from_id).with(@analysis.id)
+      @job.perform @analysis.id
+    end
+
+    it 'makes a call to chmod_x_fim_closed' do
+      expect(@job).to receive(:chmod_x_fim_closed)
       @job.perform @analysis.id
     end
 
@@ -68,6 +74,13 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
         @analysis = DataAnalysis::BasisAnalysis.find(@analysis.id)
         expect(@analysis.status).to eq 'dead'
       end
+    end
+  end
+
+  describe '#chmod_x_fim_closed' do
+    it 'calls system chmod +x ./data-analysis-fimi03/fim_closed' do
+      expect(@job).to receive(:system).with('chmod +x ./data-analysis-fimi03/fim_closed').once
+      @job.chmod_x_fim_closed
     end
   end
 
