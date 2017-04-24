@@ -35,6 +35,17 @@ RSpec.describe ElasticsearchWorker, type: :worker do
             expect(@e.perform(@occurrence.id).code).to eq ('201')
           end
         end
+
+        context 'when http post returns 500' do
+          before(:each) do
+            @url = ENV['ELASTIC_URL'] + '/occurrences/' + @occurrence.id.to_s
+            stub_request(:post, @url).to_return(status: 500)
+          end
+
+          it 'raises an exception' do
+            expect{@e.perform(@occurrence.id)}.to raise_exception Exception
+          end
+        end
       end
 
       context 'when there is an occurrence without gps coordinates in db' do
