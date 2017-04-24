@@ -7,8 +7,11 @@ class ElasticsearchWorker
     if (occurrence)
       raise(Exception, 'No ELASTIC_URL found') if not ENV['ELASTIC_URL']
       uri = URI(ENV['ELASTIC_URL'] + '/occurrences/' + (occurrence.id).to_s)
-      req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+      req = Net::HTTP::Post.new(uri, 'content-type' => 'application/json')
       req.body = build_json(occurrence)
+      username = ENV['ELASTIC_URL'].scan(/https?:\/\/(.*):(.*)@.*/).first.first
+      password = ENV['ELASTIC_URL'].scan(/https?:\/\/(.*):(.*)@.*/).last.last
+      req.basic_auth username, password
       res = Net::HTTP.start(uri.hostname, uri.port) do |http|
         http.request(req)
       end
