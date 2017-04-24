@@ -19,7 +19,7 @@ class DataAnalysis::UsersHavingSameSymptomsController < ApplicationController
 
   def show
     @analysis = DataAnalysis::AnalysisUsersHavingSameSymptom.find(params[:id])
-    if @analysis.status == 'done'
+    if @analysis.status == 'done' && File.exist?("./data-analysis-fimi03/outputs/#{@analysis.token}.output")
       @results = DataAnalysis::UsersHavingSameSymptomsResultParser.parse_result @analysis
     end
   end

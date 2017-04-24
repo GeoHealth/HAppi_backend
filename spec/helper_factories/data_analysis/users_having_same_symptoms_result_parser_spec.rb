@@ -6,7 +6,7 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsResultParser do
       before(:each) do
         @symptoms = create_list(:symptom, 3)
         @analysis = create(:analysis_users_having_same_symptom)
-        @output_file =  "./data-analysis-fimi03/outputs/#{@analysis.token}.output"
+        @output_file = "./data-analysis-fimi03/outputs/#{@analysis.token}.output"
         system "touch #{@output_file}"
         system "echo '#{@symptoms[0].id} #{@symptoms[1].id} #{@symptoms[2].id} (1006)' >> #{@output_file}"
         system "echo '#{@symptoms[0].id} #{@symptoms[1].id} #{@symptoms[2].id} (1993)' >> #{@output_file}"
@@ -58,6 +58,16 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsResultParser do
             expect(expected_ids).to include symptom.id
           end
         end
+      end
+    end
+
+    context 'when the output file does not exist' do
+      before(:each) do
+        @analysis = create(:analysis_users_having_same_symptom)
+      end
+
+      it 'raises an exception' do
+        expect {DataAnalysis::UsersHavingSameSymptomsResultParser.parse_result @analysis}.to raise_exception
       end
     end
   end

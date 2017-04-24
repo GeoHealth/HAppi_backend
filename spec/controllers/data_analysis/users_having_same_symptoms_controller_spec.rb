@@ -133,14 +133,33 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsController, type: :controlle
         expect(get :show, id: @analysis.id).to render_template :show
       end
 
-      context 'when the analysis status is done' do
+      context 'when the analysis status is done and result file exists' do
+        before(:each) do
+          @analysis.status = 'done'
+          @analysis.save
+
+          @output_file = "./data-analysis-fimi03/outputs/#{@analysis.token}.output"
+          system "touch #{@output_file}"
+        end
+
+        after(:each) do
+          system "rm #{@output_file}"
+        end
+
+        it 'calls DataAnalysis::UsersHavingSameSymptomsResultParser.parse_result' do
+          expect(DataAnalysis::UsersHavingSameSymptomsResultParser).to receive(:parse_result).with(@analysis).once
+          get :show, id: @analysis.id
+        end
+      end
+
+      context 'when the analysis status is done and result file does not exist' do
         before(:each) do
           @analysis.status = 'done'
           @analysis.save
         end
 
-        it 'calls DataAnalysis::UsersHavingSameSymptomsResultParser.parse_result' do
-          expect(DataAnalysis::UsersHavingSameSymptomsResultParser).to receive(:parse_result).with(@analysis).once
+        it 'does not call DataAnalysis::UsersHavingSameSymptomsResultParser.parse_result' do
+          expect(DataAnalysis::UsersHavingSameSymptomsResultParser).not_to receive(:parse_result).with(@analysis)
           get :show, id: @analysis.id
         end
       end
