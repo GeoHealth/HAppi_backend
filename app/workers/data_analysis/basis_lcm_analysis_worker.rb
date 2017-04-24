@@ -18,6 +18,9 @@ class DataAnalysis::BasisLCMAnalysisWorker
       puts "less #{output_path}"
       system "less #{output_path}"
 
+      puts "readlink -f #{output_path}"
+      system "readlink -f #{output_path}"
+
     else
       print $?
       @analysis.status = 'dead'
