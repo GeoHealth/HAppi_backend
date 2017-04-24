@@ -67,7 +67,7 @@ RSpec.describe DataAnalysis::UsersHavingSameSymptomsResultParser do
       end
 
       it 'raises an exception' do
-        expect {DataAnalysis::UsersHavingSameSymptomsResultParser.parse_result @analysis}.to raise_exception
+        expect {DataAnalysis::UsersHavingSameSymptomsResultParser.parse_result @analysis}.to raise_exception Exception
       end
     end
   end
