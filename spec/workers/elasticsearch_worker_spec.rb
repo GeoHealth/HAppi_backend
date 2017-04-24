@@ -9,7 +9,9 @@ RSpec.describe ElasticsearchWorker, type: :worker do
 
     context 'when there is an ELASTIC_URL' do
       before(:each) do
-        ENV['ELASTIC_URL'] = 'http://test:9200'
+        @elastic_url = 'http://username:password@test:9200'
+        @elastic_url_clean = 'http://test:9200'
+        ENV['ELASTIC_URL'] = @elastic_url
       end
 
       context 'when there are no occurrence in db' do
@@ -27,7 +29,7 @@ RSpec.describe ElasticsearchWorker, type: :worker do
 
         context 'when http post is done' do
           before(:each) do
-            @url = ENV['ELASTIC_URL'] + '/occurrences/' + @occurrence.id.to_s
+            @url = @elastic_url_clean + '/occurrences/' + @occurrence.id.to_s
             stub_request(:post, @url).to_return(status: 201)
           end
 
@@ -38,7 +40,7 @@ RSpec.describe ElasticsearchWorker, type: :worker do
 
         context 'when http post returns 500' do
           before(:each) do
-            @url = ENV['ELASTIC_URL'] + '/occurrences/' + @occurrence.id.to_s
+            @url = @elastic_url_clean + '/occurrences/' + @occurrence.id.to_s
             stub_request(:post, @url).to_return(status: 500)
           end
 
