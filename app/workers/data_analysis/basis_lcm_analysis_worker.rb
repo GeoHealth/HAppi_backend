@@ -11,7 +11,13 @@ class DataAnalysis::BasisLCMAnalysisWorker
     output_path = "#{@@bin_lcm_path}/outputs/#{@analysis.token}.output"
     if system "#{@@bin_lcm_path}/fim_closed #{input_path} #{@analysis.threshold} #{output_path}"
       @analysis.status = 'done'
+
+      puts "ls -al #{@@bin_lcm_path}/outputs"
+      system "ls -al #{@@bin_lcm_path}/outputs"
+
+      puts "less #{output_path}"
       system "less #{output_path}"
+
     else
       print $?
       @analysis.status = 'dead'
