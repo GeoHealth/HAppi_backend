@@ -532,10 +532,6 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/FactorInstance'
-      photos:
-        type: array
-        items:
-          $ref: '#/definitions/Photo'
   GPSCoordinates:
     type: object
     description: A GPS location as described in https://github.com/apache/cordova-plugin-geolocation#coordinates
@@ -568,8 +564,6 @@ definitions:
         type: number
         format: float
         description: Current ground speed of the device, specified in meters per second.
-  Photo:
-    type: object
   Account:
     type: object
     description: An account from https://github.com/lynndylanhurley/devise_token_auth
