@@ -3,7 +3,7 @@ info:
   title: HAppi API
   description: Track symptoms with the HAppi API
   version: 1.0.0
-host: geohealth-happibackend-master.yxvj.flynnhub.com
+host: geohealth-happibackend-prod.happi-doctor.be
 schemes:
   - https
 basePath: /v1
