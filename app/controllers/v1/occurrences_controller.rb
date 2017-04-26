@@ -24,7 +24,7 @@ class  V1::OccurrencesController < V1::BaseController
   end
 
   def index
-    @occurrences = Occurrence.where(user: current_user)
+    @occurrences = Occurrence.where(user: current_user).order(:date)
     render json: {occurrences: @occurrences}
   end
 
