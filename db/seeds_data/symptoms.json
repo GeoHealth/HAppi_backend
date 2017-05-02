@@ -299,5 +299,33 @@
     "sex_filter": "both",
     "short_description": "",
     "long_description": ""
+  },
+  {
+    "id": 44,
+    "name":"Eye flashes",
+    "sex_filter": "both",
+    "short_description": "",
+    "long_description": ""
+  },
+  {
+    "id": 45,
+    "name":"Temporary blindness",
+    "sex_filter": "both",
+    "short_description": "",
+    "long_description": ""
+  },
+  {
+    "id": 46,
+    "name":"Photophobia",
+    "sex_filter": "both",
+    "short_description": "Hypersensitivity to light",
+    "long_description": ""
+  },
+  {
+    "id": 47,
+    "name":"Hyperacusis",
+    "sex_filter": "both",
+    "short_description": "Hypersensitivity to sound",
+    "long_description": ""
   }
 ]
