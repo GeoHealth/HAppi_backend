@@ -23,8 +23,6 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
           create_list(:occurrence, 2, user_id: user.id, symptom_id: @symptoms[0].id, date: @analysis.start_date - 1.day)
           create_list(:occurrence, 1, user_id: user.id, symptom_id: @symptoms[1].id, date: @analysis.start_date - 1.day)
         end
-
-        allow(@job).to receive(:system)
       end
 
       before(:each) do
@@ -103,6 +101,47 @@ RSpec.describe DataAnalysis::AnalysisUsersHavingSameSymptomWorker, type: :worker
           expect(subject[index * 2 + 1].user_id).to eq user_id
         end
       end
+    end
+  end
+
+  describe '#parse_and_store_analysis_results' do
+    context 'when the output file contains 2 lines with 3 symptoms each' do
+      before(:each) do
+        @symptoms = create_list(:symptom, 3)
+        @analysis = create(:analysis_users_having_same_symptom)
+        @output_file = "./data-analysis-fimi03/outputs/#{@analysis.token}.output"
+        system "touch #{@output_file}"
+        system "echo '#{@symptoms[0].id} #{@symptoms[1].id} #{@symptoms[2].id} (1006)' >> #{@output_file}"
+        system "echo '#{@symptoms[0].id} #{@symptoms[1].id} #{@symptoms[2].id} (1993)' >> #{@output_file}"
+
+        @job.parse_and_store_analysis_results(@analysis, @output_file)
+      end
+
+      after(:each) do
+        system "rm #{@output_file}"
+      end
+
+      it 'creates 2 AnalysisResult linked to the analysis' do
+        expect(DataAnalysis::AnalysisResult.count).to eq 2
+        DataAnalysis::AnalysisResult.all.each do |result|
+          expect(result.data_analysis_analysis_users_having_same_symptom_id).to eq @analysis.id
+        end
+      end
+
+      it 'is linked to each symptom' do
+        symptoms_ids = [@symptoms[0], @symptoms[1], @symptoms[2]]
+        @analysis.data_analysis_analysis_results.each do |result|
+          result.symptoms.each do |symptom_id|
+            expect(symptoms_ids).to include symptom_id
+          end
+        end
+      end
+
+      it 'contains a Result with 1006 and a result with 1993' do
+        expect(@analysis.data_analysis_analysis_results.first.result_number).to eq 1006
+        expect(@analysis.data_analysis_analysis_results.last.result_number).to eq 1993
+      end
+
     end
   end
 end

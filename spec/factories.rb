@@ -103,4 +103,10 @@ FactoryGirl.define do
     threshold     1000
     status        'created'
   end
+
+  # DataAnalysis::AnalysisResult
+  factory :analysis_results, class: DataAnalysis::AnalysisResult do
+    result_number 10
+    data_analysis_analysis_users_having_same_symptom_id { create(:analysis_users_having_same_symptom).id }
+  end
 end

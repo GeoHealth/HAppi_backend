@@ -18,7 +18,7 @@
   <%= @analysis.threshold %>
 </p>
 
-<% if @results %>
+<% if @analysis.status == 'done' %>
     <div>
       <h3>this section will show the result of the analysis</h3>
 
@@ -30,11 +30,11 @@
         </tr>
         </thead>
         <tbody>
-        <% @results.each do |result| %>
+        <% @analysis.data_analysis_analysis_results.each do |result| %>
             <tr>
-              <td><%= result[:number_of_match] %></td>
+              <td><%= result.result_number %></td>
               <td>
-                <% result[:symptoms].each do |symptom| %> <%= symptom[:name] %> &
+                <% result.symptoms.each do |symptom| %> <%= symptom.name %> &
                 <% end %></td>
             </tr>
         <% end %>

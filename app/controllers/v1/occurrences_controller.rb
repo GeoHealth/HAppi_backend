@@ -1,8 +1,6 @@
-class  V1::OccurrencesController < V1::BaseController
+class V1::OccurrencesController < V1::BaseController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_user!
-
-
 
   def create
     @occurrence = OccurrenceFactory.build_from_params(params[:occurrence])
@@ -10,9 +8,7 @@ class  V1::OccurrencesController < V1::BaseController
 
     begin
       if @occurrence.save
-        unless @occurrence.gps_coordinate.nil? then
-          WeatherFactorInstancesWorker.perform_async(@occurrence.id)
-        end
+        WeatherFactorInstancesWorker.perform_async(@occurrence.id) unless @occurrence.gps_coordinate.nil?
         ElasticsearchWorker.perform_async(@occurrence.id)
         render json: @occurrence, status: 201
       else

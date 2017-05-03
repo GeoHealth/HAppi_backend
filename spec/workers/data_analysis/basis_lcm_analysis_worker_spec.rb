@@ -16,7 +16,9 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
       allow(@job).to receive(:create_input_file) {@input_path}
       allow(@job).to receive(:generate_input_file)
       allow(@job).to receive(:system).with("./data-analysis-fimi03/fim_closed #{@input_path} #{@analysis.threshold} #{@output_path}") {@system_return}
+      allow(@job).to receive(:parse_and_store_analysis_results)
       allow(@job).to receive(:delete_input_file) {@delete_input_file_return}
+      allow(@job).to receive(:delete_output_file) {@delete_input_file_return}
       allow(@job).to receive(:chmod_x_fim_closed)
     end
 
@@ -50,6 +52,11 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
       @job.perform @analysis.id
     end
 
+    it 'makes a call to delete_output_file' do
+      expect(@job).to receive(:delete_output_file)
+      @job.perform @analysis.id
+    end
+
     context 'when all calls succeed' do
       before(:each) do
         @system_return = true
@@ -60,6 +67,11 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
         @job.perform @analysis.id
         @analysis = DataAnalysis::BasisAnalysis.find(@analysis.id)
         expect(@analysis.status).to eq 'done'
+      end
+
+      it 'makes a call to parse_and_store_analysis_results' do
+        expect(@job).to receive(:parse_and_store_analysis_results)
+        @job.perform @analysis.id
       end
     end
 
@@ -73,6 +85,11 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
         @job.perform @analysis.id
         @analysis = DataAnalysis::BasisAnalysis.find(@analysis.id)
         expect(@analysis.status).to eq 'dead'
+      end
+
+      it 'does not make a call to parse_and_store_analysis_results' do
+        expect(@job).not_to receive(:parse_and_store_analysis_results)
+        @job.perform @analysis.id
       end
     end
   end
@@ -92,6 +109,17 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
     it 'calls system rm file' do
       expect(@job).to receive(:system).with("rm #{@input_path}").once
       @job.delete_input_file @input_path
+    end
+  end
+
+  describe '#delete_output_file' do
+    before(:each) do
+      @output_path = 'foo/bar'
+    end
+
+    it 'calls system rm file' do
+      expect(@job).to receive(:system).with("rm #{@output_path}").once
+      @job.delete_output_file @output_path
     end
   end
 
@@ -119,6 +147,12 @@ RSpec.describe DataAnalysis::BasisLCMAnalysisWorker, type: :worker do
   describe '#generate_input_file' do
     it 'must be implemented by subclasses and raise an error' do
       expect {@job.generate_input_file @analysis, @input_path}.to raise_error(NotImplementedError, 'You must implement method generate_input_file')
+    end
+  end
+
+  describe '#parse_and_store_analysis_results' do
+    it 'must be implemented by subclasses and raise an error' do
+      expect {@job.parse_and_store_analysis_results @analysis, @output_path}.to raise_error(NotImplementedError, 'You must implement method parse_and_store_analysis_results')
     end
   end
 end

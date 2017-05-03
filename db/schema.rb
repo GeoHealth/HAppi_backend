@@ -11,10 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170414110520) do
+ActiveRecord::Schema.define(version: 20170503162451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "data_analysis_analysis_result_symptoms", force: :cascade do |t|
+    t.integer "data_analysis_analysis_result_id"
+    t.integer "symptom_id"
+  end
+
+  add_index "data_analysis_analysis_result_symptoms", ["data_analysis_analysis_result_id"], name: "index_data_analysis_analysis_result", using: :btree
+  add_index "data_analysis_analysis_result_symptoms", ["symptom_id"], name: "index_data_analysis_analysis_result_symptoms_on_symptom_id", using: :btree
+
+  create_table "data_analysis_analysis_results", force: :cascade do |t|
+    t.integer "result_number"
+    t.integer "data_analysis_analysis_users_having_same_symptom_id"
+  end
+
+  add_index "data_analysis_analysis_results", ["data_analysis_analysis_users_having_same_symptom_id"], name: "index_data_analysis_users_having_same_symptom", using: :btree
 
   create_table "data_analysis_basis_analyses", force: :cascade do |t|
     t.integer  "threshold"

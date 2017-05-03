@@ -11,10 +11,12 @@ class DataAnalysis::BasisLCMAnalysisWorker
     output_path = "#{@@bin_lcm_path}/outputs/#{@analysis.token}.output"
     if system "#{@@bin_lcm_path}/fim_closed #{input_path} #{@analysis.threshold} #{output_path}"
       @analysis.status = 'done'
+      parse_and_store_analysis_results @analysis, output_path
     else
       @analysis.status = 'dead'
     end
     delete_input_file input_path
+    delete_output_file output_path
     @analysis.save
   end
 
@@ -24,6 +26,10 @@ class DataAnalysis::BasisLCMAnalysisWorker
 
   def delete_input_file(input_file_path)
     system("rm #{input_file_path}")
+  end
+
+  def delete_output_file(output_file_path)
+    system("rm #{output_file_path}")
   end
 
   def create_input_file(analysis)
@@ -38,5 +44,9 @@ class DataAnalysis::BasisLCMAnalysisWorker
 
   def generate_input_file(analysis, input_path)
     fail NotImplementedError, 'You must implement method generate_input_file'
+  end
+
+  def parse_and_store_analysis_results(analysis, output_path)
+    fail NotImplementedError, 'You must implement method parse_and_store_analysis_results'
   end
 end
