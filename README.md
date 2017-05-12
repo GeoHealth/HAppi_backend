@@ -69,4 +69,4 @@ The following environment variables are needed:
 ### Rspec documentation
 We can generate some kind of documentation using the Rpsec tests because we described them nicely.
 
-    rspec --format documentation
+    rspec --format documentation --out rspec.txt
